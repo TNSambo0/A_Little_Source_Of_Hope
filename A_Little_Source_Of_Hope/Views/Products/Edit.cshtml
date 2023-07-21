@@ -1,0 +1,90 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="sub-title">Edit a Product</h4>
+            </div>
+            <div class="card-block">
+                <form method="post" enctype="multipart/form-data">
+                    <div class='row'>
+                        <div class='col-sm-6'>
+                            <div class='container'>
+                                <div class='form-group'>
+                                    <label asp-for='ProductName' class='form-label'></label>
+                                    <input asp-for='ProductName' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='ProductName' class='text-danger'></span>
+                                </div>
+                                <div class='form-group'>
+                                    <label asp-for='Description' class='form-label'></label>
+                                    <textarea rows="3" asp-for='Description' class='form-control' aria-required='true'></textarea>
+                                    <span asp-validation-for='Description' class='text-danger'></span>
+                                </div>
+                                <div class='row'>
+                                    <div class='col-sm-6'>
+                                        <div class='form-group'>
+                                            <label asp-for='Price' class='form-label'></label>
+                                            <input asp-for='Price' class='form-control' aria-required='true' />
+                                            <span asp-validation-for='Price' class='text-danger'></span>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-6'>
+                                        <div class='form-group'>
+                                            <label asp-for='Quantity' class='form-label'></label>
+                                            <input asp-for='Quantity' class='form-control' type="number" placeholder="0" aria-required='true' />
+                                            <span asp-validation-for='Quantity' class='text-danger'></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Select Category</label>
+                                    <select id="" class="form-control">
+                                        
+                                    </select>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class='d-flex m-2'>
+                                    <input type='checkbox' id='flexCheckDefault' asp-for='IsActive' />
+                                    <label asp-for='IsActive' class='ml-1'></label>
+                                </div>
+                            </div>
+                            <div class="btn-group ml-3 mb-3">
+                                <button type="submit" class="btn btn-primary" id="btn_create">Submit</button>
+                                <a asp-action="Index" asp-controller="Product" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="container mb-2" id="container-canvImg">
+                                <div class="product_img_icon_div">
+                                    <img class="ProductImagePreview" src="~/@Model.Imageurl" />
+                                </div>
+                                <input asp-for="File" type="file" id="ProductImageInput" multiple="false" accept="Image/*" class="d-none upload_inputfile">
+                                <span asp-validation-for="File" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".product_img_icon_div").on("click", function () {
+        $("#ProductImageInput").click();
+    });
+    $("#ProductImageInput").on("change", function () {
+        if ($(this)[0].files[0] != null) {
+            $(".ProductImagePreview").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        }
+    });
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

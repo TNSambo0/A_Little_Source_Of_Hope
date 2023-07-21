@@ -1,0 +1,43 @@
+﻿@model Contact
+@{
+    ViewData["Title"] = "Enquiry";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="full">
+                <form method="post">
+                    <div class="heading_container heading_center">
+                        <h2>Enquiry</h2>
+                    </div>
+                   <div class="container">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-floating">
+                            <input type="text" placeholder="Enter your full name" asp-for="ContactName" class="form-control" />
+                            <label asp-for="ContactName" class="form-label"></label>
+                            <span asp-validation-for="ContactName" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating">
+                            <input type="email" asp-for="Email" autocomplete="username" class="form-control" type="email" placeholder="Enter your email address" />
+                            <label asp-for="Email" class="form-label"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" placeholder="Enter subject" asp-for="Subject" class="form-control" />
+                            <label asp-for="Subject" class="form-label"></label>
+                            <span asp-validation-for="Subject" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="3" placeholder="Enter your message" asp-for="Message" class="mb-0"></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Submit"/>
+                   </div>
+                   
+                </form>
+            </div>
+        </div>
+</div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

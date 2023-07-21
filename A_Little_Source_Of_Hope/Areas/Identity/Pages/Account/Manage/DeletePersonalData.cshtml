@@ -1,0 +1,55 @@
+﻿@page
+@model DeletePersonalDataModel
+@{
+    ViewData["Title"] = "Delete Personal Data";
+    ViewData["ActivePage"] = ManageNavPages.DeletePersonalData;
+}
+
+<div class="container">
+    <h3 class="mb-4">Deactivate your Account</h3>
+    <form id="set-password-form" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Input.ReasonToDeactivate" class="form-label"></label>
+            <textarea asp-for="Input.ReasonToDeactivate" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Input.ReasonToDeactivate" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-3 offset-9">
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Save</button>
+            </div>
+        </div>
+
+        <!--Delete Account modal-->
+
+        <div id="deleteModal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header flex-column">
+                        <div class="img-circle ">
+                            <img src="~/images/User/delete (1).png" width="80" />
+                        </div>
+                        <h4 class="modal-title w-100">Are you sure?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please note that once you press "deactivate", the action can not be undone</p>
+                        <div class="form-group">
+                            <label asp-for="Input.Password" class="form-label"></label>
+                            <input asp-for="Input.Password" class="form-control" autocomplete="Password" aria-required="true" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

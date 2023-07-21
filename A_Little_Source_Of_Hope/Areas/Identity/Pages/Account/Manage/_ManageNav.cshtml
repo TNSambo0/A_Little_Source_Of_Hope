@@ -1,0 +1,39 @@
+﻿<div class="wrapper">
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <div class="sidebar-brand text-center">
+                <span class="align-middle">Profile settings</span>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">
+                    Actions
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Profile</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Change email address</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Change password</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link @ManageNavPages.DeletePersonalDataNavClass(ViewContext)" id="delete-personal-data" asp-page="./DeletePersonalData">
+                        <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Deactivate account</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

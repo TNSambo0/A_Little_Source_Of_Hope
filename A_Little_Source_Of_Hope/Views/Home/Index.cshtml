@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+<section class="container mb-3">
+    <div class="container">
+        <div class="heading_container heading_center mt-2">
+            <h2>
+                CHANGE A LIFE <span>TODAY</span>
+            </h2>
+        </div>
+        <div class="row mt-1 text-center">
+            <div class="d-flex">
+                <p class="mr-2">
+                    "Nobody cares how much you know, until they know how much you care." 
+                </p>
+                <strong>- Theodre Roosevelt</strong>
+            </div>
+            <p>
+                Your donation can help us provide essential services such as food, shelter, healthcare, education, and ensuring that our children recieve the best possible care.
+                We understand that donating to a charitable course is a personal decision, and we appreciate your support of our oprhanage.
+                Your donations, no matter how big or small, can make a real difference in the lives of the children we serve.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="what_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                What would you like to do today?
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="box">
+                    <a asp-action="Payment" asp-controller="Payments">
+                        <img src="~/images/icons/IMG-20230511-WA0007.jpg" alt="Donate cash icon" />
+                    </a>
+                </div>
+            </div>
+            <div class="col col-md-4">
+                <div class="box">
+                    <a asp-action="Donate" asp-controller="Home">
+                        <img src="~/images/icons/IMG-20230511-WA0004.jpg" alt="Donate items icon" />
+                    </a>
+                </div>
+            </div>
+            <div class="col col-md-4">
+                <div class="box">
+                    <a asp-action="Volunteer" asp-controller="Home">
+                        <img src="~/images/icons/IMG-20230511-WA0009.jpg" alt="Volunteer icon" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-3">
+    <div class="container mb-3">
+        <div class="heading_container heading_center">
+            <h2>Latest news</h2>
+        </div>
+        <div class="container rounded-4 shadow p-3 latest-news-link mb-3">
+            <div class="heading_container">
+                <h2>March donations</h2>
+            </div>
+            <div>
+                <p>
+                    We have raised more than R25 000 through donations drom the past month and the amount will be given to the
+                    most in need orphanes. Thank you to everyone who made this possible...
+                </p>
+            </div>
+        </div>
+        <div class="container rounded-4 shadow p-3 latest-news-link">
+            <div class="heading_container">
+                <h2>February donations</h2>
+            </div>
+            <div>
+                <p>
+                    We have raised more than R35 000 through donations drom the past month and the amount will be given to the
+                    most in need orphanes. Thank you to everyone who made this possible...
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <div class="container rounded-4 shadow p-3 latest-news-link">
+            <div class="heading_container">
+                <h2>Who we are</h2>
+            </div>
+            <div>
+                <p>
+                    The A Little Source of Hope is a reistered Non-Profit Organization (NPO 001-023) and Public Benefit Organisation
+                    (PBO 10211133) which provides a funding for up 7 orphanages aroung johannesburg through income generated through
+                    selling thrift items.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,142 @@
+@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="p-4">
+    <div class="d-flex mb-2">
+        <h2>Category List</h2>
+        <a asp-action="Create" asp-controller="Category" class="btn btn-primary ml-auto">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Category
+        </a>
+    </div>
+    <label class="d-none DisplayTable">@ViewBag.Category</label>
+    <input id="NumberofItems" type="hidden" value="@Model.Count()" />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">&nbsp;</th>
+                <th scope="col">Image</th>
+                <th scope="col">Category Name</th>
+                <th scope="col">Is active</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr class="category-row">
+                    <td>
+                        <input type="checkbox" onclick="SelectItem(this,@obj.CategoryId)" />
+                    </td>
+                    <td>
+                        <img src="~/@obj.Imageurl" width="60" />
+                    </td>
+                    <td class="category-name">@obj.CategoryName</td>
+                    <td>@obj.IsActive</td>
+                    <td>@obj.CreatedDate</td>
+                    <td>
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.CategoryId" class="btn btn-warning mb-1">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-CategoryId="@obj.CategoryId">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary btn-block text-uppercase btn-DeleteSelectedItems">
+                Delete selected Category
+            </button>
+        </div>
+    </div>
+    <div class="row mt-2 Create-Category-div">
+        <div class="colsm-12 text-center">
+            <p>No Categories found. Click <a asp-action="Create" asp-controller="Category">here</a> to create a Category.</p>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        const DeleteItemsArray = [];
+        function DisplayTable() {
+            const isModelEmpty = $("#DisplayTable").innerHTML;
+            if (isModelEmpty == "True") {
+                $(".tm-Category-table").addClass("d-none");
+            }
+            else {
+                $(".Create-Category-div").addClass("d-none");
+            }
+
+        }
+        DisplayTable();
+        function BtnDeleteSelectedItems() {
+            if (DeleteItemsArray.length == 0) {
+                $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
+            }
+            else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
+        } BtnDeleteSelectedItems();
+
+        function SelectItem(input, CategoryId) {
+            const item = input.checked;
+            var Index = DeleteItemsArray.indexOf(CategoryId);
+            if (item) {
+                DeleteItemsArray.push(CategoryId)
+            }
+            else {
+                if (Index != -1) {
+                    DeleteItemsArray.splice(Index, 1);
+                }
+            }
+            BtnDeleteSelectedItems();
+        }
+        //$(".btn-DeleteSelectedItems").on('click', function () {
+        //    $.ajax({
+        //        type: "POST",
+        //        dataType: "JSON",
+        //        contentType: "application/json; charset=utf-8",
+                //        url: '/Category/Delete',
+        //        data: { CategoryIds: DeleteItemsArray },
+        //        success:
+        //            function (response) {
+        //                if (response.Status == "error") {
+        //                    alert("Error: " + response.Message);
+        //                    console.log("Error: " + response.Message);
+        //                }
+        //                else {
+        //                    var NumberofItems = $("#NumberofItems").val();
+        //                    if (DeleteItemsArray.length == NumberofItems) {
+        //                        while (DeleteItemsArray.length != 0) {
+        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+        //                            DeleteItemsArray.splice(0, 1);
+        //                        }
+                //                        $(".tm-Category-table").fadeOut("slow");
+                //                        $(".Create-Category-div").removeClass("d-none");
+        //                    }
+        //                    else {
+        //                        while (DeleteItemsArray.length != 0) {
+        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+        //                            DeleteItemsArray.splice(0, 1);
+        //                        }
+        //                    }
+        //                    alert("Success: " + response.Status);
+        //                    console.log("Success: " + response.Message);
+        //                    BtnDeleteSelectedItems();
+        //                }
+        //            },
+        //        error:
+        //            function (response) {
+        //                console.log("Error: " + response.Message);
+        //                console.log("Error: " + response);
+        //                BtnDeleteSelectedItems();
+        //            }
+        //    });
+        //
+        //});
+    </script>
+}

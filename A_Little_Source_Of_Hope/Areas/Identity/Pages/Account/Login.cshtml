@@ -1,0 +1,57 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="container-sign-in">
+    <form method="post">
+        <div class="container text-center">
+            <img class="rounded-circle shadow border border-dark border-5" src="~/images/icons/IMG-20230512-WA0012.jpg" width="50" />
+            <h1 class="header_label text-center">Login</h1>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="input-group"> 
+            <span class="input-group-text form-label"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i></span>
+            <div class="form-floating">
+                <input type="email" asp-for="Input.Email" autocomplete="username" class="form-control" placeholder="Email address" />
+                <label asp-for="Input.Email" class="form-label"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text form-label"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span><div class="form-floating">
+                <input type="password" asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Password" />
+                <label asp-for="Input.Password" class="form-label"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="text-right mb-2">
+            <a id="forgot-password" class="a_link" asp-page="./ForgotPassword">Forgot your password?</a>
+        </div>
+        <div class="text-center mb-2">
+            <div class="col-sm-8 offset-2">
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </div>
+        </div>
+        <div class="text-center">
+            Don't have an account?  <a class="a_link" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Sign up here</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+@*<div>
+    <div class="checkbox">
+        <label asp-for="Input.RememberMe" class="form-label">
+            <input class="form-check-input" asp-for="Input.RememberMe" />
+            @Html.DisplayNameFor(m => m.Input.RememberMe)
+        </label>
+    </div>
+</div>*@
+

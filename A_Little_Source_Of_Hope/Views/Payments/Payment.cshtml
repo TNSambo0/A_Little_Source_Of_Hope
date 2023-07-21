@@ -1,0 +1,78 @@
+﻿@model Payment
+@{
+    ViewData["Title"] = "Shop";
+}
+
+
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header">
+                <div class="heading_center"><h1>Payment</h1></div>
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <form method="post">                    
+                    <div class="row mt-2">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <Label class="text-left mb-1" asp-for="Name"></Label>
+                                <input class="form-control mb-3" type="text" asp-for="Name" placeholder="Initials and Surname" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <Label class="text-left mb-1" asp-for="CardNumber"></Label>
+                                <input type="text" class="form-control" asp-for="CardNumber" placeholder="0000 0000 0000 0000">
+                                <span asp-validation-for="CardNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <Label class="text-left mb-1" asp-for="ExpiryDate"></Label>
+                                <input type="text" class="form-control" asp-for="ExpiryDate" placeholder="MM/YY" />
+                                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <Label class="text-left mb-1" asp-for="CVVNumber"></Label>
+                                <input type="text" class="form-control" asp-for="CVVNumber" placeholder="000">
+                                <span asp-validation-for="CVVNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <div class="form-group">
+                                <Label class="mb-1" asp-for="Amount">Amount</Label>
+                                <input class="form-control" placeholder="0.00" asp-for="Amount">
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col col-md-12 text-center text-bold">
+                            <input type="submit" class="btn btn-primary"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-12 text-center">
+                            <span class="text-muted certificate-text"><i class="fa fa-lock" aria-hidden="true"></i> Secured transaction </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>console.log(@ViewData["ExceptionInfo"], @ViewData["Title"])</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

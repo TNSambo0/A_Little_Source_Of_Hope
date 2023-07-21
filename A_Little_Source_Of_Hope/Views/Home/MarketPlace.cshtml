@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Shop";
+}
+<div class="container">
+    <section class="product_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-4">
+                    <form asp-controller="Home" asp-action="MarketPlace">
+                        <div class="input-group mb-3 border border-seconodary">
+                            <input type="text" class="form-control border-0" name="searchString" placeholder="Search" aria-label="searchString" aria-describedby="basic-addon1">
+                            <button type="submit" class="input-group-text border-0" id="basic-addon1"><i class="fa fa-search fa-fw" aria-hidden="true"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row Product_div">
+                @foreach (var obj in Model)
+                {
+                    <div class="col-sm-6 col-md-4 col-lg-3 product_div">
+                        <div class="box product_sub_div">
+                            <label class="ClaimStatus">Claim</label>
+                            <label class="ClaimStatusValue d-none">@obj.ClaimStatus</label>
+                            <div class="option_container">
+                                <div class="options">
+                                    @{
+                                        var parms = new Dictionary<string, string>
+                                {
+                                { "productID" , $"{obj.ProductId}"},
+                                {"IsCartUrl" , "false"}
+                                };
+                                    }
+                                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-all-route-data="parms" class="option1">
+                                        Add To Cart
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="img-box">
+                                <img src="~/@obj.Imageurl" alt="">
+                            </div>
+                            <div class="detail-box">
+                                <h5 class="Product-name">
+                                    @obj.ProductName
+                                </h5>
+                                <h6>
+                                    R @obj.Price
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $(".Product_div .product_sub_div").each(function () {
+        if ($(this)[0].children[1].innerHTML != "True") {
+            $(this)[0].children[0].classList.add("d-none");
+        }
+    });
+    $("input[name=searchString]").on("keyup", function () {
+        var filter, Product, a, textValue;
+        filter = $(this).val();
+        Product = $(".product_div");
+        for (var i = 0; i < Product.length; i++) {
+            a = Product[i].getElementsByClassName("Product-name");
+            textValue = a[0].innerHTML;
+            if (textValue.toUpperCase().indexOf(filter.toUpperCase()) < 0) {
+                Product[i].classList.add("d-none");
+            }
+            else{
+                Product[i].classList.remove("d-none");
+            }
+        }
+    });
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
