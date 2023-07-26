@@ -1,6 +1,6 @@
-﻿@model Category
+﻿@*@model Orphanage
 @{
-    ViewData["Title"] = "Create category";
+    ViewData["Title"] = "Create Orphanage";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="row">
@@ -15,16 +15,22 @@
                         <div class='col-sm-6'>
                             <div class='container'>
                                 <div class='form-group'>
-                                    <label asp-for='CategoryName' class='form-label'></label>
-                                    <input asp-for='CategoryName' class='form-control' aria-required='true' />
-                                    <span asp-validation-for='CategoryName' class='text-danger'></span>
-                                </div>                                
-                                <div class="form-group">
-                                    <label class="form-label">Select Category</label>
-                                    <select id="province" class="form-control">
-                                    </select>
-                                    <span class="text-danger"></span>
+                                    <label asp-for='OrphanageName' class='form-label'></label>
+                                    <input asp-for='OrphanageName' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='OrphanageName' class='text-danger'></span>
                                 </div>
+                                <div class='form-group'>
+                                    <label asp-for='CellNumber' class='form-label'></label>
+                                    <input asp-for='CellNumber' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='CellNumber' class='text-danger'></span>
+                                </div>
+                                <div class='form-group'>
+                                    <label asp-for='Manager' class='form-label'></label>
+                                    <input asp-for='Manager' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='Manager' class='text-danger'></span>
+                                </div>
+
+
                                 <div class='d-flex m-2'>
                                     <input type='checkbox' id='flexCheckDefault' asp-for='IsActive' />
                                     <label asp-for='IsActive' class='ml-1'></label>
@@ -36,9 +42,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="container mb-2" id="container-canvImg"> 
+                            <div class="container mb-2" id="container-canvImg">
                                 <div class="Category_img_icon_div">
-                                    <img class="CategoryImagePreview" src="~/images/icons/Grey.jpg" />
+                                    <img class="CategoryImagePreview" src="" />
                                 </div>
                                 <input asp-for="File" type="file" id="CategoryImageInput" multiple="false" accept="Image/*" class="d-none upload_inputfile">
                                 <span asp-validation-for="File" class="text-danger"></span>
@@ -63,4 +69,4 @@
 </script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+}*@
