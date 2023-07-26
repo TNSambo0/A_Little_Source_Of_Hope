@@ -12,7 +12,7 @@
     </div>
     <label class="d-none DisplayTable">@ViewBag.Product</label>
     <input id="NumberofItems" type="hidden" value="@Model.Count()" />
-    <table class="table table-hover">
+    <table class="table table-hover product-table">
         <thead>
             <tr>
                 <th scope="col">&nbsp;</th>
@@ -46,9 +46,9 @@
                         <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.ProductId" class="btn btn-warning mb-1">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Product" asp-route-ProductId="@obj.ProductId">
+                        <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.ProductId)">
                             <i class="fa fa-trash" aria-hidden="true"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>
             }
@@ -73,7 +73,7 @@
         function DisplayTable() {
             const isModelEmpty = $("#DisplayTable").innerHTML;
             if (isModelEmpty == "True") {
-                $(".tm-product-table").addClass("d-none");
+                $(".product-table").addClass("d-none");
             }
             else {
                 $(".Create-Product-div").addClass("d-none");
@@ -100,49 +100,52 @@
                 }
             }
             BtnDeleteSelectedItems();
-        }        
-        //$(".btn-DeleteSelectedItems").on('click', function () {
-        //    $.ajax({
-        //        type: "POST",
-        //        dataType: "JSON",
-        //        contentType: "application/json; charset=utf-8",
-        //        url: '/Product/Delete',
-        //        data: { ProductIds: DeleteItemsArray },
-        //        success:
-        //            function (response) {
-        //                if (response.Status == "error") {
-        //                    alert("Error: " + response.Message);
-        //                    console.log("Error: " + response.Message);
-        //                }
-        //                else {
-        //                    var NumberofItems = $("#NumberofItems").val();
-        //                    if (DeleteItemsArray.length == NumberofItems) {
-        //                        while (DeleteItemsArray.length != 0) {
-        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-        //                            DeleteItemsArray.splice(0, 1);
-        //                        }
-        //                        $(".tm-product-table").fadeOut("slow");
-        //                        $(".Create-Product-div").removeClass("d-none");
-        //                    }
-        //                    else {
-        //                        while (DeleteItemsArray.length != 0) {
-        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-        //                            DeleteItemsArray.splice(0, 1);
-        //                        }
-        //                    }
-        //                    alert("Success: " + response.Status);
-        //                    console.log("Success: " + response.Message);
-        //                    BtnDeleteSelectedItems();
-        //                }
-        //            },
-        //        error:
-        //            function (response) {
-        //                console.log("Error: " + response.Message);
-        //                console.log("Error: " + response);
-        //                BtnDeleteSelectedItems();
-        //            }
-        //    });
+        }
+        function DeleteSingleItem(ProductId) {
+            Delete([ProductId]);
+        }
+        $(".btn-DeleteSelectedItems").on('click', function (){
+            Delete(DeleteItemsArray);});
+        function Delete(itemsArray) {
+            $.ajax({
+                method: "GET",
+                url: '/Product/Delete',
+                data: { ProductIds: itemsArray },
+                success:
+                    function (data) {
+                        data = JSON.parse(data);
+                        if (data.Status == "error") {
+                            alert("Error: " + data.Message);
+                            console.log("Error: " + data.Message);
+                        }
+                        else {
+                            var NumberofItems = $("#NumberofItems").val();
+                            if (data.DeleteItemsIds.length == NumberofItems) {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                                $(".tm-product-table").fadeOut("slow");
+                                $(".Create-Product-div").removeClass("d-none");
+                            }
+                            else {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                            }
+                            alert("Success: " + data.Status);
+                            console.log("Success: " + data.Message);
+                            BtnDeleteSelectedItems();
+                        }
+                    },
+                error:
+                    function (err) {
+                        console.log(err);
+                        console.log(err);
+                    }
+            });
 
-        //});
+        }
     </script>
 }

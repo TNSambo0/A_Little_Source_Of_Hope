@@ -22,6 +22,8 @@ namespace A_Little_Source_Of_Hope.Data
         public DbSet<Payment> Payment { get; set; }
         public DbSet<Gender> Gender { get; set; }
         public DbSet<DeleteAccount> DeletedAccount { get; set; }
+        public DbSet<Province> Province { get; set; }
+        public DbSet<City> City { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

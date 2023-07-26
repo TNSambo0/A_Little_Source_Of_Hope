@@ -26,6 +26,7 @@
                 {
                     <tr class="product-row">
                         <td>
+                            @*<input type="hidden" value="@obj.Product" />*@
                             <img src="~/@obj.ImageUrl" width="60" />
                         </td>
                         <td class="product-name">@obj.ProductName</td>
@@ -83,57 +84,18 @@
             let selectedQuantity = Number.parseInt(selectedQuantities[i]);
             let TotalPerItem = Math.round(((selectedQuantity * pricePerItem) + Number.EPSILON) * 100) / 100;
             SubTotal += TotalPerItem;
-            $(".TotalPerItem").val(TotalPerItem);
+            productRow.getElementsByClassName("TotalPerItem")[0].innerHTML = TotalPerItem;
         }
         let VAT = 0.14 * SubTotal;
         let VatOfSubTotal = Math.round((VAT + Number.EPSILON) * 100) / 100;
         let Total = Math.round(((SubTotal + VatOfSubTotal) + Number.EPSILON) * 100) / 100;
-        $(".SubTotal").val(SubTotal);
-        $(".VatOfSubTotal").val(VatOfSubTotal);
-        $(".Total").val(Total);
+        $(".row")[0].getElementsByClassName("SubTotal")[0].innerHTML = ": R " + SubTotal;
+        $(".row")[0].getElementsByClassName("VatOfSubTotal")[0].innerHTML=": R " + VatOfSubTotal;
+        $(".row")[0].getElementsByClassName("Total")[0].innerHTML=": R " + Total;
     });
     $(".btn-checkout").on('click', function () {
-        $.ajax({
-            type: "GET",
-            dataType: "JSON",
-            contentType: "application/json; charset=utf-8",
-            url: '/Payment/Payment',
-            data: { categoryIds: DeleteItemsArray },
-            success:
-                function (response) {
-                    if (response.Status == "error") {
-                        alert("Error: " + response.Message);
-                        console.log("Error: " + response.Message);
-                    }
-                    else {
-                        var NumberofItems = $("#NumberofItems").val();
-                        if (DeleteItemsArray.length == NumberofItems) {
-                            while (DeleteItemsArray.length != 0) {
-                                $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                                DeleteItemsArray.splice(0, 1);
-                            }
-                            $(".tm-product-table").fadeOut("slow");
-                            $(".Create-Product-div").removeClass("d-none");
-                        }
-                        else {
-                            while (DeleteItemsArray.length != 0) {
-                                $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                                DeleteItemsArray.splice(0, 1);
-                            }
-                        }
-                        alert("Success: " + response.Status);
-                        console.log("Success: " + response.Message);
-                        BtnDeleteSelectedItems();
-                    }
-                },
-            error:
-                function (response) {
-                    console.log("Error: " + response.Message);
-                    console.log("Error: " + response);
-                    BtnDeleteSelectedItems();
-                }
-        });
-
+        var Amount = Number.parseFloat($(".row")[0].getElementsByClassName("Total")[0].innerHTML.replace(": R ", "").replace(",", "."));
+        window.location.href = "Payment/Payment?Amount=" + Amount;
     });
 
 </script>
