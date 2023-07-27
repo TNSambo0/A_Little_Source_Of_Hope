@@ -184,5 +184,32 @@ namespace A_Little_Source_Of_Hope.Controllers
             ViewData["VatOfSubTotal"] = Math.Round((amountInDecimal * (decimal)(0.14)), 2);
             ViewData["Total"] = Math.Round((amountInDecimal * (decimal)0.14) + amountInDecimal, 2);
         }
+        public async Task<JsonResult> ChangeQuantity(int Id, int quantity)
+        {
+            ItemRemoveStatusModel results = new();
+            var sessionHandler = new SessionHandler();
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                await sessionHandler.SignUserOut(_signInManager, _logger);
+                results.Message = "Not Authorized";
+                results.Status = "error";
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            var product = await _Userdb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId==Id && x.AppUserId==user.Id);
+            if (product == null)
+            {
+                results.Message = "Product not found";
+                results.Status = "error";
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            product.Quantity = quantity;
+            _Userdb.Update(product);
+            await _Userdb.SaveChangesAsync();
+            results.Message = "Product quantity have been changed successfully.";
+            results.Status = "success";
+            return Json(JsonConvert.SerializeObject(results));
+        }
     }
 }

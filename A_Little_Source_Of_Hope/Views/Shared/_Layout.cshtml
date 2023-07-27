@@ -28,61 +28,69 @@
 </head>
 <body>
     <header>
-            <nav class="navbar navbar-expand-lg custom_nav-container bg-primary p-2 px-5">
-                <a class="navbar-brand" asp-action="Index" asp-controller="Home"><img class="rounded-circle shadow border border-dark border-2" width="50" src="~/images/icons/IMG-20230512-WA0012.jpg" alt="logo" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class=""> </span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item-nav" id="Home">
-                            <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
-                        </li>
-                        <li class="nav-item-nav dropdown-nav" id="About">
-                            <a class="nav-link dropdownbtn" asp-action="About" asp-controller="Home">About</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="" asp-action="About" asp-controller="Home">Vision & Mission</a>
-                                </li>
-                                <li>
-                                    <a class="" asp-action="Contact" asp-controller="Home">Contact us</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-nav dropdown-nav" id="Donate">
-                            <a class="nav-link dropdownbtn" asp-action="Donate" asp-controller="Home">Get involved</a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="" asp-action="Payment" asp-controller="Payments">Donate cash</a>
-                                </li>
-                                <li>
-                                    <a class="" asp-action="Donate" asp-controller="Home">Donate Items</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-nav" id="Shop">
-                            <a class="nav-link" asp-action="MarketPlace" asp-controller="Home">Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="ShoppingCart">
-                                <i class="fa fa-shopping-cart" aria-hiiden="true"></i>
-                            </a>
-                        </li>
-                        <partial name="_LoginPartial" />
-                    </ul>
-                </div>
-            </nav>
+        <nav class="navbar navbar-expand-lg custom_nav-container bg-primary p-2 px-5">
+            <a class="navbar-brand" asp-action="Index" asp-controller="Home"><img class="rounded-circle shadow border border-dark border-2" width="50" src="~/images/icons/IMG-20230512-WA0012.jpg" alt="logo" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item-nav" id="Home">
+                        <a class="nav-link" asp-action="Index" asp-controller="Home">Home</a>
+                    </li>
+                    <li class="nav-item-nav dropdown-nav" id="About">
+                        <a class="nav-link dropdownbtn" asp-action="About" asp-controller="Home">About</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="" asp-action="About" asp-controller="Home">Vision & Mission</a>
+                            </li>
+                            <li>
+                                <a class="" asp-action="Contact" asp-controller="Home">Contact us</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item-nav dropdown-nav" id="Donate">
+                        <a class="nav-link dropdownbtn" asp-action="Donate" asp-controller="Home">Get involved</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="" asp-action="Payment" asp-controller="Payments">Donate cash</a>
+                            </li>
+                            <li>
+                                <a class="" asp-action="Donate" asp-controller="Home">Donate Items</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item-nav" id="Shop">
+                        <a class="nav-link" asp-action="MarketPlace" asp-controller="Home">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Index" asp-controller="ShoppingCart">
+                            <i class="fa fa-shopping-cart" aria-hiiden="true"></i>
+                        </a>
+                    </li>
+                    <partial name="_LoginPartial" />
+                </ul>
+            </div>
+        </nav>
     </header>
     @if (ViewData["Title"].ToString() == "Home")
     {
         <section class="slider_section">
-            <div class="slider_bg_box">
-                <img src="~/images/IMG-20230511-WA0003.jpg" alt="Slider image">
-            </div>
-            <div class="slider-text">
-                <p>
-                    Help us give Children a Little Source of Hope
-                </p>
+            @*<div class="slider_bg_box">
+        <img src="~/images/icons/milada-vigerova-iQWvVYMtv1k-unsplash.jpg" alt="Slider image">
+        </div>*@
+            @* <div class="slider-text">
+        <p>
+        Help us give Children a Little Source of Hope
+        </p>
+        </div>*@
+            <div class="myBody">
+                <div class="myInfo">
+                    <h1 class="typewriter">Help us give Children</h1>
+                    <br>
+                    <h2 class="typewriter"> A Little Source of Hope</h2>
+
+                </div>
             </div>
         </section>
     }
