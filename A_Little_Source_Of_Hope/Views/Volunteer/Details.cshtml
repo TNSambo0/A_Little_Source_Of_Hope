@@ -1,0 +1,81 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="sub-title">View Applicants</h4>
+            </div>
+            <div class="card-block">
+                <form method="post" enctype="multipart/form-data">
+                    <div class='row'>
+                        <div class='col-sm-6'>
+                            <div class='container'>
+                                <div class='form-group'>
+
+                                    
+
+                                  
+                                    <label for="volunteerFullName">Volunteer Full Name:</label><br />
+                                    
+
+                                    <label for="Descript">Volunteer Description:</label><br />
+                                   
+
+                                    <label for="OrphanageName">Orphanage Name:</label><br />
+                                   
+
+                                    <label for="Date">Date:</label><br />
+                                   
+
+                                   
+                                </div>
+
+                                 
+                                
+                                
+                            </div>
+                            <div class="btn-group ml-3 mb-3">
+                                <button type="submit" class="btn btn-primary" id="btn_create">Approve</button>
+                                <a asp-action="Index" asp-controller="Category" class="btn btn-secondary">Deny</a>
+                                <Button type="submit" class="btn btn-primary" id="btn_create">Cancel</Button>
+                               
+
+                                
+                            </div>
+                            
+                           
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="container mb-2" id="container-canvImg">
+                                <div class="Category_img_icon_div">
+                                    <img class="CategoryImagePreview" src="~/images/icons/Grey.jpg" />
+                                </div>
+                                <input asp-for="File" type="file" id="CategoryImageInput" multiple="false" accept="Image/*" class="d-none upload_inputfile">
+                                <span asp-validation-for="File" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".Category_img_icon_div").on("click", function () {
+        $("#CategoryImageInput").click();
+    });
+    $("#CategoryImageInput").on("change", function () {
+        if ($(this)[0].files[0] != null) {
+            $(".CategoryImagePreview").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        }
+    });
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

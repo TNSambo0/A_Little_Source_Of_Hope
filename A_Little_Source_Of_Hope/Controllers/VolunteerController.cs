@@ -8,5 +8,9 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             return View();
         }
+        public IActionResult details()
+        {
+            return View();
+        }
     }
 }
