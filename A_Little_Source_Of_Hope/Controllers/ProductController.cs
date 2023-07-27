@@ -5,6 +5,8 @@ using A_Little_Source_Of_Hope.Models;
 using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+//using System.Web.Mvc;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
@@ -226,30 +228,24 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
 
-        // POST : ProductController/Delete/5
-        [HttpPost]
-        public async Task<IActionResult> Delete(List<int> ProductIds)
+        public async Task<JsonResult> Delete(List<int> ProductIds)
         {
-
+            ItemRemoveStatusModel results = new();
             var sessionHandler = new SessionHandler();
             await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
             }
             Product Product = new();
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Product, ProductOperations.Delete);
             if (!isAuthorized.Succeeded)
             {
-                var result = new ItemRemoveStatusModel()
-                {
-                    Message = "You don't have the permission to Delete a product.",
-                    Status = "error",
-                    DeleteItemsIds = ProductIds
-                };
-                return Json(result);
+                results.Message = $"You don't have the permission to Delete a product.{isAuthorized.Succeeded}";
+                results.Status = "error";
+                results.DeleteItemsIds = ProductIds;
+                return Json(JsonConvert.SerializeObject(results));
             }
             string errorList = "";
             foreach (var ProductId in ProductIds)
@@ -266,23 +262,16 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
             if (!String.IsNullOrEmpty(errorList))
             {
-                var result = new ItemRemoveStatusModel()
-                {
-                    Message = $"An error ocuured while trying to remove product with productId {errorList}.",
-                    Status = "error",
-                    DeleteItemsIds = ProductIds
-                };
-                return Json(result);
+                results.Message = $"An error ocuured while trying to remove product with productId {errorList}.";
+                results.Status = "error";
+                results.DeleteItemsIds = ProductIds;
+                return Json(JsonConvert.SerializeObject(results));
             }
             await _userDb.SaveChangesAsync();
-            var results = new ItemRemoveStatusModel()
-            {
-                Message = "Product have been deleted successfully.",
-                Status = "success",
-                DeleteItemsIds = ProductIds
-            };
-            return Json(results);
-
+            results.Message = "Product have been deleted successfully.";
+            results.Status = "success";
+            results.DeleteItemsIds = ProductIds;
+            return Json(JsonConvert.SerializeObject(results));
         }
     }
 }

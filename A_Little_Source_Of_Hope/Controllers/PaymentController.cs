@@ -5,12 +5,12 @@ namespace A_Little_Source_Of_Hope.Controllers
 {
     public class PaymentController : Controller
     {
-        public IActionResult Payment(decimal? Amount)
+        //[HttpGet]
+        public IActionResult Payment(decimal Amount)
         {
-            decimal OrderAmount = (decimal)(Amount == null? 0 : Amount);
             Payment paymentAmount = new()
             {
-                Amount = Math.Round(OrderAmount, 2)
+                Amount = Math.Round(Amount, 2)
             };
             return View(paymentAmount);
         }
