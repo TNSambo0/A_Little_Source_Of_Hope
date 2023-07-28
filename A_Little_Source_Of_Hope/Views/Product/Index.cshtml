@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="p-4">
+<<<<<<< HEAD
     @if (ViewData["Product"] != null)
     {
         <div class="d-flex mb-2">
@@ -26,6 +27,54 @@
                     <th scope="col">IsActive</th>
                     <th scope="col">CreatedDate</th>
                     <th scope="col">&nbsp;</th>
+=======
+    <div class="d-flex mb-2">
+        <h2>Product List</h2>
+        <a asp-action="Create" asp-controller="Product" class="btn btn-primary ml-auto">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Product
+        </a>
+    </div>
+    <label class="d-none DisplayTable">@ViewBag.Product</label>
+    <input id="NumberofItems" type="hidden" value="@Model.Count()" />
+    <table class="table table-hover product-table">
+        <thead>
+            <tr>
+                <th scope="col">&nbsp;</th>
+                <th scope="col">Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">IsActive</th>
+                <th scope="col">CreatedDate</th>
+                <th scope="col">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr class="row-@obj.ProductId">
+                    <td>
+                        <input type="checkbox" onclick="SelectItem(this,@obj.ProductId)" />
+                    </td>
+                    <td>
+                        <img src="~/@obj.Imageurl" width="60" />
+                    </td>
+                    <td class="product-name">@obj.ProductName</td>
+                    <td>@obj.Description</td>
+                    <td>@obj.Quantity</td>
+                    <td>@obj.Price</td>
+                    <td>@obj.IsActive</td>
+                    <td>@obj.CreatedDate</td>
+                    <td>
+                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.ProductId" class="btn btn-warning">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.ProductId)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+>>>>>>> 49c41f69e4f62786399dd904e804fcd0fef4364d
                 </tr>
             </thead>
             <tbody>

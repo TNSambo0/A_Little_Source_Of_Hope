@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Volunteer>
+@{
+    ViewData["Title"] = "Volunteer List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-12 tm-block-col">
+    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+        <h2 class="tm-block-title">Volunteer's List</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Orphanage Name</th>
+                    <th scope="col">Date and time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Thabo Nkosi</td>
+                    <td>Nkosithabo@gmail.com</td>
+                    <td>home works,dishes</td>
+                    <td>Little Rose</td>
+                    <td>27 july 10:30</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

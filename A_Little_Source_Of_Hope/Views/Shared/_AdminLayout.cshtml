@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="~/images/icons/IMG-20230512-WA0012.jpg" type="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="~/css/app.css">
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
@@ -71,6 +74,22 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" asp-controller="Product" asp-action="Create">
                             <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Add Product</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-header">
+                        Orphanage operations
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" asp-controller="Orphanage" asp-action="Index">
+                            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Orphanage dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-header">
+                        Volunteer operations
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" asp-controller="Volunteer" asp-action="Index">
+                            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Volunteer dashboard</span>
                         </a>
                     </li>
                 </ul>
@@ -251,7 +270,7 @@
                     <div class="row text-muted">
                         <div class="col-6 text-start">
                             <p class="mb-0">
-                                <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> &copy;
+                                <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>A Little Source Of Hope</strong></a> &copy;
                             </p>
                         </div>
                         <div class="col-6 text-end">

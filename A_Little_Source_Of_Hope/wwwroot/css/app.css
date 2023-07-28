@@ -59,6 +59,10 @@
     --bs-body-bg: #f5f7fb
 }
 
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
 *, :after, :before {
     box-sizing: border-box
 }
