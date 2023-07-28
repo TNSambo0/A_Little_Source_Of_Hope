@@ -12,8 +12,12 @@ namespace A_Little_Source_Of_Hope.Models
         }
         public IActionResult Index()
         {
-            IEnumerable<Orphanage> orphanages = _AppDb.Orphanage;
-            return View();
+            var orphanages = _AppDb.Orphanage;
+            if (_AppDb.Orphanage.Any())
+            {
+                ViewData["orphanages"] = "not null";
+            }
+            return View(orphanages);
         }public IActionResult Create()
         {
             return View();

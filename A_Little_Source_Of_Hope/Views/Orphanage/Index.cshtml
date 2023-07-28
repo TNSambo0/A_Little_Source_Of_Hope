@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="p-4">
-    @if (ViewData["Title"] != null)
+    @if (ViewData["orphanages"] != null)
     {
         <div class="d-flex mb-2">
             <h2>Orphanage List</h2>
@@ -47,9 +47,9 @@
         </table>
     }
     else{
-    <div class="row mt-2 Create-Product-div">
+    <div class="row mt-2">
         <div class="colsm-12 text-center">
-            <p>No Product found. Click <a asp-action="Create" asp-controller="Product">here</a> to create a product.</p>
+            <p>No Orphanage found. Click <a asp-action="Create" asp-controller="Orphanage">here</a> to create a orphanage.</p>
         </div>
     </div>
     }
@@ -57,17 +57,7 @@
 @section Scripts{
     <script>
         const DeleteItemsArray = [];
-        function DisplayTable() {
-            const isModelEmpty = $("#DisplayTable").innerHTML;
-            if (isModelEmpty == "True") {
-                $(".product-table").addClass("d-none");
-            }
-            else {
-                $(".Create-Product-div").addClass("d-none");
-            }
-
-        }
-        DisplayTable();
+        
         function BtnDeleteSelectedItems() {
             if (DeleteItemsArray.length == 0) {
                 $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
