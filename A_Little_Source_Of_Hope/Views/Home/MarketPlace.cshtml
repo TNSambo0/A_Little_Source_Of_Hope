@@ -26,17 +26,16 @@
                                 <label class="ClaimStatusValue d-none">@obj.ClaimStatus</label>
                                 <div class="option_container">
                                     <div class="options">
-                                        <input id="product-@obj.ProductId" type="hidden" value="@obj.ProductId" />
-                                        <a class="option1 add-to-cart" id="@obj.ProductId">
+                                        <button class="option1 add-to-cart" onclick="AddToShoppingCart(@obj.ProductId)">
                                             Add To Cart
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="img-box">
                                     <img src="~/@obj.Imageurl" alt="">
                                 </div>
                                 <div class="detail-box">
-                                    <h5 class="Product-name">obj.ProductName</h5>
+                                    <h5 class="Product-name">@obj.Description</h5>
                                     <h6>R @obj.Price</h6>
                                 </div>
                             </div>
@@ -76,31 +75,30 @@
             }
         }
     });
-    $(".add-to-cart").on("onclick", function (){
-        var id = Number.parseInt($("#product-"+$(this).id).val());
+    function AddToShoppingCart(id) {
         $.ajax({
-                method: "GET",
-                url: 'ShoppingCart/AddToCart',
-                data: { productID: id},
-                success:
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
-                        }
-                        else {
-                            console.log(data.Message);
-                        }
-                    },
-                error:
-                    function (err) {
-                        console.log(err);
-                        console.log(err);
+            method: "POST",
+            url: '/ShoppingCart/AddToCart',
+            data: { productID: id },
+            success:
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.Status == "error") {
+                        alert("Error: " + data.Message);
+                        console.log("Error: " + data.Message);
                     }
-            });
-    });
+                    else {
+                        console.log(data.Message);
+                    }
+                },
+            error:
+                function (err) {
+                    console.log(err);
+                    console.log(err);
+                }
+        });
+    }
 </script>
 @section Scripts {
-            <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
