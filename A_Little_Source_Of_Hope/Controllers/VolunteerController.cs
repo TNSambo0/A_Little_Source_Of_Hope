@@ -12,5 +12,13 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Approve()
+        {
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Reject()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

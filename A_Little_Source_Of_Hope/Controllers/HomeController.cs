@@ -155,6 +155,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     }
                 }
                 else { Product = Product.Where(s => s.ClaimStatus != true); }
+                if (Product.Any()) { ViewData["Shop"] = "not null"; }
+                else { ViewData["Shop"] = null; }
                 return View(Product.AsEnumerable<Product>());
             }
             catch (Exception ex)

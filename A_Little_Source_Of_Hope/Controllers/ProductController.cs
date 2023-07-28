@@ -48,8 +48,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     return RedirectToAction("Index", "Admin");
                 }
                 IEnumerable<Product> objProduct = _userDb.Product;
-                if (_userDb.Product.Any()) { ViewBag.Product = true; }
-                else { ViewBag.Product = false; }
+                if (_userDb.Product.Any()) { ViewData["Product"] = "not null"; }
+                else { ViewData["Product"] = null; }
                 return View(objProduct);
             }
             catch (Exception ex)
@@ -268,6 +268,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _userDb.SaveChangesAsync();
+            if(await _userDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
+            else { ViewData["Product"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = ProductIds;

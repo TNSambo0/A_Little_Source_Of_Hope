@@ -62,7 +62,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     return View();
                 }
                 GetTotal(UserCart);
-                ViewBag.Cart = "Not Null";
+                ViewData["Cart"] = "Not Null";
                 return View(UserCart);
             }
             catch (Exception ex)
@@ -75,8 +75,9 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
 
-        public async Task<JsonResult> AddToCart(int productID, bool IsCartUrl, int quantity = 1)
+        public async Task<JsonResult> AddToCart(int productID)
         {
+            int quantity = 1;
             var sessionHandler = new SessionHandler();
             await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
             var user = await _userManager.GetUserAsync(User);
@@ -149,6 +150,9 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
             _Userdb.ShoppingCart.Remove(cartFromDb);
             await _Userdb.SaveChangesAsync();
+            var UpdatedCartFromDb = await _Userdb.ShoppingCart.AnyAsync(x => x.AppUserId == user.Id);
+            if (UpdatedCartFromDb) { ViewData["Cart"] = "not null"; }
+            else { ViewData["Cart"] = null; }
             results.Status = "success";
             results.Message = "Item successfully removed from cart.";
             return Json(JsonConvert.SerializeObject(results));
@@ -171,6 +175,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 _Userdb.ShoppingCart.Remove(CartItem);
             }
+            ViewData["Cart"] = null; 
             await _Userdb.SaveChangesAsync();
             results.Status = "success";
             results.Message = "Cart successfully cleared.";

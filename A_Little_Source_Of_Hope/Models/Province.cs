@@ -9,7 +9,7 @@ namespace A_Little_Source_Of_Hope.Models
         [StringLength(50, MinimumLength = 3)]
         [DataType(DataType.Text)]
 
-        public string province{ get; set; }
+        public string ProvinceName{ get; set; }
                 
     }
 
