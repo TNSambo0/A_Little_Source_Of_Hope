@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="p-4">
-<<<<<<< HEAD
     @if (ViewData["Category"] != null)
     {
         <div class="d-flex mb-2">
@@ -24,48 +23,6 @@
                     <th scope="col">Is active</th>
                     <th scope="col">Created Date</th>
                     <th scope="col">&nbsp;</th>
-=======
-    <div class="d-flex mb-2">
-        <h2>Category List</h2>
-        <a asp-action="Create" asp-controller="Category" class="btn btn-primary ml-auto">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Category
-        </a>
-    </div>
-    <label class="d-none DisplayTable">@ViewBag.Category</label>
-    <input id="NumberofItems" type="hidden" value="@Model.Count()" />
-    <table class="table table-hover Category-table">
-        <thead>
-            <tr>
-                <th scope="col">&nbsp;</th>
-                <th scope="col">Image</th>
-                <th scope="col">Category Name</th>
-                <th scope="col">Is active</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var obj in Model)
-            {
-                <tr class="category-row">
-                    <td>
-                        <input type="checkbox" onclick="SelectItem(this,@obj.CategoryId)" />
-                    </td>
-                    <td>
-                        <img src="~/@obj.Imageurl" width="60" />
-                    </td>
-                    <td class="category-name">@obj.CategoryName</td>
-                    <td>@obj.IsActive</td>
-                    <td>@obj.CreatedDate</td>
-                    <td>
-                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.CategoryId" class="btn btn-warning">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-CategoryId="@obj.CategoryId">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </a>
-                    </td>
->>>>>>> 49c41f69e4f62786399dd904e804fcd0fef4364d
                 </tr>
             </thead>
             <tbody>
@@ -133,48 +90,48 @@
             }
             BtnDeleteSelectedItems();
         }
-                //$(".btn-DeleteSelectedItems").on('click', function () {
-                //    $.ajax({
-                //        type: "POST",
-                //        dataType: "JSON",
-                //        contentType: "application/json; charset=utf-8",
-                        //        url: '/Category/Delete',
-                //        data: { CategoryIds: DeleteItemsArray },
-                //        success:
-                //            function (response) {
-                //                if (response.Status == "error") {
-                //                    alert("Error: " + response.Message);
-                //                    console.log("Error: " + response.Message);
-                //                }
-                //                else {
-                //                    var NumberofItems = $("#NumberofItems").val();
-                //                    if (DeleteItemsArray.length == NumberofItems) {
-                //                        while (DeleteItemsArray.length != 0) {
-                //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                //                            DeleteItemsArray.splice(0, 1);
-                //                        }
-                        //                        $(".tm-Category-table").fadeOut("slow");
-                        //                        $(".Create-Category-div").removeClass("d-none");
-                //                    }
-                //                    else {
-                //                        while (DeleteItemsArray.length != 0) {
-                //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                //                            DeleteItemsArray.splice(0, 1);
-                //                        }
-                //                    }
-                //                    alert("Success: " + response.Status);
-                //                    console.log("Success: " + response.Message);
-                //                    BtnDeleteSelectedItems();
-                //                }
-                //            },
-                //        error:
-                //            function (response) {
-                //                console.log("Error: " + response.Message);
-                //                console.log("Error: " + response);
-                //                BtnDeleteSelectedItems();
-                //            }
-                //    });
-                //
-                //});
+                        //$(".btn-DeleteSelectedItems").on('click', function () {
+                        //    $.ajax({
+                        //        type: "POST",
+                        //        dataType: "JSON",
+                        //        contentType: "application/json; charset=utf-8",
+                                //        url: '/Category/Delete',
+                        //        data: { CategoryIds: DeleteItemsArray },
+                        //        success:
+                        //            function (response) {
+                        //                if (response.Status == "error") {
+                        //                    alert("Error: " + response.Message);
+                        //                    console.log("Error: " + response.Message);
+                        //                }
+                        //                else {
+                        //                    var NumberofItems = $("#NumberofItems").val();
+                        //                    if (DeleteItemsArray.length == NumberofItems) {
+                        //                        while (DeleteItemsArray.length != 0) {
+                        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+                        //                            DeleteItemsArray.splice(0, 1);
+                        //                        }
+                                //                        $(".tm-Category-table").fadeOut("slow");
+                                //                        $(".Create-Category-div").removeClass("d-none");
+                        //                    }
+                        //                    else {
+                        //                        while (DeleteItemsArray.length != 0) {
+                        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+                        //                            DeleteItemsArray.splice(0, 1);
+                        //                        }
+                        //                    }
+                        //                    alert("Success: " + response.Status);
+                        //                    console.log("Success: " + response.Message);
+                        //                    BtnDeleteSelectedItems();
+                        //                }
+                        //            },
+                        //        error:
+                        //            function (response) {
+                        //                console.log("Error: " + response.Message);
+                        //                console.log("Error: " + response);
+                        //                BtnDeleteSelectedItems();
+                        //            }
+                        //    });
+                        //
+                        //});
     </script>
 }
