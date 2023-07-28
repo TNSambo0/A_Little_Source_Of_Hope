@@ -37,7 +37,7 @@
                     <td>@obj.IsActive</td>
                     <td>@obj.CreatedDate</td>
                     <td>
-                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.CategoryId" class="btn btn-warning mb-1">
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.CategoryId" class="btn btn-warning">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-CategoryId="@obj.CategoryId">

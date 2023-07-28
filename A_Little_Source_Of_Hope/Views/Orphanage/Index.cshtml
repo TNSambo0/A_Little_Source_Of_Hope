@@ -1,66 +1,43 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<Orphanage>
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "Orphanage";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="p-4">
     <div class="d-flex mb-2">
         <h2>Product List</h2>
         <a asp-action="Create" asp-controller="Product" class="btn btn-primary ml-auto">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Product
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New Orphanage
         </a>
     </div>
-    <label class="d-none DisplayTable">@ViewBag.Product</label>
-    <input id="NumberofItems" type="hidden" value="@Model.Count()" />
+    <label class="d-none DisplayTable">@ViewBag.Orphanage</label>
     <table class="table table-hover product-table">
         <thead>
             <tr>
-                <th scope="col">&nbsp;</th>
-                <th scope="col">Image</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">IsActive</th>
-                <th scope="col">CreatedDate</th>
+                <th scope="col">Orphanage name</th>
+                <th scope="col">Manager name</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">Email address</th>
                 <th scope="col">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var obj in Model)
-            {
-                <tr class="row-@obj.ProductId">
+                <tr class="row-OrphanageId">                   
+                    <td class="product-name">People's Hope</td>
+                    <td>Norman Mfundo</td>
+                    <td>0712345678</td>
+                    <td>qwerty@gmail.com</td>
                     <td>
-                        <input type="checkbox" onclick="SelectItem(this,@obj.ProductId)" />
-                    </td>
-                    <td>
-                        <img src="~/@obj.Imageurl" width="60" />
-                    </td>
-                    <td class="product-name">@obj.ProductName</td>
-                    <td>@obj.Description</td>
-                    <td>@obj.Quantity</td>
-                    <td>@obj.Price</td>
-                    <td>@obj.IsActive</td>
-                    <td>@obj.CreatedDate</td>
-                    <td>
-                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.ProductId" class="btn btn-warning">
+                        <a asp-controller="Product" asp-action="Edit" asp-route-id="OrphanageId" class="btn btn-warning">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
-                        <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.ProductId)">
+                        <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(OrphanageId)">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                         </button>
                     </td>
                 </tr>
-            }
         </tbody>
     </table>
-    <div class="row">
-        <div class="col-md-12">
-            <button class="btn btn-primary btn-block text-uppercase btn-DeleteSelectedItems">
-                Delete selected Product
-            </button>
-        </div>
-    </div>
     <div class="row mt-2 Create-Product-div">
         <div class="colsm-12 text-center">
             <p>No Product found. Click <a asp-action="Create" asp-controller="Product">here</a> to create a product.</p>
@@ -104,8 +81,9 @@
         function DeleteSingleItem(ProductId) {
             Delete([ProductId]);
         }
-        $(".btn-DeleteSelectedItems").on('click', function (){
-            Delete(DeleteItemsArray);});
+        $(".btn-DeleteSelectedItems").on('click', function () {
+            Delete(DeleteItemsArray);
+        });
         function Delete(itemsArray) {
             $.ajax({
                 method: "GET",
