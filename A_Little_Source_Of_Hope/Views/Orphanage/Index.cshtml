@@ -4,60 +4,60 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="p-4">
-    <div class="d-flex mb-2">
-        <h2>Product List</h2>
-        <a asp-action="Create" asp-controller="Product" class="btn btn-primary ml-auto">
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New Orphanage
-        </a>
-    </div>
-    <label class="d-none DisplayTable">@ViewBag.Orphanage</label>
-    <table class="table table-hover product-table">
-        <thead>
-            <tr>
-                <th scope="col">Orphanage name</th>
-                <th scope="col">Manager name</th>
-                <th scope="col">Phone number</th>
-                <th scope="col">Email address</th>
-                <th scope="col">&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-                <tr class="row-OrphanageId">                   
-                    <td class="product-name">People's Hope</td>
-                    <td>Norman Mfundo</td>
-                    <td>0712345678</td>
-                    <td>qwerty@gmail.com</td>
-                    <td>
-                        <a asp-controller="Product" asp-action="Edit" asp-route-id="OrphanageId" class="btn btn-warning">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                        <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(OrphanageId)">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                    </td>
+    @if (ViewData["orphanages"] != null)
+    {
+        <div class="d-flex mb-2">
+            <h2>Orphanage List</h2>
+            <a asp-action="Create" asp-controller="Product" class="btn btn-primary ml-auto">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New Orphanage
+            </a>
+        </div>
+        <label class="d-none DisplayTable">@ViewBag.Orphanage</label>
+        <table class="table table-hover product-table">
+            <thead>
+                <tr>
+                    <th scope="col">Orphanage name</th>
+                    <th scope="col">Manager name</th>
+                    <th scope="col">Phone number</th>
+                    <th scope="col">Email address</th>
+                    <th scope="col">Physical address</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
-        </tbody>
-    </table>
-    <div class="row mt-2 Create-Product-div">
+            </thead>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr class="row-OrphanageId">
+                        <td class="product-name">@obj.OrphanageName</td>
+                        <td>@obj.Manager</td>
+                        <td>@obj.CellNumber</td>
+                        <td>@obj.OrphanageEmail</td>
+                        <td>@obj.OrphanageAddress</td>
+                        <td>
+                            <a asp-controller="Orphanage" asp-action="Edit" asp-route-id="@obj.OrphanageId" class="btn btn-warning">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.OrphanageId)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else{
+    <div class="row mt-2">
         <div class="colsm-12 text-center">
-            <p>No Product found. Click <a asp-action="Create" asp-controller="Product">here</a> to create a product.</p>
+            <p>No Orphanage found. Click <a asp-action="Create" asp-controller="Orphanage">here</a> to create a orphanage.</p>
         </div>
     </div>
+    }
 </div>
 @section Scripts{
     <script>
         const DeleteItemsArray = [];
-        function DisplayTable() {
-            const isModelEmpty = $("#DisplayTable").innerHTML;
-            if (isModelEmpty == "True") {
-                $(".product-table").addClass("d-none");
-            }
-            else {
-                $(".Create-Product-div").addClass("d-none");
-            }
-
-        }
-        DisplayTable();
+        
         function BtnDeleteSelectedItems() {
             if (DeleteItemsArray.length == 0) {
                 $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
@@ -87,8 +87,8 @@
         function Delete(itemsArray) {
             $.ajax({
                 method: "GET",
-                url: '/Product/Delete',
-                data: { ProductIds: itemsArray },
+                url: '/Orphanage/Delete',
+                data: { OrphanageId: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);
