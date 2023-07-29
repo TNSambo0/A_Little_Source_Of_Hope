@@ -10,14 +10,14 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
     public class AdminController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _userDb;
+        private readonly AppDbContext _AppDb;
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        public AdminController(ILogger<ShoppingCartController> logger, AppDbContext userDb, UserManager<AppUser> userManager,
+        private readonly SignInManager<AppUser> _signInManager; 
+        public AdminController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
             _logger = logger;
-            _userDb = userDb;
+            _AppDb = AppDb;
             _userManager = userManager;
             _signInManager = signInManager;
         }

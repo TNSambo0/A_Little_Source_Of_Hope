@@ -14,16 +14,16 @@ namespace A_Little_Source_Of_Hope.Controllers
     public class ProductController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _userDb;
+        private readonly AppDbContext _AppDb; 
         protected IAuthorizationService _AuthorizationService;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public ProductController(ILogger<ShoppingCartController> logger, AppDbContext userDb, UserManager<AppUser> userManager,
+        public ProductController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
             IAuthorizationService AuthorizationService, SignInManager<AppUser> signInManager)
         {
             _logger = logger;
-            _userDb = userDb;
+            _AppDb = AppDb;
             _AuthorizationService = AuthorizationService;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,8 +47,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     TempData["error"] = "You don't have the permission to see Product.";
                     return RedirectToAction("Index", "Admin");
                 }
-                IEnumerable<Product> objProduct = _userDb.Product;
-                if (_userDb.Product.Any()) { ViewData["Product"] = "not null"; }
+                IEnumerable<Product> objProduct = _AppDb.Product;
+                if (_AppDb.Product.Any()) { ViewData["Product"] = "not null"; }
                 else { ViewData["Product"] = null; }
                 return View(objProduct);
             }
@@ -100,7 +100,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var productFromDb = _userDb.Product.Contains(product);
+                    var productFromDb = _AppDb.Product.Contains(product);
                     if (productFromDb != true)
                     {
                         if (product.File != null && product.File.FileName != null)
@@ -119,8 +119,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                         }
                         product.CreatedDate = DateTime.Now;
                         product.IsActive = Producttatus.IsProductActive(product);
-                        await _userDb.Product.AddAsync(product);
-                        await _userDb.SaveChangesAsync();
+                        await _AppDb.Product.AddAsync(product);
+                        await _AppDb.SaveChangesAsync();
                         //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                         //{
                         //    product.File.CopyTo(stream);
@@ -164,7 +164,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     return NotFound();
                 }
-                var productFromDb = await _userDb.Product.FindAsync(id);
+                var productFromDb = await _AppDb.Product.FindAsync(id);
                 if (productFromDb == null)
                 {
                     return NotFound();
@@ -205,15 +205,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var productFromDb = await _userDb.Product.FindAsync(product.ProductId);
+                    var productFromDb = await _AppDb.Product.FindAsync(product.ProductId);
                     if (productFromDb == null)
                     {
                         return NotFound();
                     }
                     productFromDb.IsActive = Producttatus.IsProductActive(productFromDb);
-                    //_userDb.Attach(productFromDb).State = EntityState.Modified;
-                    _userDb.Product.Update(productFromDb);
-                    await _userDb.SaveChangesAsync();
+                    //_AppDb.Attach(productFromDb).State = EntityState.Modified;
+                    _AppDb.Product.Update(productFromDb);
+                    await _AppDb.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 return View(product);
@@ -250,14 +250,14 @@ namespace A_Little_Source_Of_Hope.Controllers
             string errorList = "";
             foreach (var ProductId in ProductIds)
             {
-                var productFromDb = await _userDb.Product.FindAsync(ProductId);
+                var productFromDb = await _AppDb.Product.FindAsync(ProductId);
                 if (productFromDb == null)
                 {
                     errorList += ProductId.ToString() + " ";
                 }
                 else
                 {
-                    _userDb.Product.Remove(productFromDb);
+                    _AppDb.Product.Remove(productFromDb);
                 }
             }
             if (!String.IsNullOrEmpty(errorList))
@@ -267,8 +267,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.DeleteItemsIds = ProductIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
-            await _userDb.SaveChangesAsync();
-            if(await _userDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
+            await _AppDb.SaveChangesAsync();
+            if(await _AppDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
             else { ViewData["Product"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";

@@ -930,7 +930,7 @@ input[type="email"], input[type="text"], input[type="password"] {
     align-items: center;
 }
 
-    .product_section .options a {
+    .product_section .options button {
         display: inline-block;
         padding: 8px 15px;
         border-radius: 30px;

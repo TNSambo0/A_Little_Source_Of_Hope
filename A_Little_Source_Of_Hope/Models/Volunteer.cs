@@ -11,6 +11,7 @@ namespace A_Little_Source_Of_Hope.Models
         public int VoluneerId { get;set;} 
         public string Description { get;set;} 
         public string OrphanageName  { get;set;} 
+        public string Status  { get;set;} 
         public DateTime VolunteerDate  { get;set;}
         [NotMapped]
         public string Date { get; set; }

@@ -25,6 +25,7 @@ namespace A_Little_Source_Of_Hope.Data
         public DbSet<Province> Province { get; set; }
         public DbSet<City> City { get; set; }
         public DbSet<Orphanage> Orphanage { get; set; }
+        public DbSet<Volunteer> Volunteer { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

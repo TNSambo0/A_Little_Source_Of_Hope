@@ -11,15 +11,15 @@ namespace A_Little_Source_Of_Hope.Controllers
     public class CategoryController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _userDb;
+        private readonly AppDbContext _AppDb; 
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         protected IAuthorizationService _AuthorizationService;
-        public CategoryController(ILogger<ShoppingCartController> logger, AppDbContext userDb, UserManager<AppUser> userManager,
+        public CategoryController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
             IAuthorizationService AuthorizationService,SignInManager<AppUser> signInManager)
         {
             _logger = logger;
-            _userDb = userDb;
+            _AppDb = AppDb;
             _userManager = userManager;
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
@@ -37,8 +37,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                IEnumerable<Category> objCategory = _userDb.Category;
-                var CategoryFromDb = _userDb.Category.Any();
+                IEnumerable<Category> objCategory = _AppDb.Category;
+                var CategoryFromDb = _AppDb.Category.Any();
                 if (CategoryFromDb == true) { ViewBag.Category = true; }
                 else { ViewBag.Category = false; }
                 return View(objCategory);
@@ -95,7 +95,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    var CategoryFromDb = _userDb.Category.Contains(category);
+                    var CategoryFromDb = _AppDb.Category.Contains(category);
                     if (CategoryFromDb != true)
                     {
                         var filename = Path.GetFileName(category.File.FileName);
@@ -110,8 +110,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                         string fileNameWithPath = Path.Combine(path, myfile);
                         category.Imageurl = fileNameWithPath;
                         category.CreatedDate = DateTime.Now;
-                        _userDb.Category.Add(category);
-                        _userDb.SaveChanges();
+                        _AppDb.Category.Add(category);
+                        _AppDb.SaveChanges();
                         using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                         {
                             category.File.CopyTo(stream);
@@ -153,7 +153,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     return NotFound();
                 }
-                var categoryFromDb = _userDb.Category.Find(id);
+                var categoryFromDb = _AppDb.Category.Find(id);
                 if (categoryFromDb == null)
                 {
                     return NotFound();
@@ -214,7 +214,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     return NotFound();
                 }
-                var categoryFromDb = _userDb.Category.Find(id);
+                var categoryFromDb = _AppDb.Category.Find(id);
                 if (categoryFromDb == null)
                 {
                     return NotFound();
@@ -260,7 +260,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 string errorList = "";
                 foreach (var ProductId in categoryIds)
                 {
-                    var productFromDb = await _userDb.Product.FindAsync(ProductId);
+                    var productFromDb = await _AppDb.Product.FindAsync(ProductId);
                     if (productFromDb == null)
                     {
                         errorList += ProductId.ToString() + " ";
@@ -280,8 +280,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     };
                     return Json(result);
                 }
-                _userDb.Product.RemoveRange(Product);
-                await _userDb.SaveChangesAsync();
+                _AppDb.Product.RemoveRange(Product);
+                await _AppDb.SaveChangesAsync();
                 var results = new ItemRemoveStatusModel()
                 {
                     Message = "Product have been deleted successfully.",

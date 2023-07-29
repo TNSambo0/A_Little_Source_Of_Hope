@@ -15,15 +15,15 @@ namespace A_Little_Source_Of_Hope.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _Userdb;
+        private readonly AppDbContext _AppDb;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public ShoppingCartController(ILogger<ShoppingCartController> logger, AppDbContext Userdb, UserManager<AppUser> userManager,
+        public ShoppingCartController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
             _logger = logger;
-            _Userdb = Userdb;
+            _AppDb = AppDb;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -40,8 +40,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     return Problem("Please try login in again.");
                 }
 
-                IEnumerable<ShoppingCart> UserCart = from cart in _Userdb.ShoppingCart
-                                                     join product in _Userdb.Product
+                IEnumerable<ShoppingCart> UserCart = from cart in _AppDb.ShoppingCart
+                                                     join product in _AppDb.Product
                                                      on cart.ProductId equals product.ProductId
                                                      where cart.AppUserId == user.Id
                                                      select new ShoppingCart
@@ -74,10 +74,9 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-
+        [HttpPost]
         public async Task<JsonResult> AddToCart(int productID)
         {
-            int quantity = 1;
             var sessionHandler = new SessionHandler();
             await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
             var user = await _userManager.GetUserAsync(User);
@@ -90,7 +89,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
 
-            var ProductFromDb = await _Userdb.Product.FirstOrDefaultAsync(p => p.ProductId == productID && p.Quantity >= 1 && p.IsActive == true);
+            var ProductFromDb = await _AppDb.Product.FirstOrDefaultAsync(p => p.ProductId == productID && p.Quantity >= 1 && p.IsActive == true);
             if (ProductFromDb == null)
             {
                 TempData["error"] = "Selected item not found";
@@ -98,35 +97,36 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Message = "Selected item not found.";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            if (ProductFromDb.Quantity < quantity)
+            if (ProductFromDb.Quantity < 1)
             {
                 results.Status = "error";
                 results.Message = "Selected quantity is greater then the available quantity.";
                 return Json(JsonConvert.SerializeObject(results));
             }
             var addCart = new ShoppingCart();
-            var userCartFromDb = await _Userdb.ShoppingCart.FirstOrDefaultAsync(c => c.AppUserId == user.Id && c.ProductId == productID);
+            var userCartFromDb = await _AppDb.ShoppingCart.FirstOrDefaultAsync(c => c.AppUserId == user.Id && c.ProductId == productID);
             if (userCartFromDb == null)
             {
                 addCart.ProductId = productID;
-                addCart.Quantity = quantity;
+                addCart.Quantity = 1;
                 addCart.AppUserId = user.Id;
-                await _Userdb.ShoppingCart.AddAsync(addCart);
-                await _Userdb.SaveChangesAsync();
+                await _AppDb.ShoppingCart.AddAsync(addCart);
+                await _AppDb.SaveChangesAsync();
                 results.Status = "success";
                 results.Message = "Item successfully added to cart.";
                 return Json(JsonConvert.SerializeObject(results));
             }
             else
             {
-                userCartFromDb.Quantity += quantity;
-                _Userdb.ShoppingCart.Update(userCartFromDb);
-                await _Userdb.SaveChangesAsync();
+                userCartFromDb.Quantity += 1;
+                _AppDb.ShoppingCart.Update(userCartFromDb);
+                await _AppDb.SaveChangesAsync();
                 results.Status = "success";
                 results.Message = "Item successfully added to cart.";
                 return Json(JsonConvert.SerializeObject(results));
             }
         }
+        [HttpPost]
         public async Task<JsonResult> RemoveFromCart(int productId)
         {
             var sessionHandler = new SessionHandler();
@@ -141,22 +141,23 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
 
-            var cartFromDb = await _Userdb.ShoppingCart.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.ProductId == productId);
+            var cartFromDb = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.ProductId == productId);
             if (cartFromDb == null)
             {
                 results.Status = "error";
                 results.Message = "Selected item not found.";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            _Userdb.ShoppingCart.Remove(cartFromDb);
-            await _Userdb.SaveChangesAsync();
-            var UpdatedCartFromDb = await _Userdb.ShoppingCart.AnyAsync(x => x.AppUserId == user.Id);
+            _AppDb.ShoppingCart.Remove(cartFromDb);
+            await _AppDb.SaveChangesAsync();
+            var UpdatedCartFromDb = await _AppDb.ShoppingCart.AnyAsync(x => x.AppUserId == user.Id);
             if (UpdatedCartFromDb) { ViewData["Cart"] = "not null"; }
             else { ViewData["Cart"] = null; }
             results.Status = "success";
             results.Message = "Item successfully removed from cart.";
             return Json(JsonConvert.SerializeObject(results));
         }
+        [HttpPost]
         public async Task<JsonResult> ClearCart()
         {
             var sessionHandler = new SessionHandler();
@@ -170,13 +171,13 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Message = "Unable to load user data, try try refreshing the page.";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            var UserCart = _Userdb.ShoppingCart.Where(cart => cart.AppUserId == user.Id);
+            var UserCart = _AppDb.ShoppingCart.Where(cart => cart.AppUserId == user.Id);
             foreach (var CartItem in UserCart)
             {
-                _Userdb.ShoppingCart.Remove(CartItem);
+                _AppDb.ShoppingCart.Remove(CartItem);
             }
             ViewData["Cart"] = null; 
-            await _Userdb.SaveChangesAsync();
+            await _AppDb.SaveChangesAsync();
             results.Status = "success";
             results.Message = "Cart successfully cleared.";
             return Json(JsonConvert.SerializeObject(results));
@@ -202,7 +203,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Status = "error";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            var product = await _Userdb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId==Id && x.AppUserId==user.Id);
+            var product = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId==Id && x.AppUserId==user.Id);
             if (product == null)
             {
                 results.Message = "Product not found";
@@ -210,8 +211,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             product.Quantity = quantity;
-            _Userdb.Update(product);
-            await _Userdb.SaveChangesAsync();
+            _AppDb.Update(product);
+            await _AppDb.SaveChangesAsync();
             results.Message = "Product quantity have been changed successfully.";
             results.Status = "success";
             return Json(JsonConvert.SerializeObject(results));

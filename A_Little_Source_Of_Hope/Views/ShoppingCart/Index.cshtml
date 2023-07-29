@@ -7,6 +7,7 @@
     {
         <div class="d-flex mb-2">
             <h2>Shopping Cart</h2>
+            <input type="hidden" class="NumberofItems" value="@Model.Count()" />
             <button class="btn btn-primary ml-auto btn-clearCart">Clear cart</button>
         </div>
         <table class="table table-hover shoppingCart-table">
@@ -24,22 +25,22 @@
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="product-row">
+                    <tr class="product-row product-row-@obj.ProductId)">
                         <td>
                             <img src="~/@obj.ImageUrl" width="60" />
                         </td>
                         <td class="product-name">@obj.ProductName</td>
                         <td>@obj.Description</td>
                         <td>
-                            @Html.DropDownList("Quantity",Enumerable.Range(1,obj.AvailableQuantity).Select(i => new SelectListItem{Text = i.ToString(), Value = i.ToString(), Selected=i==obj.Quantity?true:false}),new {@class="form-control product-Quantity", @id = obj.ProductId})
+                            @Html.DropDownList("Quantity",Enumerable.Range(1,obj.AvailableQuantity).Select(i => new SelectListItem{Text = i.ToString(), Value = i.ToString(), Selected=i==obj.Quantity?true:false}),new {@class="form-control product-Quantity", @onchange= $"ChangeQuantity(this,{@obj.ProductId})"})
                         </td>
                         <td class="PricePerItem">@obj.PricePerItem</td>
                         <td class="TotalPerItem">@obj.TotalPerItem</td>
                         <td>
                             <div class="container">
-                                <a class="btn btn-danger" asp-action="RemoveFromCart" asp-controller="ShoppingCart" asp-route-productId="@obj.ProductId">
+                                <button class="btn btn-danger" onclick="RemoveItem(@obj.ProductId)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -76,109 +77,76 @@
     }
 </div>
 <script>
-    $(document).ready(function () {
-        $(".product-Quantity").on("change", function () {
-            var id = Number.parseInt($(".product-Quantity")[0].id);
-            var Quantity = Number.parseInt($(this)[0].options[$(this)[0].selectedIndex].text);
-            $.ajax({
-                method: "GET",
-                url: 'ShoppingCart/ChangeQuantity',
-                data: { Id: id, quantity: Quantity },
-                success:
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
-                        }
-                        else {
-                            var selectedQuantities = $(".product-Quantity :selected").text().split("");
-                            var SubTotal = 0;
-                            for (let i = 0; i < selectedQuantities.length; i++) {
-                                var productRow = $(".product-row")[i];
-                                let pricePerItem = productRow.getElementsByClassName("PricePerItem")[0].innerHTML.replace(": R ", "").replace(",", ".");
-                                let selectedQuantity = Number.parseInt(selectedQuantities[i]);
-                                let TotalPerItem = Math.round(((selectedQuantity * pricePerItem) + Number.EPSILON) * 100) / 100;
-                                SubTotal += TotalPerItem;
-                                productRow.getElementsByClassName("TotalPerItem")[0].innerHTML = TotalPerItem;
-                            }
-                            let VAT = 0.14 * SubTotal;
-                            let VatOfSubTotal = Math.round((VAT + Number.EPSILON) * 100) / 100;
-                            let Total = Math.round(((SubTotal + VatOfSubTotal) + Number.EPSILON) * 100) / 100;
-                            $(".row")[0].getElementsByClassName("SubTotal")[0].innerHTML = ": R " + SubTotal;
-                            $(".row")[0].getElementsByClassName("VatOfSubTotal")[0].innerHTML = ": R " + VatOfSubTotal;
-                            $(".row")[0].getElementsByClassName("Total")[0].innerHTML = ": R " + Total;
-                            //toastr.success(data.Message);
-                        }
-                    },
-                error:
-                    function (err) {
-                        console.log(err);
-                        console.log(err);
+    function ChangeQuantity(Select, pId) {
+        var Quantity = Number.parseInt(Select.options[Select.selectedIndex].text);
+        $.ajax({
+            method: "POST",
+            url: 'ShoppingCart/ChangeQuantity',
+            data: { Id: pId, quantity: Quantity },
+            success:
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.Status == "error") {
+                        alert("Error: " + data.Message);
+                        console.log("Error: " + data.Message);
                     }
-            });
+                    else {
+                        window.location.reload();
+                    }
+                },
+            error:
+                function (err) {
+                    console.log(err);
+                }
         });
+    }
 
-        $(".btn-checkout").on('click', function () {
-            var Amount = Number.parseFloat($(".row")[0].getElementsByClassName("Total")[0].innerHTML.replace(": R ", "").replace(",", "."));
-            window.location.href = "Payment/Payment?Amount=" + Amount;
-        });
-        $(".btn-clearCart").on('click', function () {
-            console.log('Added');
-            $.ajax({
-                method: "GET",
-                url: 'ShoppingCart/ClearCart',
-                success:
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
-                        }
-                        else {
-                            var NumberofItems = $("#NumberofItems").val();
-                            var productRows = $(".product-row");
-                            for (let i = 0; i < NumberofItems; i++) {
-                                productRows[i].fadeOut("slow");
-                            }
-                            $(".display-table").fadeOut("slow");
-                            $(".Add-To-Cart").removeClass("d-none");
-                        }
-                    },
-                error:
-                    function (err) {
-                        console.log(err);
-                        console.log(err);
+    $(".btn-checkout").on('click', function () {
+        var Amount = Number.parseFloat($(".row")[0].getElementsByClassName("Total")[0].innerHTML.replace(": R ", "").replace(",", "."));
+        window.location.href = "Payment/Payment?Amount=" + Amount;
+    });
+    $(".btn-clearCart").on('click', function () {
+
+        $.ajax({
+            method: "POST",
+            url: 'ShoppingCart/ClearCart',
+            success:
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.Status == "error") {
+                        alert("Error: " + data.Message);
+                        console.log("Error: " + data.Message);
                     }
-            });
-        });
-        $(".btn-clearCart").on('click', function () {
-            $.ajax({
-                method: "GET",
-                url: 'ShoppingCart/ClearCart',
-                success:
-                    function (data) {
-                        data = JSON.parse(data);
-                        if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
-                        }
-                        else {
-                            var NumberofItems = $("#NumberofItems").val();
-                            var productRows = $(".product-row");
-                            for (let i = 0; i < NumberofItems; i++) {
-                                productRows[i].fadeOut("slow");
-                            }
-                            $(".display-table").fadeOut("slow");
-                            $(".Add-To-Cart").removeClass("d-none");
-                        }
-                    },
-                error:
-                    function (err) {
-                        console.log(err);
-                        console.log(err);
+                    else {
+                        window.location.reload();
                     }
-            });
+                },
+            error:
+                function (err) {
+                    console.log(err);
+                }
         });
     });
+    function RemoveItem(Id) {
+        $.ajax({
+            method: "POST",
+            url: 'ShoppingCart/RemoveFromCart',
+            data: { productId: Id },
+            success:
+                function (data) {
+                    data = JSON.parse(data);
+                    if (data.Status == "error") {
+                        alert("Error: " + data.Message);
+                        console.log("Error: " + data.Message);
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+            error:
+                function (err) {
+                    console.log(err);
+                }
+        });
+    }
 </script>

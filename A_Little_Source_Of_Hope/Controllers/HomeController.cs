@@ -10,18 +10,18 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 namespace A_Little_Source_Of_Hope.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : Controller 
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AppDbContext _Userdb;
+        private readonly AppDbContext _AppDb;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        public HomeController(ILogger<HomeController> logger, AppDbContext Userdb, UserManager<AppUser> userManager,
+        public HomeController(ILogger<HomeController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager, IEmailSender emailSender)
         {
             _logger = logger;
-            _Userdb = Userdb;
+            _AppDb = AppDb;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -69,8 +69,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (ModelState.IsValid)
                 {
                     await _emailSender.SendEmailAsync(contact.Email,contact.Subject,contact.Message);
-                    await _Userdb.Contact.AddAsync(contact);
-                    await _Userdb.SaveChangesAsync();
+                    await _AppDb.Contact.AddAsync(contact);
+                    await _AppDb.SaveChangesAsync();
                     TempData["success"] = "Thank you, query successfully submitted. Will get back to you soon.";
                     return View();
                 }
@@ -130,11 +130,11 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                if (_Userdb.Product == null)
+                if (_AppDb.Product == null)
                 {
                     return Problem("No items found");
                 }
-                var Product = from s in _Userdb.Product select s;
+                var Product = from s in _AppDb.Product select s;
                 Product = Product.Where(s => s.IsActive == true);
                 if (Product == null)
                 {
