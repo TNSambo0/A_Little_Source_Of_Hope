@@ -21,8 +21,10 @@ namespace A_Little_Source_Of_Hope.Models
         }public IActionResult Create()
         {
             return View();
+        }public IActionResult Orphanage_edit()
+        {
+            return View();
         }
-
 
     }
 }
