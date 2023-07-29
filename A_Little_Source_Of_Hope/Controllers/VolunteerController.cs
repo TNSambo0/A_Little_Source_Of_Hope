@@ -27,6 +27,10 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             return View();
         }
+        public IActionResult volunteerapplication()
+        {
+            return View();
+        }
         public async Task<IActionResult> details(int id)
         {
             var sessionHandler = new SessionHandler();

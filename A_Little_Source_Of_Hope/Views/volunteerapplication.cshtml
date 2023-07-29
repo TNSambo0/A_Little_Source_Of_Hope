@@ -1,0 +1,38 @@
+﻿@model Volunteer
+@{
+    ViewData["Title"] = "Volunteering Application";
+}
+
+
+<div class="form-container">
+    <h2>Volunteering Application</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class='row'>
+            <div class='col-sm-6'>
+                <div class='container'>
+                    <div class='form-group'>
+                        <label asp-for='Description' class='form-label'></label>
+                        <textarea asp-for='Description' class='form-control' aria-required='true'></textarea>
+                        <span asp-validation-for='Description' class='text-danger'></span>
+                    </div>
+                    <div class='form-group'>
+                        <label asp-for='VolunteerDate' class='form-label'></label>
+                        <input asp-for='VolunteerDate' class='form-control' aria-required='true' />
+                        <span asp-validation-for='VolunteerDate' class='text-danger'></span>
+                    </div>
+                    <div>
+                        <label asp-for='OrphanageName'>Orphanage Name:</label>
+                        <select asp-for='OrphanageName' class='form-control' aria-required='true'>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
