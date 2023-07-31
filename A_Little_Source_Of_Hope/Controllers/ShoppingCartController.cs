@@ -190,6 +190,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             ViewData["VatOfSubTotal"] = Math.Round((amountInDecimal * (decimal)(0.14)), 2);
             ViewData["Total"] = Math.Round((amountInDecimal * (decimal)0.14) + amountInDecimal, 2);
         }
+        [HttpPost]
         public async Task<JsonResult> ChangeQuantity(int Id, int quantity)
         {
             ItemRemoveStatusModel results = new();

@@ -32,13 +32,13 @@
                         <td class="product-name">@obj.ProductName</td>
                         <td>@obj.Description</td>
                         <td>
-                            @Html.DropDownList("Quantity",Enumerable.Range(1,obj.AvailableQuantity).Select(i => new SelectListItem{Text = i.ToString(), Value = i.ToString(), Selected=i==obj.Quantity?true:false}),new {@class="form-control product-Quantity", @onchange= $"ChangeQuantity(this,{@obj.Id})"})
+                            @Html.DropDownList("Quantity",Enumerable.Range(1,obj.AvailableQuantity).Select(i => new SelectListItem{Text = i.ToString(), Value = i.ToString(), Selected=i==obj.Quantity?true:false}),new {@class="form-control product-Quantity", @onchange= $"ChangeQuantity(this,{@obj.ProductId})"})
                         </td>
                         <td class="PricePerItem">@obj.PricePerItem</td>
                         <td class="TotalPerItem">@obj.TotalPerItem</td>
                         <td>
                             <div class="container">
-                                <button class="btn btn-danger" onclick="RemoveItem(@obj.Id)">
+                                <button class="btn btn-danger" onclick="RemoveItem(@obj.ProductId)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </div>

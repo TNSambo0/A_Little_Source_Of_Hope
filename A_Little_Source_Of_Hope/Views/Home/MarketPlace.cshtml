@@ -88,12 +88,11 @@
                         console.log("Error: " + data.Message);
                     }
                     else {
-                        console.log(data.Message);
+                        toastr.success('Success');
                     }
                 },
             error:
                 function (err) {
-                    console.log(err);
                     console.log(err);
                 }
         });
