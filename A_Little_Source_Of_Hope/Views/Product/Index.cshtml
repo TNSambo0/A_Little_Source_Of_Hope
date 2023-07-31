@@ -111,8 +111,7 @@
                     function (data) {
                         data = JSON.parse(data);
                         if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
+                            toastr.error('error');
                         }
                         else {
                             var NumberofItems = $("#NumberofItems").val();
@@ -130,15 +129,13 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                             }
-                            alert("Success: " + data.Status);
-                            console.log("Success: " + data.Message);
+                            toastr.error('success');;
                             BtnDeleteSelectedItems();
                         }
                     },
                 error:
                     function (err) {
-                        console.log(err);
-                        console.log(err);
+                        toastr.error('error');
                     }
             });
 
