@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Data;
+using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
+    [Authorize(Roles = "ProductAdministrators")]
     public class VolunteerController : Controller
     {
         private readonly ILogger<VolunteerController> _logger;
@@ -23,10 +25,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
         public async Task<IActionResult> details(int id)
         {
             var sessionHandler = new SessionHandler();
@@ -40,7 +38,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
             if (!isAuthorized)
             {
-                TempData["error"] = "You don't have the permission to see Product.";
+                TempData["error"] = "You don't have the permission to see application details.";
                 return RedirectToAction("Index", "Admin");
             }
             var applicationFromDb = await _AppDb.Volunteer.FindAsync(id);
@@ -48,8 +46,17 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 return Problem("Application not found.");
             }
+            applicationFromDb = new Volunteer
+            {
+                Status = applicationFromDb.Status,
+                Description = applicationFromDb.Description,
+                VolunteerDate = applicationFromDb.VolunteerDate,
+                OrphanageName = applicationFromDb.OrphanageName,
+                ApplicantFullName = user.FirstName + " "+ user.LastName
+            };
             return View(applicationFromDb);
         }
+        [HttpPost]
         public async Task<IActionResult> Approve(int id)
         {
             var sessionHandler = new SessionHandler();
@@ -63,11 +70,11 @@ namespace A_Little_Source_Of_Hope.Controllers
             var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
             if (!isAuthorized)
             {
-                TempData["error"] = "You don't have the permission to see Product.";
+                TempData["error"] = "You don't have the permission to change application status.";
                 return RedirectToAction("Index", "Admin");
             }
             var applicationFromDb = await _AppDb.Volunteer.FindAsync(id);
-            if (applicationFromDb ==null)
+            if (applicationFromDb == null)
             {
                 return Problem("Application not found.");
             }
@@ -76,6 +83,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             await _AppDb.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [HttpPost]
         public async Task<IActionResult> Reject(int id)
         {
             var sessionHandler = new SessionHandler();
@@ -89,7 +97,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
             if (!isAuthorized)
             {
-                TempData["error"] = "You don't have the permission to see Product.";
+                TempData["error"] = "You don't have the permission to change application status.";
                 return RedirectToAction("Index", "Admin");
             }
             var applicationFromDb = await _AppDb.Volunteer.FindAsync(id);

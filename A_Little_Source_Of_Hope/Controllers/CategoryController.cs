@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
@@ -11,12 +13,12 @@ namespace A_Little_Source_Of_Hope.Controllers
     public class CategoryController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _AppDb; 
+        private readonly AppDbContext _AppDb;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         protected IAuthorizationService _AuthorizationService;
         public CategoryController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
-            IAuthorizationService AuthorizationService,SignInManager<AppUser> signInManager)
+            IAuthorizationService AuthorizationService, SignInManager<AppUser> signInManager)
         {
             _logger = logger;
             _AppDb = AppDb;
@@ -37,11 +39,16 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                IEnumerable<Category> objCategory = _AppDb.Category;
-                var CategoryFromDb = _AppDb.Category.Any();
-                if (CategoryFromDb == true) { ViewBag.Category = true; }
-                else { ViewBag.Category = false; }
-                return View(objCategory);
+                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+                if (!isAuthorized)
+                {
+                    TempData["error"] = "You don't have the permission to see category.";
+                    return RedirectToAction("Index", "Admin");
+                }
+                IEnumerable<Category> objcategory = _AppDb.Category;
+                if (_AppDb.Category.Any()) { ViewData["Category"] = "not null"; }
+                else { ViewData["Category"] = null; }
+                return View(objcategory);
             }
             catch (Exception ex)
             {
@@ -53,32 +60,27 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
 
-        // GET: CategoryController/Create
+        // GET: categoryController/Create
         public async Task<ActionResult> Create()
         {
-            try
+            var sessionHandler = new SessionHandler();
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                var sessionHandler = new SessionHandler();
-                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
-                }
-                return View();
+                await sessionHandler.SignUserOut(_signInManager, _logger);
+                return Problem("Please try login in again.");
             }
-            catch (Exception ex)
+            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+            if (!isAuthorized)
             {
-                if (ex != null)
-                {
-                    ViewData["error"] = ex.ToString();
-                }
-                return View();
+                TempData["error"] = "You don't have the permission to create a category.";
+                return RedirectToAction("Index", "Admin");
             }
+            return View();
         }
 
-        // POST: CategoryController/Create
+        // POST: categoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Category category)
@@ -95,32 +97,43 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    var CategoryFromDb = _AppDb.Category.Contains(category);
-                    if (CategoryFromDb != true)
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Create);
+                    if (!isAuthorized.Succeeded)
                     {
-                        var filename = Path.GetFileName(category.File.FileName);
-                        var fileExt = Path.GetExtension(category.File.FileName);
-                        string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
-                        string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Category");
-                        if (!Directory.Exists(path))
+                        TempData["error"] = "You don't have the permission to create a category.";
+                        return RedirectToAction("Index");
+                    }
+                    var categoryFromDb = _AppDb.Category.Contains(category);
+                    if (categoryFromDb != true)
+                    {
+                        if (category.File != null && category.File.FileName != null)
                         {
-                            Directory.CreateDirectory(path);
+                            var filename = Path.GetFileName(category.File.FileName);
+                            var fileExt = Path.GetExtension(category.File.FileName);
+                            string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
+                            string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
+                            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+                            string fileNameWithPath = Path.Combine(path, myfile);
+                            category.Imageurl = fileNameWithPath;
                         }
-                        string fileNameWithPath = Path.Combine(path, myfile);
-                        category.Imageurl = fileNameWithPath;
                         category.CreatedDate = DateTime.Now;
-                        _AppDb.Category.Add(category);
-                        _AppDb.SaveChanges();
-                        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                        {
-                            category.File.CopyTo(stream);
-                        }
+                        await _AppDb.Category.AddAsync(category);
+                        await _AppDb.SaveChangesAsync();
+                        //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                        //{
+                        //    category.File.CopyTo(stream);
+                        //}
+                        TempData["success"] = "category successfully created";
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        ModelState.AddModelError("CategoryName", "Category already exists.");
+                        ModelState.AddModelError("", "category already exists.");
+                        TempData["error"] = "category already exists";
                         return View(category);
                     }
                 }
@@ -132,11 +145,11 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     ViewData["error"] = ex.ToString();
                 }
-                return View();
+                return View(category);
             }
         }
 
-        // GET: CategoryController/Edit/5
+        // GET: categoryController/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             try
@@ -149,11 +162,18 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                if (id == null || id == 0)
+                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+                if (!isAuthorized)
+                {
+                    TempData["error"] = "You don't have the permission to edit a category.";
+                    return RedirectToAction("Index");
+                }
+
+                if (id is null or 0)
                 {
                     return NotFound();
                 }
-                var categoryFromDb = _AppDb.Category.Find(id);
+                var categoryFromDb = await _AppDb.Category.FindAsync(id);
                 if (categoryFromDb == null)
                 {
                     return NotFound();
@@ -170,22 +190,40 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
 
-        // POST: CategoryController/Edit/5
+        // POST: categoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Category category)
         {
             try
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
+
+                if (ModelState.IsValid)
                 {
-                    await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null)
+                    {
+                        await sessionHandler.SignUserOut(_signInManager, _logger);
+                        return Problem("Please try login in again.");
+                    }
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Update);
+                    if (!isAuthorized.Succeeded)
+                    {
+                        TempData["error"] = "You don't have the permission to edit a category.";
+                        return RedirectToAction("Index");
+                    }
+                    var categoryFromDb = await _AppDb.Category.FindAsync(category.Id);
+                    if (categoryFromDb == null)
+                    {
+                        return NotFound();
+                    }
+                    _AppDb.Category.Update(categoryFromDb);
+                    await _AppDb.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(category);
             }
             catch (Exception ex)
             {
@@ -193,113 +231,63 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     ViewData["error"] = ex.ToString();
                 }
-                return View();
+                return View(category);
             }
         }
-
-        // GET: CategoryController/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        [HttpPost]
+        public async Task<JsonResult> Delete(List<int> categoryIds)
         {
-            try
+            ItemRemoveStatusModel results = new();
+            var sessionHandler = new SessionHandler();
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                var sessionHandler = new SessionHandler();
-                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
-                }
-                if (id == null || id == 0)
-                {
-                    return NotFound();
-                }
-                var categoryFromDb = _AppDb.Category.Find(id);
+                await sessionHandler.SignUserOut(_signInManager, _logger);
+            }
+            if (categoryIds.Count == 0)
+            {
+                results.Message = "An error occured while deleting selected item, please try again.";
+                results.Status = "error";
+                results.DeleteItemsIds = categoryIds;
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            Category category = await _AppDb.Category.FindAsync(categoryIds[0]);
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Delete);
+            if (!isAuthorized.Succeeded)
+            {
+                results.Message = "You don't have the permission to Delete a category.";
+                results.Status = "error";
+                results.DeleteItemsIds = categoryIds;
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            string errorList = "";
+            foreach (var categoryId in categoryIds)
+            {
+                var categoryFromDb = await _AppDb.Category.FindAsync(categoryId);
                 if (categoryFromDb == null)
                 {
-                    return NotFound();
+                    errorList += categoryId.ToString() + " ";
                 }
-                return View(categoryFromDb);
+                else
+                {
+                    _AppDb.Category.Remove(categoryFromDb);
+                }
             }
-            catch (Exception ex)
+            if (!String.IsNullOrEmpty(errorList))
             {
-                if (ex != null)
-                {
-                    ViewData["error"] = ex.ToString();
-                }
-                return View();
+                results.Message = $"An error ocuured while trying to remove category with categoryId {errorList}.";
+                results.Status = "error";
+                results.DeleteItemsIds = categoryIds;
+                return Json(JsonConvert.SerializeObject(results));
             }
-        }
-
-        // POST: CategoryController/Delete/5
-        [HttpPost]
-        public async Task<ActionResult> Delete(List<int> categoryIds)
-        {
-            try
-            {
-                var sessionHandler = new SessionHandler();
-                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
-                }
-                var Product = new List<Product>();
-                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Product, ProductOperations.Delete);
-                if (!isAuthorized.Succeeded)
-                {
-                    var result = new ItemRemoveStatusModel()
-                    {
-                        Message = "You don't have the permission to Delete a product.",
-                        Status = "error",
-                        DeleteItemsIds = categoryIds
-                    };
-                    return Json(result);
-                }
-                string errorList = "";
-                foreach (var ProductId in categoryIds)
-                {
-                    var productFromDb = await _AppDb.Product.FindAsync(ProductId);
-                    if (productFromDb == null)
-                    {
-                        errorList += ProductId.ToString() + " ";
-                    }
-                    else
-                    {
-                        Product.Add(productFromDb);
-                    }
-                }
-                if (!String.IsNullOrEmpty(errorList))
-                {
-                    var result = new ItemRemoveStatusModel()
-                    {
-                        Message = $"An error ocuured while trying to remove product with productId {errorList}.",
-                        Status = "error",
-                        DeleteItemsIds = categoryIds
-                    };
-                    return Json(result);
-                }
-                _AppDb.Product.RemoveRange(Product);
-                await _AppDb.SaveChangesAsync();
-                var results = new ItemRemoveStatusModel()
-                {
-                    Message = "Product have been deleted successfully.",
-                    Status = "success",
-                    DeleteItemsIds = categoryIds
-                };
-                return Json(results);
-            }
-            catch (Exception ex)
-            {
-                var result = new ItemRemoveStatusModel()
-                {
-                    Message = $"An error ocuured while trying to remove category. Error -  {ex}.",
-                    Status = "error",
-                    DeleteItemsIds = categoryIds
-                };
-                return Json(result);
-            }
+            await _AppDb.SaveChangesAsync();
+            if (await _AppDb.Category.AnyAsync()) { ViewData["Category"] = "not null"; }
+            else { ViewData["Category"] = null; }
+            results.Message = "category have been deleted successfully.";
+            results.Status = "success";
+            results.DeleteItemsIds = categoryIds;
+            return Json(JsonConvert.SerializeObject(results));
         }
     }
 }

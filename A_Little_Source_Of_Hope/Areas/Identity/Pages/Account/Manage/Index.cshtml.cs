@@ -1,15 +1,12 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
 {
@@ -17,21 +14,23 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly AppDbContext _Userdb;
+        private readonly AppDbContext _AppDb;
 
         public IndexModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            AppDbContext Userdb)
+            AppDbContext AppDb)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _Userdb = Userdb; ;
+            _AppDb = AppDb; ;
         }
 
         public string Username { get; set; }
         public string ImageSrc { get; set; }
         public IEnumerable<SelectListItem> GenderList { get; set; }
+        public IEnumerable<SelectListItem> CityList { get; set; }
+        public IEnumerable<SelectListItem> ProvinceList { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -41,53 +40,49 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Please enter an email address.")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter a first name.")]
             [DataType(DataType.Text)]
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter a last name.")]
             [DataType(DataType.Text)]
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter a phone number.")]
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [Required]
+            //[Required(ErrorMessage = "Please select a gender.")]
             [Display(Name = "Gender")]
             public string GenderId { get; set; }
-
             public IFormFile ImageFile { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter a city.")]
             [DataType(DataType.Text)]
             [Display(Name = "Address line 1")]
             public string AddressLine1 { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter a city.")]
             [DataType(DataType.Text)]
             [Display(Name = "Address line 2")]
             public string AddressLine2 { get; set; }
 
-            [Required]
-            [DataType(DataType.Text)]
+            //[Required(ErrorMessage = "Please select a city.")]
             [Display(Name = "City")]
-            public string City { get; set; }
-
+            public string CityId { get; set; }
             [Required]
-            [DataType(DataType.Text)]
             [Display(Name = "Province")]
-            public string Province { get; set; }
+            public string ProvinceId { get; set; }
 
-            [Required]
+            //[Required(ErrorMessage = "Please select a city.")]
             [DataType(DataType.PostalCode)]
             [Display(Name = "Postal code")]
             public string PostalCode { get; set; }
@@ -99,7 +94,9 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
-            GenderList = _Userdb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
+            GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
+            CityList = _AppDb.City.Select(x => new SelectListItem() { Text = x.CityName, Value = x.Id.ToString() }).AsEnumerable();
+            ProvinceList = _AppDb.Province.Select(x => new SelectListItem() { Text = x.ProvinceName, Value = x.Id.ToString() }).AsEnumerable();
             ImageSrc = user.ImageUrl;
 
             Input = new InputModel
@@ -110,8 +107,6 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
                 PhoneNumber = phoneNumber,
                 AddressLine1 = user.AddressLine1,
                 AddressLine2 = user.AddressLine2,
-                City = user.City,
-                Province = user.Province,
                 PostalCode = user.PostalCode
             };
             if (user.Gender == null && Input.GenderId == null)
@@ -129,6 +124,40 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             else
             {
                 Input.GenderId = GenderList.FirstOrDefault(x => x.Value == Input.GenderId).Value;
+            }
+
+            if (user.City == null && Input.CityId == null)
+            {
+                Input.CityId = "1";
+            }
+            else if (user.City == null && Input.CityId != null)
+            {
+                Input.CityId = GenderList.FirstOrDefault(x => x.Value == Input.CityId).Value;
+            }
+            else if (user.City != null && Input.CityId == null)
+            {
+                Input.CityId = GenderList.FirstOrDefault(x => x.Text == user.City).Value;
+            }
+            else
+            {
+                Input.CityId = GenderList.FirstOrDefault(x => x.Value == Input.CityId).Value;
+            }
+
+            if (user.Province == null && Input.ProvinceId == null)
+            {
+                Input.ProvinceId = "1";
+            }
+            else if (user.Province == null && Input.ProvinceId != null)
+            {
+                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
+            }
+            else if (user.Province != null && Input.ProvinceId == null)
+            {
+                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Text == user.Province).Value;
+            }
+            else
+            {
+                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
             }
         }
 
@@ -205,7 +234,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
                     //}
                 }
             }
-            GenderList = _Userdb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
+            GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
             var selectedGender = GenderList.FirstOrDefault(x => x.Value == Input.GenderId);
             if (user.Gender == null)
             {
@@ -218,6 +247,35 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
                     user.Gender = selectedGender.Text;
                 }
             }
+
+            CityList = _AppDb.City.Select(x => new SelectListItem() { Text = x.CityName, Value = x.Id.ToString() }).AsEnumerable();
+            var selectedCity = CityList.FirstOrDefault(x => x.Value == Input.CityId);
+            if (user.City == null)
+            {
+                user.City = selectedCity.Text;
+            }
+            else
+            {
+                if (selectedCity.Text != user.City)
+                {
+                    user.City = selectedCity.Text;
+                }
+            }
+
+            ProvinceList = _AppDb.Province.Select(x => new SelectListItem() { Text = x.ProvinceName, Value = x.Id.ToString() }).AsEnumerable();
+            var selectedProvince = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId);
+            if (user.Province == null)
+            {
+                user.Province = selectedProvince.Text;
+            }
+            else
+            {
+                if (selectedProvince.Text != user.Province)
+                {
+                    user.Province = selectedProvince.Text;
+                }
+            }
+
             if (Input.AddressLine1 != user.AddressLine1)
             {
                 user.AddressLine1 = Input.AddressLine1;
@@ -225,14 +283,6 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             if (Input.AddressLine2 != user.AddressLine2)
             {
                 user.AddressLine2 = Input.AddressLine2;
-            }
-            if (Input.City != user.City)
-            {
-                user.City = Input.City;
-            }
-            if (Input.Province != user.Province)
-            {
-                user.Province = Input.Province;
             }
             if (Input.PostalCode != user.PostalCode)
             {

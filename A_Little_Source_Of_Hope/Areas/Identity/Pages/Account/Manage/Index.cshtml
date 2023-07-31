@@ -72,19 +72,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="Input.City" class="form-label"></label>
-                        <input asp-for="Input.City" type="text" class="form-control">
-                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                        <label asp-for="Input.CityId" class="form-label"></label>
+                        <select asp-for="Input.CityId" asp-items="Model.CityList" class="form-control">
+                        </select>
+                        <span asp-validation-for="Input.CityId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="Input.Province" class="form-label"></label>
-                        <input asp-for="Input.Province" type="text" class="form-control">
-                        <span asp-validation-for="Input.Province" class="text-danger"></span>
-                    </div>
+                        <label asp-for="Input.ProvinceId" class="form-label"></label>
+                        <select asp-for="Input.ProvinceId" asp-items="Model.ProvinceList" class="form-control">
+                        </select>
+                        <span asp-validation-for="Input.ProvinceId" class="text-danger"></span>
+                    </div> 
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">

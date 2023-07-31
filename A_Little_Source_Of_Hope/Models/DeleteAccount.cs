@@ -1,16 +1,17 @@
-﻿#nullable disable
-using A_Little_Source_Of_Hope.Areas.Identity.Data;
+﻿using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace A_Little_Source_Of_Hope.Models
 {
     public class DeleteAccount
     {
         [Key]
-        public int DeleteAccountId { get; set; }
+        public int Id { get; set; }
         public string DeactivatingReason { get; set; }
         public string Username { get; set; }
+        [ForeignKey("AppUser")]
         public string UserId { get; set; }
-        public AppUser? AppUser { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

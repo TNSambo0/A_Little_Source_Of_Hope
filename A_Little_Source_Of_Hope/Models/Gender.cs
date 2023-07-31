@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace A_Little_Source_Of_Hope.Models

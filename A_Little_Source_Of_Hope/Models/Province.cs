@@ -5,10 +5,8 @@ namespace A_Little_Source_Of_Hope.Models
     public class Province
     {
         [Key]
-        public int provinceId { get; set; }
+        public int Id { get; set; }
         [StringLength(50, MinimumLength = 3)]
-        [DataType(DataType.Text)]
-
         public string ProvinceName{ get; set; }
                 
     }

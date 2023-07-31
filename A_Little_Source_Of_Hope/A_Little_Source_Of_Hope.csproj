@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Identity\Pages\Account\Manage\ViewApplications.cshtml" />
     <Content Remove="wwwroot\js\jquery-3.6.4.min.js" />
   </ItemGroup>
 
@@ -27,9 +28,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Identity\Pages\Account\Manage\ViewApplications.cshtml" />
     <None Include="wwwroot\css\Admin\icon\icofont\fonts\icofont.svg" />
     <None Include="wwwroot\css\Admin\icon\themify-icons\fonts\themify.svg" />
     <None Include="wwwroot\js\jquery-3.6.4.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Identity\Pages\Account\Manage\ViewApplications.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ViewApplications.cshtml" />
   </ItemGroup>
 
 </Project>

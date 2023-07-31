@@ -31,9 +31,9 @@
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="row-@obj.ProductId">
+                    <tr class="row-@obj.Id">
                         <td>
-                            <input type="checkbox" onclick="SelectItem(this,@obj.ProductId)" />
+                            <input type="checkbox" onclick="SelectItem(this,@obj.Id)" />
                         </td>
                         <td>
                             <img src="~/@obj.Imageurl" width="60" />
@@ -45,10 +45,10 @@
                         <td>@obj.IsActive</td>
                         <td>@obj.CreatedDate</td>
                         <td>
-                            <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.ProductId" class="btn btn-warning">
+                            <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.ProductId)">
+                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.Id)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </td>

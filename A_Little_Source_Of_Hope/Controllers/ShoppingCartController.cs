@@ -42,11 +42,11 @@ namespace A_Little_Source_Of_Hope.Controllers
 
                 IEnumerable<ShoppingCart> UserCart = from cart in _AppDb.ShoppingCart
                                                      join product in _AppDb.Product
-                                                     on cart.ProductId equals product.ProductId
+                                                     on cart.ProductId equals product.Id
                                                      where cart.AppUserId == user.Id
                                                      select new ShoppingCart
                                                      {
-                                                         ShoppingCartId = cart.ShoppingCartId,
+                                                         Id = cart.Id,
                                                          ProductId = cart.ProductId,
                                                          Quantity = cart.Quantity,
                                                          AvailableQuantity = product.Quantity,
@@ -89,7 +89,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
 
-            var ProductFromDb = await _AppDb.Product.FirstOrDefaultAsync(p => p.ProductId == productID && p.Quantity >= 1 && p.IsActive == true);
+            var ProductFromDb = await _AppDb.Product.FirstOrDefaultAsync(p => p.Id == productID && p.Quantity >= 1 && p.IsActive == true);
             if (ProductFromDb == null)
             {
                 TempData["error"] = "Selected item not found";

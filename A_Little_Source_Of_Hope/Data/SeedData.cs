@@ -31,7 +31,8 @@ namespace A_Little_Source_Of_Hope.Data
                     UserName = UserName,
                     EmailConfirmed = true,
                     Email = UserName,
-                    UserType = UserType
+                    UserType = UserType,
+                    ImageUrl = "images/User/images.png"
                 };
                 await userManager.CreateAsync(user, testUserPw);
             }
@@ -56,7 +57,7 @@ namespace A_Little_Source_Of_Hope.Data
         }
         public static async Task SeedDataOnDb(AppDbContext context)
         {
-            if (context.Category.Any()) { return; }
+            if (await context.Category.AnyAsync()) { return; }
             else
             {
                 await context.Category.AddRangeAsync(new Category
@@ -72,9 +73,9 @@ namespace A_Little_Source_Of_Hope.Data
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 });
+                await context.SaveChangesAsync();
             }
-            //await context.SaveChangesAsync();
-            if (context.Product.Any()) { return; }
+            if (await context.Product.AnyAsync()) { return; }
             else
             {
                 await context.Product.AddRangeAsync(new Product
@@ -209,10 +210,9 @@ namespace A_Little_Source_Of_Hope.Data
                     IsActive = true,
                     ClaimStatus = true,
                     CreatedDate = DateTime.Now
-                });
+                }); await context.SaveChangesAsync();
             }
-            //await context.SaveChangesAsync();
-            if (context.Gender.Any()) { return; }
+            if (await context.Gender.AnyAsync()) { return; }
             else
             {
                 await context.Gender.AddRangeAsync(new Gender
@@ -227,10 +227,9 @@ namespace A_Little_Source_Of_Hope.Data
                 }, new Gender
                 {
                     GenderName = "Prefer not to say"
-                });
+                }); await context.SaveChangesAsync();
             }
-            //await context.SaveChangesAsync();
-            if (context.Province.Any()) { return; }
+            if (await context.Province.AnyAsync()) { return; }
             else
             {
                 await context.Province.AddRangeAsync(new Province
@@ -260,1167 +259,1165 @@ namespace A_Little_Source_Of_Hope.Data
                 }, new Province
                 {
                     ProvinceName = "Kwazulu Natal"
-                });
+                }); await context.SaveChangesAsync();
             }
-            //await context.SaveChangesAsync();
-            if (context.City.Any()) { return; }
+            if (await context.City.AnyAsync()) { return; }
             else
             {
                 await context.City.AddRangeAsync(new City
                 {
-                    city = "Johannesburg",
-                    provinceId = 1
+                    CityName ="Johannesburg",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Pretoria",
-                    provinceId = 1
+                    CityName ="Pretoria",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Soweto",
-                    provinceId = 1
+                    CityName ="Soweto",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Centurion",
-                    provinceId = 1
+                    CityName ="Centurion",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Krugersdorp",
-                    provinceId = 1
+                    CityName ="Krugersdorp",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Randburg",
-                    provinceId = 1
+                    CityName ="Randburg",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Roodepoort",
-                    provinceId = 1
+                    CityName ="Roodepoort",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Kempton Park",
-                    provinceId = 1
+                    CityName ="Kempton Park",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Boksburg",
-                    provinceId = 1
+                    CityName ="Boksburg",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Benoni",
-                    provinceId = 1
+                    CityName ="Benoni",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Germiston",
-                    provinceId = 1
+                    CityName ="Germiston",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Brakpan",
-                    provinceId = 1
+                    CityName ="Brakpan",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Springs",
-                    provinceId = 1
+                    CityName ="Springs",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Vanderbijlpark",
-                    provinceId = 1
+                    CityName ="Vanderbijlpark",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Vereeniging",
-                    provinceId = 1
+                    CityName ="Vereeniging",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Midrand",
-                    provinceId = 1
+                    CityName ="Midrand",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Alberton",
-                    provinceId = 1
+                    CityName ="Alberton",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Nigel",
-                    provinceId = 1
+                    CityName ="Nigel",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Heidelberg",
-                    provinceId = 1
+                    CityName ="Heidelberg",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Edenvale",
-                    provinceId = 1
+                    CityName ="Edenvale",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Sandton",
-                    provinceId = 1
+                    CityName ="Sandton",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Randfontein",
-                    provinceId = 1
+                    CityName ="Randfontein",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Westonaria",
-                    provinceId = 1
+                    CityName ="Westonaria",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Cullinan",
-                    provinceId = 1
+                    CityName ="Cullinan",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Bronkhorstspruit",
-                    provinceId = 1
+                    CityName ="Bronkhorstspruit",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Ekurhuleni",
-                    provinceId = 1
+                    CityName ="Ekurhuleni",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Tshwane",
-                    provinceId = 1
+                    CityName ="Tshwane",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Mabopane",
-                    provinceId = 1
+                    CityName ="Mabopane",
+                    ProvinceId =  1
                 }, new City
                 {
-                    city = "Polokwane (Pietersburg)",
-                    provinceId = 2
+                    CityName ="Polokwane (Pietersburg)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Thohoyandou",
-                    provinceId = 2
+                    CityName ="Thohoyandou",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Mokopane (Potgietersrus)",
-                    provinceId = 2
+                    CityName ="Mokopane (Potgietersrus)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Musina (Messina)",
-                    provinceId = 2
+                    CityName ="Musina (Messina)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Louis Trichardt (Makhado)",
-                    provinceId = 2
+                    CityName ="Louis Trichardt (Makhado)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Phalaborwa",
-                    provinceId = 2
+                    CityName ="Phalaborwa",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Tzaneen",
-                    provinceId = 2
+                    CityName ="Tzaneen",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Giyani",
-                    provinceId = 2
+                    CityName ="Giyani",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Modimolle (Nylstroom)",
-                    provinceId = 2
+                    CityName ="Modimolle (Nylstroom)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Bela-Bela (Warmbaths)",
-                    provinceId = 2
+                    CityName ="Bela-Bela (Warmbaths)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Lephalale (Ellisras)",
-                    provinceId = 2
+                    CityName ="Lephalale (Ellisras)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Modjadjiskloof (Duiwelskloof)",
-                    provinceId = 2
+                    CityName ="Modjadjiskloof (Duiwelskloof)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Mookgophong (Naboomspruit)",
-                    provinceId = 2
+                    CityName ="Mookgophong (Naboomspruit)",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Jane Furse",
-                    provinceId = 2
+                    CityName ="Jane Furse",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Burgersfort",
-                    provinceId = 2
+                    CityName ="Burgersfort",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Groblersdal",
-                    provinceId = 2
+                    CityName ="Groblersdal",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Steelpoort",
-                    provinceId = 2
+                    CityName ="Steelpoort",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Lebowakgomo",
-                    provinceId = 2
+                    CityName ="Lebowakgomo",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Thabazimbi",
-                    provinceId = 2
+                    CityName ="Thabazimbi",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Marble Hall",
-                    provinceId = 2
+                    CityName ="Marble Hall",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Vaalwater",
-                    provinceId = 2
+                    CityName ="Vaalwater",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Letaba",
-                    provinceId = 2
+                    CityName ="Letaba",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Alldays",
-                    provinceId = 2
+                    CityName ="Alldays",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Makhado Air Force Base",
-                    provinceId = 2
+                    CityName ="Makhado Air Force Base",
+                    ProvinceId =  2
                 }, new City
                 {
-                    city = "Bloemfontein",
-                    provinceId = 3
+                    CityName ="Bloemfontein",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Bethlehem",
-                    provinceId = 3
+                    CityName ="Bethlehem",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Welkom",
-                    provinceId = 3
+                    CityName ="Welkom",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Sasolburg",
-                    provinceId = 3
+                    CityName ="Sasolburg",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Parys",
-                    provinceId = 3
+                    CityName ="Parys",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Kroonstad",
-                    provinceId = 3
+                    CityName ="Kroonstad",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Ficksburg",
-                    provinceId = 3
+                    CityName ="Ficksburg",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Phuthaditjhaba",
-                    provinceId = 3
+                    CityName ="Phuthaditjhaba",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Harrismith",
-                    provinceId = 3
+                    CityName ="Harrismith",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Virginia",
-                    provinceId = 3
+                    CityName ="Virginia",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Thaba Nchu",
-                    provinceId = 3
+                    CityName ="Thaba Nchu",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Koppies",
-                    provinceId = 3
+                    CityName ="Koppies",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Ladybrand",
-                    provinceId = 3
+                    CityName ="Ladybrand",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Wesselsbron",
-                    provinceId = 3
+                    CityName ="Wesselsbron",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Odendaalsrus",
-                    provinceId = 3
+                    CityName ="Odendaalsrus",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Viljoenskroon",
-                    provinceId = 3
+                    CityName ="Viljoenskroon",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Reitz",
-                    provinceId = 3
+                    CityName ="Reitz",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Heilbron",
-                    provinceId = 3
+                    CityName ="Heilbron",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Hennenman",
-                    provinceId = 3
+                    CityName ="Hennenman",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Bothaville",
-                    provinceId = 3
+                    CityName ="Bothaville",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Senekal",
-                    provinceId = 3
+                    CityName ="Senekal",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Ventersburg",
-                    provinceId = 3
+                    CityName ="Ventersburg",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Virginia",
-                    provinceId = 3
+                    CityName ="Virginia",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Winburg",
-                    provinceId = 3
+                    CityName ="Winburg",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Zastron",
-                    provinceId = 3
+                    CityName ="Zastron",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Clocolan",
-                    provinceId = 3
+                    CityName ="Clocolan",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Clarens",
-                    provinceId = 3
+                    CityName ="Clarens",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Fouriesburg",
-                    provinceId = 3
+                    CityName ="Fouriesburg",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Marquard",
-                    provinceId = 3
+                    CityName ="Marquard",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Memel",
-                    provinceId = 3
+                    CityName ="Memel",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Paul Roux",
-                    provinceId = 3
+                    CityName ="Paul Roux",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Rosendal",
-                    provinceId = 3
+                    CityName ="Rosendal",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Soutpan",
-                    provinceId = 3
+                    CityName ="Soutpan",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Caledonspoort",
-                    provinceId = 3
+                    CityName ="Caledonspoort",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Tweespruit",
-                    provinceId = 3
+                    CityName ="Tweespruit",
+                    ProvinceId =  3
                 }, new City
                 {
-                    city = "Bloemfontein",
-                    provinceId = 4
+                    CityName ="Bloemfontein",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Bethlehem",
-                    provinceId = 4
+                    CityName ="Bethlehem",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Welkom",
-                    provinceId = 4
+                    CityName ="Welkom",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Sasolburg",
-                    provinceId = 4
+                    CityName ="Sasolburg",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Parys",
-                    provinceId = 4
+                    CityName ="Parys",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Kroonstad",
-                    provinceId = 4
+                    CityName ="Kroonstad",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Ficksburg",
-                    provinceId = 4
+                    CityName ="Ficksburg",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Phuthaditjhaba",
-                    provinceId = 4
+                    CityName ="Phuthaditjhaba",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Harrismith",
-                    provinceId = 4
+                    CityName ="Harrismith",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Virginia",
-                    provinceId = 4
+                    CityName ="Virginia",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Thaba Nchu",
-                    provinceId = 4
+                    CityName ="Thaba Nchu",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Koppies",
-                    provinceId = 4
+                    CityName ="Koppies",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Ladybrand",
-                    provinceId = 4
+                    CityName ="Ladybrand",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Wesselsbron",
-                    provinceId = 4
+                    CityName ="Wesselsbron",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Odendaalsrus",
-                    provinceId = 4
+                    CityName ="Odendaalsrus",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Viljoenskroon",
-                    provinceId = 4
+                    CityName ="Viljoenskroon",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Reitz",
-                    provinceId = 4
+                    CityName ="Reitz",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Heilbron",
-                    provinceId = 4
+                    CityName ="Heilbron",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Hennenman",
-                    provinceId = 4
+                    CityName ="Hennenman",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Bothaville",
-                    provinceId = 4
+                    CityName ="Bothaville",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Senekal",
-                    provinceId = 4
+                    CityName ="Senekal",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Ventersburg",
-                    provinceId = 4
+                    CityName ="Ventersburg",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Virginia",
-                    provinceId = 4
+                    CityName ="Virginia",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Winburg",
-                    provinceId = 4
+                    CityName ="Winburg",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Zastron",
-                    provinceId = 4
+                    CityName ="Zastron",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Clocolan",
-                    provinceId = 4
+                    CityName ="Clocolan",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Clarens",
-                    provinceId = 4
+                    CityName ="Clarens",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Fouriesburg",
-                    provinceId = 4
+                    CityName ="Fouriesburg",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Marquard",
-                    provinceId = 4
+                    CityName ="Marquard",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Memel",
-                    provinceId = 4
+                    CityName ="Memel",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Paul Roux",
-                    provinceId = 4
+                    CityName ="Paul Roux",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Rosendal",
-                    provinceId = 4
+                    CityName ="Rosendal",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Soutpan",
-                    provinceId = 4
+                    CityName ="Soutpan",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Caledonspoort",
-                    provinceId = 4
+                    CityName ="Caledonspoort",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Tweespruit",
-                    provinceId = 4
+                    CityName ="Tweespruit",
+                    ProvinceId =  4
                 }, new City
                 {
-                    city = "Kimberley",
-                    provinceId = 5
+                    CityName ="Kimberley",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Upington",
-                    provinceId = 5
+                    CityName ="Upington",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Kathu",
-                    provinceId = 5
+                    CityName ="Kathu",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Kuruman",
-                    provinceId = 5
+                    CityName ="Kuruman",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Springbok",
-                    provinceId = 5
+                    CityName ="Springbok",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "De Aar",
-                    provinceId = 5
+                    CityName ="De Aar",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Postmasburg",
-                    provinceId = 5
+                    CityName ="Postmasburg",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Prieska",
-                    provinceId = 5
+                    CityName ="Prieska",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Danielskuil",
-                    provinceId = 5
+                    CityName ="Danielskuil",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Jan Kempdorp",
-                    provinceId = 5
+                    CityName ="Jan Kempdorp",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Warrenton",
-                    provinceId = 5
+                    CityName ="Warrenton",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Keimoes",
-                    provinceId = 5
+                    CityName ="Keimoes",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Ritchie",
-                    provinceId = 5
+                    CityName ="Ritchie",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Hartswater",
-                    provinceId = 5
+                    CityName ="Hartswater",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Kakamas",
-                    provinceId = 5
+                    CityName ="Kakamas",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Strydenburg",
-                    provinceId = 5
+                    CityName ="Strydenburg",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Colesberg",
-                    provinceId = 5
+                    CityName ="Colesberg",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Groblershoop",
-                    provinceId = 5
+                    CityName ="Groblershoop",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Victoria West",
-                    provinceId = 5
+                    CityName ="Victoria West",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Carnarvon",
-                    provinceId = 5
+                    CityName ="Carnarvon",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Williston",
-                    provinceId = 5
+                    CityName ="Williston",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Calvinia",
-                    provinceId = 5
+                    CityName ="Calvinia",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Nieuwoudtville",
-                    provinceId = 5
+                    CityName ="Nieuwoudtville",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Douglas",
-                    provinceId = 5
+                    CityName ="Douglas",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Kenhardt",
-                    provinceId = 5
+                    CityName ="Kenhardt",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Sutherland",
-                    provinceId = 5
+                    CityName ="Sutherland",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Andriesvale",
-                    provinceId = 5
+                    CityName ="Andriesvale",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Askham",
-                    provinceId = 5
+                    CityName ="Askham",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Augrabies",
-                    provinceId = 5
+                    CityName ="Augrabies",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Pofadder",
-                    provinceId = 5
+                    CityName ="Pofadder",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Griekwastad",
-                    provinceId = 5
+                    CityName ="Griekwastad",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Hopetown",
-                    provinceId = 5
+                    CityName ="Hopetown",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Brandvlei",
-                    provinceId = 5
+                    CityName ="Brandvlei",
+                    ProvinceId =  5
                 }, new City
                 {
-                    city = "Cape Town",
-                    provinceId = 6
+                    CityName ="Cape Town",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Stellenbosch",
-                    provinceId = 6
+                    CityName ="Stellenbosch",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Paarl",
-                    provinceId = 6
+                    CityName ="Paarl",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Franschhoek",
-                    provinceId = 6
+                    CityName ="Franschhoek",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Somerset West",
-                    provinceId = 6
+                    CityName ="Somerset West",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Worcester",
-                    provinceId = 6
+                    CityName ="Worcester",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Hermanus",
-                    provinceId = 6
+                    CityName ="Hermanus",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "George",
-                    provinceId = 6
+                    CityName ="George",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Knysna",
-                    provinceId = 6
+                    CityName ="Knysna",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Mossel Bay",
-                    provinceId = 6
+                    CityName ="Mossel Bay",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Oudtshoorn",
-                    provinceId = 6
+                    CityName ="Oudtshoorn",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Beaufort West",
-                    provinceId = 6
+                    CityName ="Beaufort West",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Saldanha",
-                    provinceId = 6
+                    CityName ="Saldanha",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Vredenburg",
-                    provinceId = 6
+                    CityName ="Vredenburg",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Langebaan",
-                    provinceId = 6
+                    CityName ="Langebaan",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Swellendam",
-                    provinceId = 6
+                    CityName ="Swellendam",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Ceres",
-                    provinceId = 6
+                    CityName ="Ceres",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Robertson",
-                    provinceId = 6
+                    CityName ="Robertson",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Montagu",
-                    provinceId = 6
+                    CityName ="Montagu",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Wellington",
-                    provinceId = 6
+                    CityName ="Wellington",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Malmesbury",
-                    provinceId = 6
+                    CityName ="Malmesbury",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Darling",
-                    provinceId = 6
+                    CityName ="Darling",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Clanwilliam",
-                    provinceId = 6
+                    CityName ="Clanwilliam",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Tulbagh",
-                    provinceId = 6
+                    CityName ="Tulbagh",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "McGregor",
-                    provinceId = 6
+                    CityName ="McGregor",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Paternoster",
-                    provinceId = 6
+                    CityName ="Paternoster",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Arniston",
-                    provinceId = 6
+                    CityName ="Arniston",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "De Rust",
-                    provinceId = 6
+                    CityName ="De Rust",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "De Rust",
-                    provinceId = 6
+                    CityName ="De Rust",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Montague",
-                    provinceId = 6
+                    CityName ="Montague",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Calitzdorp",
-                    provinceId = 6
+                    CityName ="Calitzdorp",
+                    ProvinceId =  6
                 }, new City
                 {
-                    city = "Nelspruit (Mbombela)",
-                    provinceId = 7
+                    CityName ="Nelspruit (Mbombela)",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Witbank (eMalahleni)",
-                    provinceId = 7
+                    CityName ="Witbank (eMalahleni)",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Middelburg",
-                    provinceId = 7
+                    CityName ="Middelburg",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Secunda",
-                    provinceId = 7
+                    CityName ="Secunda",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Ermelo",
-                    provinceId = 7
+                    CityName ="Ermelo",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Barberton",
-                    provinceId = 7
+                    CityName ="Barberton",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Standerton",
-                    provinceId = 7
+                    CityName ="Standerton",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Hazyview",
-                    provinceId = 7
+                    CityName ="Hazyview",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Lydenburg",
-                    provinceId = 7
+                    CityName ="Lydenburg",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Piet Retief",
-                    provinceId = 7
+                    CityName ="Piet Retief",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Malelane",
-                    provinceId = 7
+                    CityName ="Malelane",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Komatipoort",
-                    provinceId = 7
+                    CityName ="Komatipoort",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Sabie",
-                    provinceId = 7
+                    CityName ="Sabie",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "White River",
-                    provinceId = 7
+                    CityName ="White River",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Belfast",
-                    provinceId = 7
+                    CityName ="Belfast",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Carolina",
-                    provinceId = 7
+                    CityName ="Carolina",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Graskop",
-                    provinceId = 7
+                    CityName ="Graskop",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Dullstroom",
-                    provinceId = 7
+                    CityName ="Dullstroom",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Kwamhlanga",
-                    provinceId = 7
+                    CityName ="Kwamhlanga",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Balfour",
-                    provinceId = 7
+                    CityName ="Balfour",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Badplaas",
-                    provinceId = 7
+                    CityName ="Badplaas",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Volksrust",
-                    provinceId = 7
+                    CityName ="Volksrust",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Machadodorp",
-                    provinceId = 7
+                    CityName ="Machadodorp",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Bethal",
-                    provinceId = 7
+                    CityName ="Bethal",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Greylingstad",
-                    provinceId = 7
+                    CityName ="Greylingstad",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Marloth Park",
-                    provinceId = 7
+                    CityName ="Marloth Park",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Delmas",
-                    provinceId = 7
+                    CityName ="Delmas",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Amersfoort",
-                    provinceId = 7
+                    CityName ="Amersfoort",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Morgenzon",
-                    provinceId = 7
+                    CityName ="Morgenzon",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Wakkerstroom",
-                    provinceId = 7
+                    CityName ="Wakkerstroom",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Trichardt",
-                    provinceId = 7
+                    CityName ="Trichardt",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "Chrissiesmeer",
-                    provinceId = 7
+                    CityName ="Chrissiesmeer",
+                    ProvinceId =  7
                 }, new City
                 {
-                    city = "East London",
-                    provinceId = 8
+                    CityName ="East London",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Port Elizabeth",
-                    provinceId = 8
+                    CityName ="Port Elizabeth",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Mthatha",
-                    provinceId = 8
+                    CityName ="Mthatha",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Bhisho",
-                    provinceId = 8
+                    CityName ="Bhisho",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Queenstown",
-                    provinceId = 8
+                    CityName ="Queenstown",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "King William's Town",
-                    provinceId = 8
+                    CityName ="King William's Town",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Grahamstown",
-                    provinceId = 8
+                    CityName ="Grahamstown",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Graaff-Reinet",
-                    provinceId = 8
+                    CityName ="Graaff-Reinet",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Port St. Johns",
-                    provinceId = 8
+                    CityName ="Port St. Johns",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Butterworth",
-                    provinceId = 8
+                    CityName ="Butterworth",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Aliwal North",
-                    provinceId = 8
+                    CityName ="Aliwal North",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Somerset East",
-                    provinceId = 8
+                    CityName ="Somerset East",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Fort Beaufort",
-                    provinceId = 8
+                    CityName ="Fort Beaufort",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Cradock",
-                    provinceId = 8
+                    CityName ="Cradock",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Sterkspruit",
-                    provinceId = 8
+                    CityName ="Sterkspruit",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Mount Frere",
-                    provinceId = 8
+                    CityName ="Mount Frere",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Dutywa",
-                    provinceId = 8
+                    CityName ="Dutywa",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Lady Frere",
-                    provinceId = 8
+                    CityName ="Lady Frere",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Maclear",
-                    provinceId = 8
+                    CityName ="Maclear",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Elliot",
-                    provinceId = 8
+                    CityName ="Elliot",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Cofimvaba",
-                    provinceId = 8
+                    CityName ="Cofimvaba",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Flagstaff",
-                    provinceId = 8
+                    CityName ="Flagstaff",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Keiskammahoek",
-                    provinceId = 8
+                    CityName ="Keiskammahoek",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Matatiele",
-                    provinceId = 8
+                    CityName ="Matatiele",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Nqamakwe",
-                    provinceId = 8
+                    CityName ="Nqamakwe",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Libode",
-                    provinceId = 8
+                    CityName ="Libode",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Qumbu",
-                    provinceId = 8
+                    CityName ="Qumbu",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Lusikisiki",
-                    provinceId = 8
+                    CityName ="Lusikisiki",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Willowvale",
-                    provinceId = 8
+                    CityName ="Willowvale",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Ngqamakhwe",
-                    provinceId = 8
+                    CityName ="Ngqamakhwe",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Centane",
-                    provinceId = 8
+                    CityName ="Centane",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Tsolo",
-                    provinceId = 8
+                    CityName ="Tsolo",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Stutterheim",
-                    provinceId = 8
+                    CityName ="Stutterheim",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Peddie",
-                    provinceId = 8
+                    CityName ="Peddie",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Idutywa",
-                    provinceId = 8
+                    CityName ="Idutywa",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Komga",
-                    provinceId = 8
+                    CityName ="Komga",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Whittlesea",
-                    provinceId = 8
+                    CityName ="Whittlesea",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Mount Ayliff",
-                    provinceId = 8
+                    CityName ="Mount Ayliff",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Hogsback",
-                    provinceId = 8
+                    CityName ="Hogsback",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Bisho",
-                    provinceId = 8
+                    CityName ="Bisho",
+                    ProvinceId =  8
                 }, new City
                 {
-                    city = "Durban",
-                    provinceId = 9
+                    CityName ="Durban",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Pietermaritzburg",
-                    provinceId = 9
+                    CityName ="Pietermaritzburg",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Newcastle",
-                    provinceId = 9
+                    CityName ="Newcastle",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Richards Bay",
-                    provinceId = 9
+                    CityName ="Richards Bay",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Ladysmith",
-                    provinceId = 9
+                    CityName ="Ladysmith",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Amanzimtoti",
-                    provinceId = 9
+                    CityName ="Amanzimtoti",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Ballito",
-                    provinceId = 9
+                    CityName ="Ballito",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Port Shepstone",
-                    provinceId = 9
+                    CityName ="Port Shepstone",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Margate",
-                    provinceId = 9
+                    CityName ="Margate",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Howick",
-                    provinceId = 9
+                    CityName ="Howick",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Umhlanga",
-                    provinceId = 9
+                    CityName ="Umhlanga",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Dundee",
-                    provinceId = 9
+                    CityName ="Dundee",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Vryheid",
-                    provinceId = 9
+                    CityName ="Vryheid",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Estcourt",
-                    provinceId = 9
+                    CityName ="Estcourt",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Scottburgh",
-                    provinceId = 9
+                    CityName ="Scottburgh",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Kokstad",
-                    provinceId = 9
+                    CityName ="Kokstad",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Verulam",
-                    provinceId = 9
+                    CityName ="Verulam",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Stanger (KwaDukuza)",
-                    provinceId = 9
+                    CityName ="Stanger (KwaDukuza)",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Eshowe",
-                    provinceId = 9
+                    CityName ="Eshowe",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Ixopo",
-                    provinceId = 9
+                    CityName ="Ixopo",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Port Edward",
-                    provinceId = 9
+                    CityName ="Port Edward",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Mooi River",
-                    provinceId = 9
+                    CityName ="Mooi River",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Empangeni",
-                    provinceId = 9
+                    CityName ="Empangeni",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Bergville",
-                    provinceId = 9
+                    CityName ="Bergville",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Hluhluwe",
-                    provinceId = 9
+                    CityName ="Hluhluwe",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Melmoth",
-                    provinceId = 9
+                    CityName ="Melmoth",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Mount Edgecombe",
-                    provinceId = 9
+                    CityName ="Mount Edgecombe",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Tongaat",
-                    provinceId = 9
+                    CityName ="Tongaat",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Ulundi",
-                    provinceId = 9
+                    CityName ="Ulundi",
+                    ProvinceId =  9
                 }, new City
                 {
-                    city = "Gingindlovu",
-                    provinceId = 9
-                });
+                    CityName ="Gingindlovu",
+                    ProvinceId =  9
+                }); await context.SaveChangesAsync();
             }     
-            await context.SaveChangesAsync();
         }
     }
 }

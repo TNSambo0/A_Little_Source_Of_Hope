@@ -34,10 +34,10 @@
                         <td>@obj.OrphanageEmail</td>
                         <td>@obj.OrphanageAddress</td>
                         <td>
-                            <a asp-controller="Orphanage" asp-action="Edit" asp-route-id="@obj.OrphanageId" class="btn btn-warning">
+                            <a asp-controller="Orphanage" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.OrphanageId)">
+                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.Id)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </td>

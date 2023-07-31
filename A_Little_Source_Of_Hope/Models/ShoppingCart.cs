@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,8 +8,7 @@ namespace A_Little_Source_Of_Hope.Models
     public class ShoppingCart
     {
         [Key]
-        public int ShoppingCartId { get; set; }
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public int Quantity { get; set; }
         [NotMapped]
         public string ImageUrl { get; set; }
@@ -29,9 +27,12 @@ namespace A_Little_Source_Of_Hope.Models
         [NotMapped]
         [DataType(DataType.Currency)]
         public decimal Total { get; set; }
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+        [ForeignKey("AppUser")]
         public string AppUserId { get; set; }
 
-        public Product? Product { get; set; }
-        public AppUser? AppUser { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

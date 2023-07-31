@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 //using System.Web.Mvc;
 
 namespace A_Little_Source_Of_Hope.Controllers
@@ -14,7 +15,7 @@ namespace A_Little_Source_Of_Hope.Controllers
     public class ProductController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
-        private readonly AppDbContext _AppDb; 
+        private readonly AppDbContext _AppDb;
         protected IAuthorizationService _AuthorizationService;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -73,14 +74,18 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            Product product = new();
-            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, ProductOperations.Create);
-            if (!isAuthorized.Succeeded)
+            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+            if (!isAuthorized)
             {
                 TempData["error"] = "You don't have the permission to create a product.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Admin");
             }
-            return View();
+            var product = new Product
+            {
+                CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable(),
+                CategoryId = 1
+            };
+            return View(product);
         }
 
         // POST: ProductController/Create
@@ -92,13 +97,19 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    await sessionHandler.SignUserOut(_signInManager, _logger);
+                    return Problem("Please try login in again.");
+                }
                 if (ModelState.IsValid)
                 {
-                    var user = await _userManager.GetUserAsync(User);
-                    if (user == null)
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, ProductOperations.Create);
+                    if (!isAuthorized.Succeeded)
                     {
-                        await sessionHandler.SignUserOut(_signInManager, _logger);
-                        return Problem("Please try login in again.");
+                        TempData["error"] = "You don't have the permission to create a product.";
+                        return RedirectToAction("Index");
                     }
                     var productFromDb = _AppDb.Product.Contains(product);
                     if (productFromDb != true)
@@ -118,7 +129,23 @@ namespace A_Little_Source_Of_Hope.Controllers
                             product.Imageurl = fileNameWithPath;
                         }
                         product.CreatedDate = DateTime.Now;
-                        product.IsActive = Producttatus.IsProductActive(product);
+                        product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
+                        var selectedProduct = product.CategoryNames.FirstOrDefault(x => x.Value == product.CategoryId.ToString());
+                        if (selectedProduct == null)
+                        {
+                            return View(product);
+                        }
+                        if (product.CategoryId.ToString() == null)
+                        {
+                            product.CategoryId = int.Parse(selectedProduct.Value);
+                        }
+                        else
+                        {
+                            if (selectedProduct != null && selectedProduct.Value != product.CategoryId.ToString())
+                            {
+                                product.CategoryId = int.Parse(selectedProduct.Value);
+                            }
+                        }
                         await _AppDb.Product.AddAsync(product);
                         await _AppDb.SaveChangesAsync();
                         //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
@@ -160,6 +187,13 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
+                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+                if (!isAuthorized)
+                {
+                    TempData["error"] = "You don't have the permission to edit a product.";
+                    return RedirectToAction("Index");
+                }
+
                 if (id is null or 0)
                 {
                     return NotFound();
@@ -169,12 +203,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     return NotFound();
                 }
-                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, productFromDb, ProductOperations.Update);
-                if (!isAuthorized.Succeeded)
-                {
-                    TempData["error"] = "You don't have the permission to edit a product.";
-                    return RedirectToAction("Index");
-                }
+                productFromDb.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
                 return View(productFromDb);
             }
             catch (Exception ex)
@@ -205,13 +234,34 @@ namespace A_Little_Source_Of_Hope.Controllers
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var productFromDb = await _AppDb.Product.FindAsync(product.ProductId);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, ProductOperations.Update);
+                    if (!isAuthorized.Succeeded)
+                    {
+                        TempData["error"] = "You don't have the permission to edit a product.";
+                        return RedirectToAction("Index");
+                    }
+                    var productFromDb = await _AppDb.Product.FindAsync(product.Id);
                     if (productFromDb == null)
                     {
                         return NotFound();
                     }
-                    productFromDb.IsActive = Producttatus.IsProductActive(productFromDb);
-                    //_AppDb.Attach(productFromDb).State = EntityState.Modified;
+                    productFromDb.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
+                    var selectedProduct = productFromDb.CategoryNames.FirstOrDefault(x => x.Value == product.Id.ToString());
+                    if (selectedProduct == null)
+                    {
+                        return View(product);
+                    }
+                    if (productFromDb.CategoryId.ToString() == null)
+                    {
+                        productFromDb.CategoryId = int.Parse(selectedProduct.Value);
+                    }
+                    else
+                    {
+                        if (selectedProduct != null && selectedProduct.Value != productFromDb.CategoryId.ToString())
+                        {
+                            productFromDb.CategoryId = int.Parse(selectedProduct.Value);
+                        }
+                    }
                     _AppDb.Product.Update(productFromDb);
                     await _AppDb.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -227,7 +277,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View(product);
             }
         }
-
+        [HttpPost]
         public async Task<JsonResult> Delete(List<int> ProductIds)
         {
             ItemRemoveStatusModel results = new();
@@ -238,11 +288,18 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
             }
-            Product Product = new();
+            if (ProductIds.Count == 0)
+            {
+                results.Message = "An error occured while deleting selected item, please try again.";
+                results.Status = "error";
+                results.DeleteItemsIds = ProductIds;
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            Product Product = await _AppDb.Product.FindAsync(ProductIds[0]);
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Product, ProductOperations.Delete);
             if (!isAuthorized.Succeeded)
             {
-                results.Message = $"You don't have the permission to Delete a product.{isAuthorized.Succeeded}";
+                results.Message = "You don't have the permission to Delete a product.";
                 results.Status = "error";
                 results.DeleteItemsIds = ProductIds;
                 return Json(JsonConvert.SerializeObject(results));
@@ -268,7 +325,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if(await _AppDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
+            if (await _AppDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
             else { ViewData["Product"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";

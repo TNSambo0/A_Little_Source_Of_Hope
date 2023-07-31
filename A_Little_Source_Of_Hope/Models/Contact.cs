@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace A_Little_Source_Of_Hope.Models
@@ -7,7 +6,7 @@ namespace A_Little_Source_Of_Hope.Models
     public class Contact
     {
         [Key]
-        public int ContactId { get; set; }
+        public int Id { get; set; }
         [StringLength(50, MinimumLength = 3)]
         [Display(Name = "Contact name")]
         [DataType(DataType.Text)]

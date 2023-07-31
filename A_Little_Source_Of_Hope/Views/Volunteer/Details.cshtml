@@ -14,15 +14,15 @@
                     <div class="col-md-6 offset-3">
                         <div class="d-flex">
                             <div class="d-flex flex-column mr-1 font-weight-bold">
-                                <label asp-for="FullName">Volunteer Full Name:</label><br />
+                                <label asp-for="ApplicantFullName"></label><br />
                             </div>
                             <div class="d-flex flex-column font-weight-bold ml-auto">
-                                <input asp-for="FullName" class="form-control" />
+                                <input asp-for="ApplicantFullName" class="form-control" />
                             </div>
                         </div>
                         <div class="d-flex">
                             <div class="d-flex flex-column mr-1 font-weight-bold">
-                                <label asp-for="Description">Volunteer Full Name:</label><br />
+                                <label asp-for="Description"></label><br />
                             </div>
                             <div class="d-flex flex-column font-weight-bold ml-auto">
                                 <input asp-for="Description" class="form-control" />
@@ -30,7 +30,7 @@
                         </div>
                         <div class="d-flex">
                             <div class="d-flex flex-column mr-1 font-weight-bold">
-                                <label asp-for="OrphanageName">Volunteer Full Name:</label><br />
+                                <label asp-for="OrphanageName"></label><br />
                             </div>
                             <div class="d-flex flex-column font-weight-bold ml-auto">
                                 <input asp-for="OrphanageName" class="form-control" />
@@ -38,15 +38,15 @@
                         </div>
                         <div class="d-flex">
                             <div class="d-flex flex-column mr-1 font-weight-bold">
-                                <label asp-for="Date">Volunteer Full Name:</label><br />
+                                <label asp-for="VolunteerDate"></label><br />
                             </div>
                             <div class="d-flex flex-column font-weight-bold ml-auto">
-                                <input asp-for="Date" class="form-control" />
+                                <input asp-for="VolunteerDate" class="form-control" />
                             </div>
                         </div>
                         <div class="btn-group ml-3 mb-3">
-                            <a asp-action="Approve" asp-controller="Volunteer" asp-route-id="@Model.VoluneerId" class="btn btn-primary btn-Approve">Approve</a>
-                            <a asp-action="Reject" asp-controller="Volunteer" asp-route-id="@Model.VoluneerId" class="btn btn-danger btn-Reject">Reject</a>
+                            <a asp-action="Approve" asp-controller="Volunteer" asp-route-id="@Model.Id" class="btn btn-primary btn-Approve">Approve</a>
+                            <a asp-action="Reject" asp-controller="Volunteer" asp-route-id="@Model.Id" class="btn btn-danger btn-Reject">Reject</a>
                             <a asp-action="Index" asp-controller="Volunteer" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>

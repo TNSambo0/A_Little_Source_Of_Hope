@@ -15,6 +15,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
 
         public static string ChangePassword => "ChangePassword";
 
+        //public static string ViewApplications => "ViewApplications";
         public static string DeletePersonalData => "DeletePersonalData";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
@@ -22,6 +23,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+        //public static string ViewApplicationsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ViewApplications);
 
         public static string DeletePersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DeletePersonalData);
 

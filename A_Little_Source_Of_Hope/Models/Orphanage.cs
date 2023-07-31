@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 namespace A_Little_Source_Of_Hope.Models
 
@@ -6,7 +7,7 @@ namespace A_Little_Source_Of_Hope.Models
     public class Orphanage
     {
         [Key]
-        public int OrphanageId { get; set; }
+        public int Id { get; set; }
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Orphanage Name")]
@@ -26,7 +27,8 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Cell No")]
         public string  CellNumber { get; set; }
+        [ForeignKey("AppUser")]
         public string AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }
