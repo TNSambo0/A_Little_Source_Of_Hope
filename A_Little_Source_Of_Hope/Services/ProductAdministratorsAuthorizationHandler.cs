@@ -10,9 +10,16 @@ namespace A_Little_Source_Of_Hope.Services
 {
     public class ProductAdministratorsAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Product>
     {
+        UserManager<AppUser> _userManager;
+        public ProductAdministratorsAuthorizationHandler(UserManager<AppUser> userManager)
+        {
+
+            _userManager = userManager;
+
+        }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Product productResource)
         {
-            if (context.User == null || productResource == null)
+            if (context.User == null)
             {
                 return Task.CompletedTask;
             }

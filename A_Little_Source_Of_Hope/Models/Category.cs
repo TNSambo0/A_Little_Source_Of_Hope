@@ -11,13 +11,13 @@ namespace A_Little_Source_Of_Hope.Models
         [Display(Name = "Category name")]
         [DataType(DataType.Text)]
         public string CategoryName { get; set; }
-        public string Imageurl { get; set; }
+        public string? Imageurl { get; set; }
         [Display(Name = "Is active")]
         [Column(TypeName = "bit")]
         public bool IsActive { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         [NotMapped]
-        public IFormFile? File { get; set; }
+        public IFormFile? File { get; set; } 
     }
 }

@@ -97,6 +97,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 if (ModelState.IsValid)
                 {
+                    category.CreatedDate = DateTime.Now;
+                    category.Imageurl = "hjvbufjgnrnrd";
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Create);
                     if (!isAuthorized.Succeeded)
                     {
@@ -137,6 +139,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                         return View(category);
                     }
                 }
+                TempData["error"] = "Please fill all required fields";
                 return View(category);
             }
             catch (Exception ex)
