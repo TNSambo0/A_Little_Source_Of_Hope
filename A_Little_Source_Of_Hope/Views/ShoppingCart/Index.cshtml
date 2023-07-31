@@ -87,16 +87,16 @@
                 function (data) {
                     data = JSON.parse(data);
                     if (data.Status == "error") {
-                        alert("Error: " + data.Message);
-                        console.log("Error: " + data.Message);
+                        toastr.error('error');
                     }
                     else {
+                         toastr.success('success');
                         window.location.reload();
                     }
                 },
             error:
                 function (err) {
-                    console.log(err);
+                    toastr.error('error');
                 }
         });
     }
@@ -114,16 +114,16 @@
                 function (data) {
                     data = JSON.parse(data);
                     if (data.Status == "error") {
-                        alert("Error: " + data.Message);
-                        console.log("Error: " + data.Message);
+                        toastr.error('error');;
                     }
                     else {
+                        toastr.success('success');
                         window.location.reload();
                     }
                 },
             error:
                 function (err) {
-                    console.log(err);
+                   toastr.error('error');
                 }
         });
     });
@@ -136,16 +136,16 @@
                 function (data) {
                     data = JSON.parse(data);
                     if (data.Status == "error") {
-                        alert("Error: " + data.Message);
-                        console.log("Error: " + data.Message);
+                        toastr.error('error');;
                     }
                     else {
+                        toastr.success('success');
                         window.location.reload();
                     }
                 },
             error:
                 function (err) {
-                    console.log(err);
+                    toastr.error('error');
                 }
         });
     }
