@@ -8,7 +8,7 @@
     <h2>Volunteering Application</h2>
     <form method="post" enctype="multipart/form-data">
         <div class='row'>
-            <div class='col-sm-6'>
+            <div class='col-sm-6 offset-3'>
                 <div class='container'>
                     <div class='form-group'>
                         <label asp-for='Description' class='form-label'></label>
@@ -20,13 +20,13 @@
                         <input asp-for='VolunteerDate' class='form-control' aria-required='true' />
                         <span asp-validation-for='VolunteerDate' class='text-danger'></span>
                     </div>
-                    <div>
-                        <label asp-for='OrphanageName'>Orphanage Name:</label>
-                        <select asp-for='OrphanageName' class='form-control' aria-required='true'>
+                    <div class='form-group'>
+                        <label asp-for='OrphanageId'></label>
+                        <select asp-for='OrphanageId' asp-items="Model.OrphanageList" class='form-control'>
                         </select>
                     </div>
                     <div>
-                        <button type="submit">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>

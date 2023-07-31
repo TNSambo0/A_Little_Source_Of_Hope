@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using A_Little_Source_Of_Hope.Data;
 using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
@@ -56,6 +58,47 @@ namespace A_Little_Source_Of_Hope.Controllers
             };
             return View(applicationFromDb);
         }
+        public async Task<IActionResult> ViewVolunteeringApplication()
+        {
+            var sessionHandler = new SessionHandler();
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                await sessionHandler.SignUserOut(_signInManager, _logger);
+                return Problem("Please try login in again.");
+            }
+            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+            if (!isAuthorized)
+            {
+                TempData["error"] = "You don't have the permission to see application details.";
+                return RedirectToAction("Index", "Admin");
+            }
+            var managerFromDb = await _AppDb.Users.FirstOrDefaultAsync(app => app.Id == user.Id);
+            var volunteerAppsFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(app => app.AppUserId == user.Id);
+            var orphanageFromDb = await _AppDb.Orphanage.FirstOrDefaultAsync(app => app.AppUserId == managerFromDb.Id);
+            if (managerFromDb !=null && volunteerAppsFromDb != null && orphanageFromDb !=null)
+            {
+                ViewData["VApplications"] = "not null";
+            }
+            else
+            {
+                ViewData["VApplications"] = null; ;
+            }
+            IEnumerable<Volunteer> Applications = _AppDb.Volunteer.Select(x => new Volunteer
+            {
+                Status = volunteerAppsFromDb.Status,
+                Description = volunteerAppsFromDb.Description,
+                VolunteerDate = volunteerAppsFromDb.VolunteerDate,
+                OrphanageName = orphanageFromDb.OrphanageName,
+                OrphanageAddress = orphanageFromDb.OrphanageAddress,
+                OrphanageEmail = orphanageFromDb.OrphanageEmail,
+                OrphanageManager = managerFromDb.FirstName + " " + managerFromDb.LastName,
+                OrphanageContact = orphanageFromDb.CellNumber
+
+            });
+            return View(Applications);
+        }
         [HttpPost]
         public async Task<IActionResult> Approve(int id)
         {
@@ -83,6 +126,69 @@ namespace A_Little_Source_Of_Hope.Controllers
             await _AppDb.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        public async Task<ActionResult> VolunteerApplication()
+        {
+            var sessionHandler = new SessionHandler();
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                await sessionHandler.SignUserOut(_signInManager, _logger);
+                return Problem("Please try login in again.");
+            }
+            var OrphanageList = new Volunteer {
+               OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable() 
+            };
+            return View(OrphanageList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VolunteerApplication(Volunteer VApplication)
+        {
+            try
+            {
+                var sessionHandler = new SessionHandler();
+                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    await sessionHandler.SignUserOut(_signInManager, _logger);
+                    return Problem("Please try login in again.");
+                }
+                if (ModelState.IsValid)
+                {
+                    var VApplicationFromDb = _AppDb.Volunteer.Contains(VApplication);
+                    if (VApplicationFromDb != true)
+                    {
+                        var OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable();
+                        var selectedOrphanage = OrphanageList.FirstOrDefault(x => x.Value == VApplication.OrphanageId.ToString());
+                        VApplication.OrphanageName = selectedOrphanage.Text;
+                        await _AppDb.Volunteer.AddAsync(VApplication);
+                        await _AppDb.SaveChangesAsync();
+                        TempData["success"] = "Volunteering application successfully submitted.";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Volunteering application for specified orphanage already exists.");
+                        TempData["error"] = "Volunteering application for specified orphanage already exists";
+                        return View(VApplication);
+                    }
+                }
+                return View(VApplication);
+            }
+            catch (Exception ex)
+            {
+                if (ex != null)
+                {
+                    ViewData["error"] = ex.ToString();
+                }
+                return View(VApplication);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Reject(int id)
         {
