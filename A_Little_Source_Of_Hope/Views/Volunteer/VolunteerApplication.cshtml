@@ -5,7 +5,7 @@
 
 
 <div class="form-container">
-    <h2>Volunteering Application</h2>
+    <h2 style="text-align: center; font-weight: bold;">Volunteering Application</h2>
     <form method="post" enctype="multipart/form-data">
         <div class='row'>
             <div class='col-sm-6 offset-3'>
@@ -21,8 +21,14 @@
                         <span asp-validation-for='VolunteerDate' class='text-danger'></span>
                     </div>
                     <div class='form-group'>
-                        <label asp-for='OrphanageId'></label>
-                        <select asp-for='OrphanageId' asp-items="Model.OrphanageList" class='form-control'>
+                        <label for="orphanageSelect">Orphanage Name</label>
+
+                        <select id="orphanageSelect" name="orphanage">
+                            <option value="">Select an orphanage</option>
+                            <option value="1">Door of Hope</option>
+                            <option value="2">Hearts of Hope</option>
+                            <option value="3">The Johannesburg Children's Home</option>
+                            <option value="4">Malaika Orphanage</option>
                         </select>
                     </div>
                     <div>
