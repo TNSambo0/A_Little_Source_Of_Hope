@@ -58,10 +58,7 @@
                         <a class="nav-link dropdownbtn" asp-action="Donate" asp-controller="Home">Get involved</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="" asp-action="Payment" asp-controller="Payments">Donate cash</a>
-                            </li>
-                            <li>
-                                <a class="" asp-action="Donate" asp-controller="Home">Donate Items</a>
+                                <a class="" asp-action="Donate" asp-controller="Home">Donate</a>
                             </li>
                             <li>
                                 <a class="" asp-action="VolunteerApplication" asp-controller="Volunteer">Volunteer</a>
@@ -119,15 +116,19 @@
                         <div class="information_f">
                             <p><strong>ADDRESS:</strong> 28 White tower, DFC, Johannesburg, South Africa</p>
                             <p><strong>TELEPHONE:</strong> +27 66 348 7693</p>
-                            <p><strong>EMAIL:</strong> alittlesourceofhope@outlook.com</p>
+                            @*<p><strong>EMAIL:</strong> alittlesourceofhope@outlook.com</p>*@
+ 
+                            <label>
+                                <strong class="mr-1">EMAIL: </strong>
+                                <a class="text-white" href="mailto:abc@example.com?subject = Feedback&body = Message">
+                                    alittlesourceofhope@outlook.com
+                                </a>
+                            </label>
                             <label>
                                 <strong class="mr-1">WHATSAPP: </strong>
                                 <a class="text-white" href="whatsapp://send?text=This is WhatsApp sharing example using link" data-action="share/whatsapp/share"
-                                   target="_blank">+27 66 348 7693 </a>
-                                
-                            </label>
-                                
-                         
+                                   target="_blank">+27 66 348 7693 </a>                                
+                            </label> 
                             
                         </div>
                     </div>

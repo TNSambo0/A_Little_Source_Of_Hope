@@ -9,7 +9,7 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    //[Authorize(Roles = "ProductAdministrators")]
     public class VolunteerController : Controller
     {
         private readonly ILogger<VolunteerController> _logger;
