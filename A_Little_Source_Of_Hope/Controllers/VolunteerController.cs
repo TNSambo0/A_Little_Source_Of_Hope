@@ -9,7 +9,7 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    //[Authorize(Roles = "ProductAdministrators")]
     public class VolunteerController : Controller
     {
         private readonly ILogger<VolunteerController> _logger;
@@ -137,10 +137,11 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var OrphanageList = new Volunteer {
-               OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable() 
+            Volunteer volunteer = new()
+            {
+                OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable()
             };
-            return View(OrphanageList);
+            return View(volunteer);
         }
 
         [HttpPost]
@@ -177,6 +178,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                         return View(VApplication);
                     }
                 }
+                ModelState.AddModelError("", "Fill all field.");
                 return View(VApplication);
             }
             catch (Exception ex)

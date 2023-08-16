@@ -11,7 +11,8 @@ namespace A_Little_Source_Of_Hope.Models
         public int Id { get;set;} 
         public string? Status  { get;set;}
         public string Description { get; set; }
-        public DateTime VolunteerDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime VolunteerDate { get; set; } = DateTime.Now;
         [NotMapped]
         [Display(Name = "Orphanage name")]
         public string OrphanageName { get; set; }
@@ -32,6 +33,8 @@ namespace A_Little_Source_Of_Hope.Models
         public string ApplicantFullName { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> OrphanageList { get; set; }
+        [NotMapped]
+        public string OrphanageID { get; set; }
         [ForeignKey("Orphanage")]
         public int OrphanageId { get; set; }
         public virtual Orphanage Orphanage { get; set; }

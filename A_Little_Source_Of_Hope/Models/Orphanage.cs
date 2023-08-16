@@ -12,7 +12,7 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.Text)]
         [Display(Name = "Orphanage Name")]
         public string OrphanageName { get; set; }
-        [Required]
+        //[Required]
         [DataType(DataType.Text)]
         public string Manager { get; set; }
         [Required]
