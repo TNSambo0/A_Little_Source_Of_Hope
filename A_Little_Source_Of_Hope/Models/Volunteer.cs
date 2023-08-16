@@ -12,25 +12,25 @@ namespace A_Little_Source_Of_Hope.Models
         public string? Status  { get;set;}
         public string Description { get; set; }
         [DataType(DataType.Date)]
-        public DateTime VolunteerDate { get; set; } = DateTime.Now;
+        public DateTime? VolunteerDate { get; set; }
         [NotMapped]
         [Display(Name = "Orphanage name")]
-        public string OrphanageName { get; set; }
+        public string? OrphanageName { get; set; }
         [NotMapped]
         [Display(Name = "Orphanage address")]
-        public string OrphanageAddress { get; set; }
+        public string? OrphanageAddress { get; set; }
         [NotMapped]
         [Display(Name = "Orphanage Email")]
-        public string OrphanageEmail { get; set; }
+        public string? OrphanageEmail { get; set; }
         [NotMapped]
         [Display(Name = "Orphanage manager")]
-        public string OrphanageManager { get; set; }
+        public string? OrphanageManager { get; set; }
         [NotMapped]
         [Display(Name = "Orphanage Contact")]
-        public string OrphanageContact { get; set; }
+        public string? OrphanageContact { get; set; }
         [NotMapped]
         [Display(Name = "Applicant full name")]
-        public string ApplicantFullName { get; set; }
+        public string? ApplicantFullName { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> OrphanageList { get; set; }
         [NotMapped]
