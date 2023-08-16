@@ -16,8 +16,10 @@ namespace A_Little_Source_Of_Hope.Data
             var managerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "manager@outlook.com", " Employee");
             await EnsureRole(serviceProvider, managerID, Constants.ProductAdministratorsRole);
             var OrphanageManagerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager@outlook.com", "Orphanage Manager");
+            var OrphanageManagerID2 = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager@outlook.com", "Orphanage Manager");
             var CustomerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "Customer@outlook.com", "Customer");
             await SeedDataOnDb(context);
+            await sdOrphanage(context, OrphanageManagerID, OrphanageManagerID2);
         }
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider, string testUserPw, string UserName, string UserType)
@@ -1419,6 +1421,35 @@ namespace A_Little_Source_Of_Hope.Data
                 });
             }
             await context.SaveChangesAsync();
+        }
+
+        public static async Task sdOrphanage(AppDbContext context, string UserId, string UserId2)
+        {
+            if (await context.Orphanage.AnyAsync()) { return; }
+            else
+            {
+                await context.Orphanage.AddRangeAsync(new Orphanage
+                {
+                    OrphanageName = "The Hope",
+                    OrphanageEmail = "Hope2023@gmail.com",
+                    OrphanageAddress = "5 Avenue, Johannesburg,8130",
+                    Manager = "Sheldon Cooper",
+                    CellNumber = "0786178662",
+                    AppUserId = UserId,
+
+
+                }, new Orphanage
+                {
+                    OrphanageName = "The Home",
+                    OrphanageEmail = "home23@outlook.com",
+                    OrphanageAddress = "5 Ave Botha, Pretoria,0081",
+                    Manager = "Rajesh Kothrappoli",
+                    CellNumber = "0715566997",
+                    AppUserId = UserId2,
+                });
+                await context.SaveChangesAsync();
+            }
+
         }
     }
 }
