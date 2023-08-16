@@ -9,7 +9,7 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    //[Authorize(Roles = "ProductAdministrators")]
     public class VolunteerController : Controller
     {
         private readonly ILogger<VolunteerController> _logger;
@@ -138,7 +138,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Problem("Please try login in again.");
             }
             var OrphanageList = new Volunteer {
-               OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable() 
+                OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable(),
+                VolunteerDate = DateTime.Now
             };
             return View(OrphanageList);
         }
@@ -157,12 +158,14 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
+                var OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable();
+
                 if (ModelState.IsValid)
                 {
                     var VApplicationFromDb = _AppDb.Volunteer.Contains(VApplication);
+
                     if (VApplicationFromDb != true)
                     {
-                        var OrphanageList = _AppDb.Orphanage.Select(x => new SelectListItem() { Text = x.OrphanageName, Value = x.Id.ToString() }).AsEnumerable();
                         var selectedOrphanage = OrphanageList.FirstOrDefault(x => x.Value == VApplication.OrphanageId.ToString());
                         VApplication.OrphanageName = selectedOrphanage.Text;
                         await _AppDb.Volunteer.AddAsync(VApplication);
@@ -177,6 +180,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                         return View(VApplication);
                     }
                 }
+                TempData["error"] = "Please fill all the required fields";
+
                 return View(VApplication);
             }
             catch (Exception ex)
@@ -185,6 +190,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     ViewData["error"] = ex.ToString();
                 }
+                TempData["error"] = "An error occured, try to refresh the page";
+
                 return View(VApplication);
             }
         }
