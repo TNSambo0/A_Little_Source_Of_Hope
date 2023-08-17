@@ -67,7 +67,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Imageurl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Imageurl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
@@ -288,28 +288,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Volunteer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VolunteerDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Volunteer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Volunteer_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -354,6 +332,35 @@ namespace A_Little_Source_Of_Hope.Migrations
                         principalTable: "Province",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Volunteer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VolunteerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OrphanageId = table.Column<int>(type: "int", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Volunteer", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Volunteer_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Volunteer_Orphanage_OrphanageId",
+                        column: x => x.OrphanageId,
+                        principalTable: "Orphanage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -456,6 +463,11 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "IX_Volunteer_AppUserId",
                 table: "Volunteer",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Volunteer_OrphanageId",
+                table: "Volunteer",
+                column: "OrphanageId");
         }
 
         /// <inheritdoc />
@@ -489,9 +501,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "Gender");
 
             migrationBuilder.DropTable(
-                name: "Orphanage");
-
-            migrationBuilder.DropTable(
                 name: "Payment");
 
             migrationBuilder.DropTable(
@@ -510,10 +519,13 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Orphanage");
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

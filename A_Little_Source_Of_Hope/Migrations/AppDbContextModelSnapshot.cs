@@ -141,7 +141,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Imageurl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -433,16 +432,16 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrphanageId")
+                    b.Property<int?>("OrphanageId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VolunteerDate")
+                    b.Property<DateTime?>("VolunteerDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

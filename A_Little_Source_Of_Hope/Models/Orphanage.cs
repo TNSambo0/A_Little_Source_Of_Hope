@@ -29,6 +29,6 @@ namespace A_Little_Source_Of_Hope.Models
         public string  CellNumber { get; set; }
         [ForeignKey("AppUser")]
         public string AppUserId { get; set; }
-        public virtual AppUser AppUser { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

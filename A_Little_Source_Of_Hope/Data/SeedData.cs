@@ -16,10 +16,10 @@ namespace A_Little_Source_Of_Hope.Data
             var managerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "manager@outlook.com", " Employee");
             await EnsureRole(serviceProvider, managerID, Constants.ProductAdministratorsRole);
             var OrphanageManagerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager@outlook.com", "Orphanage Manager");
-            var OrphanageManagerID2 = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager@outlook.com", "Orphanage Manager");
+            var OrphanageManagerID2 = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager1@outlook.com", "Orphanage Manager");
             var CustomerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "Customer@outlook.com", "Customer");
             await SeedDataOnDb(context);
-            await sdOrphanage(context, OrphanageManagerID, OrphanageManagerID2);
+            await SDOrphanage(context, OrphanageManagerID, OrphanageManagerID2);
         }
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider, string testUserPw, string UserName, string UserType)
@@ -1423,7 +1423,7 @@ namespace A_Little_Source_Of_Hope.Data
             await context.SaveChangesAsync();
         }
 
-        public static async Task sdOrphanage(AppDbContext context, string UserId, string UserId2)
+        public static async Task SDOrphanage(AppDbContext context, string UserId, string UserId2)
         {
             if (await context.Orphanage.AnyAsync()) { return; }
             else

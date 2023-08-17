@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A_Little_Source_Of_Hope.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230730215508_InitialCreate")]
+    [Migration("20230817104949_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -144,7 +144,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Imageurl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -436,18 +435,23 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrphanageId")
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VolunteerDate")
+                    b.Property<DateTime?>("VolunteerDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
+
+                    b.HasIndex("OrphanageId");
 
                     b.ToTable("Volunteer");
                 });
@@ -660,7 +664,15 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("A_Little_Source_Of_Hope.Models.Orphanage", "Orphanage")
+                        .WithMany()
+                        .HasForeignKey("OrphanageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AppUser");
+
+                    b.Navigation("Orphanage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
