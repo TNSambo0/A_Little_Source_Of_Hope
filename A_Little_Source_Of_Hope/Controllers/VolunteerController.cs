@@ -27,8 +27,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
@@ -82,6 +82,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                                     where volunteer.Id == id && UserDb.Id == volunteer.AppUserId
                                     select new VolunteerApp
                                     {
+                                        Id = id,
                                         Status = volunteer.Status,
                                         Description = volunteer.Description,
                                         VolunteerDate = (DateTime)volunteer.VolunteerDate,
@@ -93,8 +94,19 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 return View();
             }
-            ViewData["VolApplications"] = "Not Null";
-            return View(applicationFromDb);
+            ViewData["VApplications"] = "Not Null";
+            var app = await applicationFromDb.SingleOrDefaultAsync();
+            var application = new VolunteerApp
+            {
+                Id = id,
+                Status = app.Status,
+                Description = app.Description,
+                VolunteerDate = app.VolunteerDate,
+                OrphanageName = app.OrphanageName,
+                ApplicantFullName = app.ApplicantFullName,
+                AppUserId = app.AppUserId
+            };
+            return View(application);
         }
         public async Task<IActionResult> Index()
         {
@@ -117,9 +129,10 @@ namespace A_Little_Source_Of_Hope.Controllers
                                     on volunteer.OrphanageId equals orphanage.Id
                                     join manager in _AppDb.Users
                                     on orphanage.AppUserId equals manager.Id
-                                    where user.Id == volunteer.AppUserId
                                     select new VolunteerApp
                                     {
+                                        Id = volunteer.Id,
+                                        AppUserId = volunteer.AppUserId,
                                         Status = volunteer.Status,
                                         Description = volunteer.Description,
                                         VolunteerDate = (DateTime)volunteer.VolunteerDate,
@@ -136,8 +149,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             ViewData["VApplications"] = "Not Null";
             return View(applicationFromDb);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
@@ -247,8 +260,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var volunteerAppsFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(app => app.AppUserId == user.Id);
-            var orphanageFromDb = await _AppDb.Orphanage.FirstOrDefaultAsync(app => app.Id == volunteerAppsFromDb.OrphanageId);
             var Applications = from volunteer in _AppDb.Volunteer
                                join orphanage in _AppDb.Orphanage
                                on volunteer.OrphanageId equals orphanage.Id

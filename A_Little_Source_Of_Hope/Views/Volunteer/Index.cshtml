@@ -6,6 +6,10 @@
 <div class="p-4">
     @if (ViewData["VApplications"] != null)
     {
+        <div class="d-flex mb-2">
+            <h2>Volunteering Application List</h2>
+            <hr/>
+        </div>
         <table class="table table-hover product-table">
             <thead>
                 <tr>
@@ -37,7 +41,7 @@
                             {
                                     var parms = new Dictionary<string, string>
                                             {
-                                                {"id" , $"{obj.Id}" },
+                                                { "id" , $"{obj.Id}" },
                                                 { "UserID" , $"{obj.AppUserId}" }
                                             };
                                  <a asp-controller="Volunteer" asp-action="Details" asp-all-route-data="parms" class="btn btn-warning">
