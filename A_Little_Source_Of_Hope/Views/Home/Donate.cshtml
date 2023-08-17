@@ -45,22 +45,34 @@
                 <p class="location-paragraph">
                     326 Chris Hani Road, Pimville Johannesburg, 1808
                 </p>
-                <div class="container--1">
-                    <div class="display--1">
+                <div class="container__1">
+                    <div class="display__1">
                         <label for="">Select an amount</label>
-                        <div class="type">
-                            <input type="text">
-                            <type></type>
+                        <div class="container__2" style="width: 300px">
+                            <input type="text" class="text_input" id="amountInput" />
+                            <button value="Save" class="btn_">Donate</button>
                         </div>
-                        <div class="amount--1">
-                            <button>R100</button>
-                            <button>R250</button>
-                            <button>R500</button>
-                            <button>R750</button>
-                            <button>R1000</button>
+
+                        <div class="amount_1">
+                            <button class="amountBtn" data-amount="100">R100</button>
+                            <button class="amountBtn" data-amount="250">R250</button>
+                            <button class="amountBtn" data-amount="500">R500</button>
+                            <button class="amountBtn" data-amount="750">R750</button>
+                            <button class="amountBtn" data-amount="1000">R1000</button>
                         </div>
                     </div>
                 </div>
+                <script>
+                    const amountButtons = document.querySelectorAll('.amountBtn');
+                    const amountInput = document.getElementById('amountInput');
+
+                    amountButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const amount = button.getAttribute('data-amount');
+                            amountInput.value = `R${amount}`;
+                        });
+                    });
+                </script>
             </div>
             <div class="sub-form">
                 Please note that all items should be of sufficient quality in order to be processed.
