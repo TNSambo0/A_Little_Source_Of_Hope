@@ -1,4 +1,4 @@
-﻿@model Volunteer
+﻿@model VolunteerApp
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -45,8 +45,15 @@
                             </div>
                         </div>
                         <div class="btn-group ml-3 mb-3">
-                            <a asp-action="Approve" asp-controller="Volunteer" asp-route-id="@Model.Id" class="btn btn-primary btn-Approve">Approve</a>
-                            <a asp-action="Reject" asp-controller="Volunteer" asp-route-id="@Model.Id" class="btn btn-danger btn-Reject">Reject</a>
+                            @{
+                                var parms = new Dictionary<string, string>
+                                {
+                                    {"Id" , $"{Model.Id}" },
+                                    { "userID" , $"{Model.AppUserId}" }
+                                };
+                            }
+                            <a asp-action="Approve" asp-controller="Volunteer" asp-all-route-data="parms" class="btn btn-primary btn-Approve">Approve</a>
+                            <a asp-action="Reject" asp-controller="Volunteer" asp-all-route-data="parms" class="btn btn-danger btn-Reject">Reject</a>
                             <a asp-action="Index" asp-controller="Volunteer" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>

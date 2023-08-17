@@ -35,6 +35,6 @@ namespace A_Little_Source_Of_Hope.Models
         public IEnumerable<SelectListItem> CategoryNames { get; set; }
         [NotMapped]
         public IFormFile? File { get; set; }
-        public virtual Category Category { get; set; }
+        public Category Category { get; set; }
     }
 }
