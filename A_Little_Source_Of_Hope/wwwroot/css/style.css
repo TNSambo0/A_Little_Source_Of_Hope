@@ -110,7 +110,7 @@ body {
 }
 
     .custom_nav-container .nav_search-btn:hover {
-        color:lightgrey;
+        color: #0026ff;
     }
 
 .custom_nav-container .navbar-toggler {
@@ -254,7 +254,7 @@ footer {
 }
 
 .widget_menu h3 {
-    color: #cfcf5a;
+    color: white;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
@@ -275,7 +275,7 @@ footer {
 
         .widget_menu ul li a {
             font-size: 15px;
-            color: white;
+            color: #2403ff;
             margin-bottom: 0;
             float: left;
             width: 100%;
@@ -365,7 +365,7 @@ form textarea {
 }
 
 .nav-item-nav .nav-link:hover {
-    color: lightslategrey;
+    color: #0026ff;
 }
 
 .nav-item-nav.active .nav-link {
@@ -403,7 +403,7 @@ form textarea {
     }
 
         .dropdown-menu li a:hover {
-            background-color: #cfcf5a;
+            background-color: #17a2b8;
         }
 
 .dropdown-nav:hover .dropdown-menu {
@@ -411,7 +411,7 @@ form textarea {
 }
 
 .dropdown-nav:hover .dropdownbtn {
-    color: lightslategrey;
+    color: #0026ff;
 }
 
 
@@ -424,7 +424,7 @@ form textarea {
 }
 
     .latest-news-link:hover {
-        background-color:cadetblue;
+        background-color: #3f628a;
     }
 
 .filter-navbar {
@@ -1017,4 +1017,3 @@ input[type="email"], input[type="text"], input[type="password"] {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-

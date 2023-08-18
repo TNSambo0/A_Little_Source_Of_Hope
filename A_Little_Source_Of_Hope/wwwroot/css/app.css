@@ -14285,7 +14285,7 @@ span.flatpickr-weekday {
 /*# sourceMappingURL=app.css.map*/
 
 .myBody {
-    background: url(/images//icons/back.jpg);
+    background: url(/images/icons/back.jpg);
     height: 100vh;
     background-size: cover;
     width: 100%;
@@ -14342,108 +14342,4 @@ span.flatpickr-weekday {
     color: #fff;
     margin-top: 10px;
     text-shadow: 2px 2px #ff0000;
-}
-
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.container__1 {
-    margin: 10px;
-    padding: 10px;
-    height: 50vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #3c3c3c;
-}
-
-.display__1 {
-    display: block;
-    border-radius: 5px;
-}
-
-    .display__1 label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 30px;
-        color: #fff;
-    }
-
-.type, .amount__1 {
-    padding: 10px;
-}
-
-input {
-    padding: 10px;
-    width: 300px;
-    font-size: 17px;
-    text-align: left;
-    background: #fff;
-    outline: none !important;
-    color: black;
-    border: none;
-    transition: all ease-in-out.3s;
-    border-radius: 4px;
-    margin: 10px;
-    border: 1px solid grey;
-}
-
-button {
-    margin: 5px;
-    cursor: pointer;
-    position: relative;
-    font-size: 15px;
-    padding: 5px;
-    background-color: #cfcf5a;
-    color: #fff;
-    border: none;
-    border-radius: 2px;
-}
-
-.input {
-    width: 100%;
-    margin-right: 0px;
-}
-
-.button {
-    width: 30%;
-}
-
-.container__2 {
-    position: relative;
-    border: 1px solid #cfcf5a;
-    height: 50px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    background: #fff;
-    border-radius: 3px;
-}
-
-.text_input {
-    height: 44px;
-    width: 60%;
-    padding: 0;
-    line-height: 30px;
-    font-size: 25px;
-    border: none;
-    text-align:left;
-}
-
-.btn_ {
-    position: absolute;
-    height: 50px;
-    line-height: 50px;
-    right: 0;
-    top: 0;
-    margin: 0;
-    padding: 0;
-    background: #cfcf5a;
-    color: white;
-    border: none;
-    width: 30%;
-    font-weight: bold;
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A_Little_Source_Of_Hope.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230818144142_AddNewsLetterModel")]
-    partial class AddNewsLetterModel
+    [Migration("20230818203228_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -268,7 +268,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Descriopn")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

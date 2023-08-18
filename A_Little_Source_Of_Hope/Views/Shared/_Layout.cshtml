@@ -166,12 +166,11 @@
                                     <p>Subscribe to our newsletter and get more updates</p>
                                 </div>
                                 <div class="form_sub">
-                                    <form method="post" asp-action="Subscribe" asp-controller="NewsLetter">
+                                    <form>
                                         <fieldset>
-                                            <div class="form-group">
-                                                @model A_Little_Source_Of_Hope.Models.NewsSubscription
-                                                <input class="form-control" asp-for="Email" type="email" placeholder="Enter Your Mail" name="email" />
-                                                <input type="submit" value="Subscribe" class="btn btn-primary"/>
+                                            <div class="field">
+                                                <input class="form-control EmailSubscribe" type="email" placeholder="Enter Your Mail" name="email" />
+                                                <input type="submit" value="Subscribe" class="btn btn-primary Subscribe" />
                                             </div>
                                         </fieldset>
                                     </form>
@@ -188,6 +187,31 @@
             © @DateTime.Now.Year All Rights Reserved By A Little Source Of Hope
         </p>
     </div>
+    <script>
+        $(".Subscribe").on("click",function () {
+            var email = $(".EmailSubscribe").[0].val();
+            $.ajax({
+                method: "POST",
+                url: '/Newsletter/Subscribe',
+                data: { Email: email },
+                success:
+                    function (data) {
+                        data = JSON.parse(data);
+                        if (data.Status == "error") {
+                            alert("Error: " + data.Message);
+                            console.log("Error: " + data.Message);
+                        }
+                        else {
+                            toastr.success('Success');
+                        }
+                    },
+                error:
+                    function (err) {
+                        console.log(err);
+                    }
+            });
+        });
+    </script>
     <script type="text/javascript" src="~/js/js/bootstrap.js"></script>
     <script type="text/javascript" src="~/js/bootstrap.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
