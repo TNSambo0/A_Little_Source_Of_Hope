@@ -189,7 +189,7 @@
     </div>
     <script>
         $(".Subscribe").on("click",function () {
-            var email = $(".EmailSubscribe").[0].val();
+            var email = $(".EmailSubscribe").val();
             $.ajax({
                 method: "POST",
                 url: '/Newsletter/Subscribe',

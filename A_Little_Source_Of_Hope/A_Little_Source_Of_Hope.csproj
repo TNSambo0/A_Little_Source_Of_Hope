@@ -42,4 +42,8 @@
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\ViewApplications.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
