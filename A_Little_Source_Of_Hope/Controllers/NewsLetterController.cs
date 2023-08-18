@@ -10,9 +10,9 @@ namespace A_Little_Source_Of_Hope.Controllers
 {
     public class NewsletterController : Controller
     {
-        private readonly ILogger<ShoppingCartController> _logger;
+        private readonly ILogger<NewsletterController> _logger;
         private readonly AppDbContext _AppDb;
-        public NewsletterController(ILogger<ShoppingCartController> logger, AppDbContext AppDb)
+        public NewsletterController(ILogger<NewsletterController> logger, AppDbContext AppDb)
         {
             _logger = logger;
             _AppDb = AppDb;

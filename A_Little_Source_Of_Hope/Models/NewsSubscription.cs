@@ -7,6 +7,7 @@ namespace A_Little_Source_Of_Hope.Models
 {
     public class NewsSubscription
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(250)]
