@@ -1,13 +1,15 @@
-﻿@model IEnumerable<Volunteer>
+﻿@model IEnumerable<VolunteerApp>
 @{
     ViewData["Title"] = "Volunteering Applications";
+    Layout = "~/Areas/Identity/Pages/_Layout.cshtml";
 }
 <div class="p-4">
+
     @if (ViewData["VApplications"] != null)
     {
         <div class="d-flex mb-2">
             <h2>Volunteering Application List</h2>
-            <a asp-action="VolunteerApplication" asp-controller="Volunteering" class="btn btn-primary ml-auto">
+            <a asp-action="VolunteerApplication" asp-controller="Volunteer" class="btn btn-primary ml-auto">
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Application
             </a>
         </div>
@@ -28,7 +30,7 @@
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="row-@obj.Id">
+                    <tr>
                         <td class="product-name">@obj.OrphanageName</td>
                         <td>@obj.OrphanageAddress</td>
                         <td>@obj.OrphanageEmail</td>
@@ -37,16 +39,6 @@
                         <td>@obj.Description</td>
                         <td>@obj.VolunteerDate</td>
                         <td>@obj.Status</td>
-                        <td>
-                            @if(obj.Status == "Pending"){
-                                <a asp-controller="Volunteer" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a>
-                                <button class="btn btn-danger deleteItem" type="button" asp-controller="Volunteer" asp-action="Delete" asp-route-id="@obj.Id">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                            }
-                        </td>
                     </tr>
                 }
             </tbody>
@@ -56,7 +48,7 @@
     {
         <div class="row mt-2">
             <div class="colsm-12 text-center">
-                <p>You have not submitted an application yet. Click <a asp-action="ViewVolunteeringApplication" asp-controller="Volunteer">here</a> to create one.</p>
+                <p>You have not submitted an application yet. Click <a asp-action="VolunteerApplication" asp-controller="Volunteer">here</a> to create one.</p>
             </div>
         </div>
     }

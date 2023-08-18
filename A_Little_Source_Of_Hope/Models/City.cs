@@ -13,6 +13,6 @@ namespace A_Little_Source_Of_Hope.Models
         public string CityName { get; set; }
         [ForeignKey("Province")]
         public int ProvinceId { get; set; }
-        public virtual Province Province { get; set; }
+        public Province Province { get; set; }
     }
 }

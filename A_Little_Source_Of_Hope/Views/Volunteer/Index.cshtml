@@ -1,31 +1,65 @@
-﻿@model IEnumerable<Volunteer>
+﻿@model IEnumerable<VolunteerApp>
 @{
     ViewData["Title"] = "Volunteer List";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-<div class="col-12 tm-block-col">
-    <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-        <h2 class="tm-block-title">Volunteer's List</h2>
-        <table class="table">
+<div class="p-4">
+    @if (ViewData["VApplications"] != null)
+    {
+        <div class="d-flex mb-2">
+            <h2>Volunteering Application List</h2>
+            <hr/>
+        </div>
+        <table class="table table-hover product-table">
             <thead>
                 <tr>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th>
+                    <th scope="col">Orphanage name</th>
+                    <th scope="col">Orphanage address</th>
+                    <th scope="col">Orphanage Email</th>
+                    <th scope="col">Orphanage Contact</th>
+                    <th scope="col">Orphanage manager</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Orphanage Name</th>
-                    <th scope="col">Date and time</th>
+                    <th scope="col">CreatedDate</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Thabo Nkosi</td>
-                    <td>Nkosithabo@gmail.com</td>
-                    <td>home works,dishes</td>
-                    <td>Little Rose</td>
-                    <td>27 july 10:30</td>
-                </tr>
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td class="product-name">@obj.OrphanageName</td>
+                        <td>@obj.OrphanageAddress</td>
+                        <td>@obj.OrphanageEmail</td>
+                        <td>@obj.OrphanageContact</td>
+                        <td>@obj.OrphanageManager</td>
+                        <td>@obj.Description</td>
+                        <td>@obj.VolunteerDate</td>
+                        <td>@obj.Status</td>
+                        <td>
+                            @if (obj.Status == "Pending")
+                            {
+                                    var parms = new Dictionary<string, string>
+                                            {
+                                                { "id" , $"{obj.Id}" },
+                                                { "UserID" , $"{obj.AppUserId}" }
+                                            };
+                                 <a asp-controller="Volunteer" asp-action="Details" asp-all-route-data="parms" class="btn btn-warning">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
-    </div>
+    }
+    else
+    {
+        <div class="row mt-2">
+            <div class="colsm-12 text-center">
+                <p>There are no volunteering application on the database.</p>
+            </div>
+        </div>
+    }
 </div>
