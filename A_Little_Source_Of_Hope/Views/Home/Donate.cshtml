@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Donate";
+}
+<div class="container">
+    <div class="container my-2">
+        <div class="container">
+            <div class="heading_container heading_center">
+                <h2>Donate items</h2>
+            </div>
+        </div>
+        <div class="text-center">
+            <p class="sub_hearder">
+                Find your nearest drop-off point
+            </p>
+            <p class="drop-paragraph">
+                You can drop
+                off clothing or unwanted toys to one of the 4 University of Johannesburg campuses
+                located in the City of Johannesburg.
+            </p>
+            <div class="donate_subcontainer">
+                <h2 class="campus">
+                    Auckland Park Kingsway campus
+                </h2>
+                <p class="location-paragraph">
+                    Corner Kingsway and University Road, Auckland Park Johannesburg, 2092.
+                </p>
+
+                <h3 class="campus">
+                    Auckland Park Bunting Road campus
+                </h3>
+                <p class="location-paragraph">
+                    Corner Bunting and Annet Road, Aukland park Johannesburg, 2092.
+                </p>
+
+                <h4 class="campus">
+                    Doornfontein campus
+                </h4>
+                <p class="location-paragraph">
+                    55 Beit Street, Doornfontein, Johannesburg, 2028
+                </p>
+
+                <h5 class="campus">
+                    Soweto campus
+                </h5>
+                <p class="location-paragraph">
+                    326 Chris Hani Road, Pimville Johannesburg, 1808
+                </p>
+                <div class="container__1">
+                    <div class="display__1">
+                        <label for="">Select an amount</label>
+                        <div class="container__2" style="width: 300px">
+                            <input type="text" class="text_input amountInput" id="amountInput" />
+                            <button class="btn_ btn-donate" asp-action="Payment" asp-controller="Payment">Donate</button>
+                        </div>
+
+                        <div class="amount_1">
+                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(100);}" asp-action="Payment" asp-controller="Payment" data-amount="100">
+                                R100
+                            </button>
+                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(250);}" asp-action="Payment" asp-controller="Payment" data-amount="250">
+                                R250
+                            </button>
+                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(500);}" asp-action="Payment" asp-controller="Payment" data-amount="500">
+                                R500
+                            </button>
+                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(750);}" asp-action="Payment" asp-controller="Payment" data-amount="750">
+                                R750
+                            </button>
+                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(1000);}" asp-action="Payment" asp-controller="Payment" data-amount="1000">
+                                R1000
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-form">
+                Please note that all items should be of sufficient quality in order to be processed.
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".btn-donate").on('click', function () {
+        var Amount = Number.parseFloat(getElementsByClassName("amountInput")[0].innerHTML.replace(",", "."));
+        window.location.href = "Payment/Payment?Amount=" + Amount;
+    });
+</script>

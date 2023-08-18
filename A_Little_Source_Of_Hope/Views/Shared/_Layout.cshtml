@@ -166,11 +166,12 @@
                                     <p>Subscribe to our newsletter and get more updates</p>
                                 </div>
                                 <div class="form_sub">
-                                    <form asp-action="Newsletter" asp-controller="Home">
+                                    <form method="post" asp-action="Subscribe" asp-controller="NewsLetter">
                                         <fieldset>
-                                            <div class="field">
-                                                <input type="email" placeholder="Enter Your Mail" name="email" />
-                                                <input type="submit" value="Subscribe" />
+                                            <div class="form-group">
+                                                @model A_Little_Source_Of_Hope.Models.NewsSubscription
+                                                <input class="form-control" asp-for="Email" type="email" placeholder="Enter Your Mail" name="email" />
+                                                <input type="submit" value="Subscribe" class="btn btn-primary"/>
                                             </div>
                                         </fieldset>
                                     </form>
