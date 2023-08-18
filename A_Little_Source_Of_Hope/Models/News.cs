@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using A_Little_Source_Of_Hope.Areas.Identity.Data;
+﻿using System.ComponentModel.DataAnnotations;
 namespace A_Little_Source_Of_Hope.Models
+
 {
     public class News
     {
