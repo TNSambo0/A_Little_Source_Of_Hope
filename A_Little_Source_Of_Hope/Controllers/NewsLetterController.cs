@@ -27,27 +27,35 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
         public async Task Subscribe(string Email)
         {
+            ItemRemoveStatusModel results = new();
             try
             {
-                var subcribers = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
-                if (subcribers != null)
+                var subcriber = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
+                if (subcriber != null)
                 {
-                    TempData["error"] = "Already subscribed.";
+                    results.Status = "error";
+                    results.Message = "Already subscribed.";
                 }
                 else
                 {
-                    subscription.Subscribed = true;
-                    subscription.CreatedDate = DateTime.Now;
-                    await _AppDb.NewsSubscriptions.AddAsync(subscription);
+                    var subscribe = new NewsSubscription
+                    {
+                        Email = Email,
+                        Subscribed = true,
+                        CreatedDate = DateTime.Now
+                    };
+                    await _AppDb.NewsSubscriptions.AddAsync(subscribe);
                     await _AppDb.SaveChangesAsync();
-                    TempData["success"] = "Successfully subscribed to our news letter.";
+                    results.Status = "success";
+                    results.Message = "Successfully subscribed to our news letter.";
                 }
             }
             catch (Exception ex)
             {
                 if (ex != null)
                 {
-                    TempData["error"] = "An error occured please try again.";
+                    results.Status = "error";
+                    results.Message = "An error occured please try again.";
                     ViewData["error"] = ex.ToString();
                 }
             }
