@@ -29,16 +29,19 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             try
             {
-                var subcribers = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
-                if (subcribers != null)
+                var subscriber = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
+                if (subscriber != null)
                 {
                     TempData["error"] = "Already subscribed.";
                 }
                 else
                 {
-                    subscription.Subscribed = true;
-                    subscription.CreatedDate = DateTime.Now;
-                    await _AppDb.NewsSubscriptions.AddAsync(subscription);
+                    var subscribe = new NewsSubscription 
+                    { 
+                        Email = Email,Subscribed = true, CreatedDate = DateTime.Now
+                    };
+                   
+                    await _AppDb.NewsSubscriptions.AddAsync(subscribe);
                     await _AppDb.SaveChangesAsync();
                     TempData["success"] = "Successfully subscribed to our news letter.";
                 }

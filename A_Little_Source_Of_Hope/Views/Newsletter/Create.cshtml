@@ -16,16 +16,29 @@
                             <div class='container'>
                                 <div class='form-group'>
                                     <label asp-for='Heading' class='form-label'></label>
-                                    <input asp-for='Summary' class='form-control' aria-required='true' />
-                                    @*<span asp-validation-for='' class='text-danger'></span>*@
-                                    <textarea rows="3" placeholder="Enter the newsletter" asp-for="Description" class="mb-0"></textarea>
-                                    <span asp-validation-for="Description" class="text-danger"></span>
-
+                                    <input asp-for='Heading' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='Heading' class='text-danger'></span>
                                 </div>
-                               @* <div class="form-group">
-                                    <textarea rows="3" placeholder="Enter your message" asp-for="Message" class="mb-0"></textarea>
-                                    <span asp-validation-for="Message" class="text-danger"></span>
-                                </div>*@
+                                <div class='form-group'>
+                                    <label asp-for='Summary' class='form-label'></label>
+                                    <input asp-for='Summary' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='Summary' class='text-danger'></span>
+                                </div>
+                                <div class='form-group'>
+                               
+                                    <label asp-for='Description' class='form-label'></label>
+                                    <textarea rows="1"  placeholder="Enter a newsletter" asp-for="Description" class="form-control"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                <div class='form-group'>
+                                    <label asp-for='CreatedDate' class='form-label'></label>
+                                    <input asp-for='CreatedDate' class='form-control' aria-required='true' />
+                                    <span asp-validation-for='CreatedDate' class='text-danger'></span>
+                                </div>
+
+
+
+                               
                             </div>
                             <div class="btn-group ml-3 mb-3">
                                 <button type="submit" class="btn btn-primary" id="btn_create">Submit</button>
@@ -33,7 +46,7 @@
                             </div>
                         </div>
                         @*<div class="col-sm-6">
-                            <div class="container mb-2" id="container-canvImg"> 
+                            <div class="container mb-2" id="container-canvImg">
                                 <div class="Category_img_icon_div">
                                     <img class="CategoryImagePreview" src="~/images/icons/Grey.jpg" />
                                 </div>
