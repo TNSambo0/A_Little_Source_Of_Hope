@@ -50,25 +50,25 @@
                         <label for="">Select an amount</label>
                         <div class="container__2" style="width: 300px">
                             <input type="text" class="text_input amountInput" id="amountInput" />
-                            <button class="btn_ btn-donate" asp-action="Payment" asp-controller="Payment">Donate</button>
+                            <button class="btn_ btn-donate">Donate</button>
                         </div>
 
                         <div class="amount_1">
-                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(100);}" asp-action="Payment" asp-controller="Payment" data-amount="100">
+                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@Convert.ToDecimal(100)">
                                 R100
-                            </button>
-                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(250);}" asp-action="Payment" asp-controller="Payment" data-amount="250">
+                            </a>
+                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@Convert.ToDecimal(250)">
                                 R250
-                            </button>
-                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(500);}" asp-action="Payment" asp-controller="Payment" data-amount="500">
+                            </a>
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(500)">
                                 R500
-                            </button>
-                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(750);}" asp-action="Payment" asp-controller="Payment" data-amount="750">
+                            </a>
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(750)">
                                 R750
-                            </button>
-                            <button class="amountBtn" asp-route-Amount="@{Convert.ToDecimal(1000);}" asp-action="Payment" asp-controller="Payment" data-amount="1000">
+                            </a>
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(1000)">
                                 R1000
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -80,8 +80,12 @@
     </div>
 </div>
 <script>
+    let value = "";
+    $(".amountInput").on("change", function () {
+        value = $(this).val();
+    });
     $(".btn-donate").on('click', function () {
-        var Amount = Number.parseFloat(getElementsByClassName("amountInput")[0].innerHTML.replace(",", "."));
-        window.location.href = "Payment/Payment?Amount=" + Amount;
+        var Amount = Number.parseFloat(value.replace(",", "."));
+        window.location.href = "../Payment/Payment?Amount=" + Amount;
     });
 </script>

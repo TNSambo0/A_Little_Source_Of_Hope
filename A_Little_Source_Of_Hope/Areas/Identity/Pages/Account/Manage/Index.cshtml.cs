@@ -132,15 +132,15 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             }
             else if (user.City == null && Input.CityId != null)
             {
-                Input.CityId = GenderList.FirstOrDefault(x => x.Value == Input.CityId).Value;
+                Input.CityId = CityList.FirstOrDefault(x => x.Value == Input.CityId).Value;
             }
             else if (user.City != null && Input.CityId == null)
             {
-                Input.CityId = GenderList.FirstOrDefault(x => x.Text == user.City).Value;
+                Input.CityId = CityList.FirstOrDefault(x => x.Text == user.City).Value;
             }
             else
             {
-                Input.CityId = GenderList.FirstOrDefault(x => x.Value == Input.CityId).Value;
+                Input.CityId = CityList.FirstOrDefault(x => x.Value == Input.CityId).Value;
             }
 
             if (user.Province == null && Input.ProvinceId == null)
@@ -149,15 +149,15 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             }
             else if (user.Province == null && Input.ProvinceId != null)
             {
-                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
+                Input.ProvinceId = ProvinceList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
             }
             else if (user.Province != null && Input.ProvinceId == null)
             {
-                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Text == user.Province).Value;
+                Input.ProvinceId = ProvinceList.FirstOrDefault(x => x.Text == user.Province).Value;
             }
             else
             {
-                Input.ProvinceId = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
+                Input.ProvinceId = ProvinceList.FirstOrDefault(x => x.Value == Input.ProvinceId).Value;
             }
         }
 

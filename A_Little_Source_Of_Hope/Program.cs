@@ -29,6 +29,9 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
 });
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator", "CategoryAdministrators", "ProductAdministrators"));
+});
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o =>

@@ -33,8 +33,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 var subcriber = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
                 if (subcriber != null)
                 {
-                    results.Status = "error";
-                    results.Message = "Already subscribed.";
+                    TempData["error"] = "Already subscribed.";
                 }
                 else
                 {
@@ -46,16 +45,14 @@ namespace A_Little_Source_Of_Hope.Controllers
                     };
                     await _AppDb.NewsSubscriptions.AddAsync(subscribe);
                     await _AppDb.SaveChangesAsync();
-                    results.Status = "success";
-                    results.Message = "Successfully subscribed to our news letter.";
+                    TempData["success"] = "Successfully subscribed to our news letter.";
                 }
             }
             catch (Exception ex)
             {
                 if (ex != null)
                 {
-                    results.Status = "error";
-                    results.Message = "An error occured please try again.";
+                    TempData["error"] = "An error occured please try again.";
                     ViewData["error"] = ex.ToString();
                 }
             }

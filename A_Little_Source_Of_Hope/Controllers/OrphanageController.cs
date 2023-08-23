@@ -93,7 +93,7 @@ namespace A_Little_Source_Of_Hope.Models
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, ProductOperations.Create);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Create);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to create an orphanage.";
@@ -182,7 +182,7 @@ namespace A_Little_Source_Of_Hope.Models
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, ProductOperations.Update);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Update);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to edit an orphanage.";
@@ -227,7 +227,7 @@ namespace A_Little_Source_Of_Hope.Models
                 return Json(JsonConvert.SerializeObject(results));
             }
             Orphanage Orphanage = await _AppDb.Orphanage.FindAsync(orphanageIds[0]);
-            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Orphanage, ProductOperations.Delete);
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Orphanage, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
                 results.Message = "You don't have the permission to Delete an orphanage.";

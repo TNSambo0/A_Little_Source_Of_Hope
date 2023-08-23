@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace A_Little_Source_Of_Hope.Controllers.Admin
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class AdminController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    [Authorize(Roles = "CategoryAdministrators")]
     public class CategoryController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
@@ -39,7 +39,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+                var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
                 if (!isAuthorized)
                 {
                     TempData["error"] = "You don't have the permission to see category.";
@@ -71,7 +71,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+            var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
             if (!isAuthorized)
             {
                 TempData["error"] = "You don't have the permission to create a category.";
@@ -99,7 +99,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 {
                     category.CreatedDate = DateTime.Now;
                     category.Imageurl = "hjvbufjgnrnrd";
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Create);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Create);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to create a category.";
@@ -165,7 +165,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+                var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
                 if (!isAuthorized)
                 {
                     TempData["error"] = "You don't have the permission to edit a category.";
@@ -211,7 +211,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Update);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Update);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to edit a category.";
@@ -256,7 +256,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             Category category = await _AppDb.Category.FindAsync(categoryIds[0]);
-            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, ProductOperations.Delete);
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
                 results.Message = "You don't have the permission to Delete a category.";
