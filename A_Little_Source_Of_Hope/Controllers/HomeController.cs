@@ -69,6 +69,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (ModelState.IsValid)
                 {
                     await _emailSender.SendEmailAsync(contact.Email,contact.Subject,contact.Message);
+                    contact.CreatedDate = DateTime.Now;
                     await _AppDb.Contact.AddAsync(contact);
                     await _AppDb.SaveChangesAsync();
                     TempData["success"] = "Thank you, query successfully submitted. Will get back to you soon.";

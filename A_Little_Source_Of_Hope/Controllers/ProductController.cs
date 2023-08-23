@@ -105,7 +105,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, ProductOperations.Create);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Create);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to create a product.";
@@ -234,7 +234,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, ProductOperations.Update);
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Update);
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to edit a product.";
@@ -296,7 +296,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             Product Product = await _AppDb.Product.FindAsync(ProductIds[0]);
-            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Product, ProductOperations.Delete);
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Product, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
                 results.Message = "You don't have the permission to Delete a product.";
