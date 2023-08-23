@@ -103,6 +103,11 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
+
+
+              product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
+                   
+               
                 if (ModelState.IsValid)
                 {
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Create);
