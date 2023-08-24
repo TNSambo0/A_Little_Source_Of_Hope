@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace A_Little_Source_Of_Hope.Models
 
     {
@@ -12,9 +13,11 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.Text)]
         [Display(Name = "Orphanage Name")]
         public string OrphanageName { get; set; }
-        //[Required]
-        [DataType(DataType.Text)]
-        public string Manager { get; set; }
+        [NotMapped]
+        public string ManagerId { get; set; }
+        public string? Manager { get; set; }
+        [NotMapped]
+        public IEnumerable<SelectListItem> Managers { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Orphanage Email")]
@@ -28,7 +31,7 @@ namespace A_Little_Source_Of_Hope.Models
         [Display(Name = "Cell No")]
         public string  CellNumber { get; set; }
         [ForeignKey("AppUser")]
-        public string AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public string? AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
+using A_Little_Source_Of_Hope.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +93,9 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            //var Cities = await _AppDb.City.ToListAsync();
+            //var Cities = await _AppDb.City.ToListAsync();
+            //var Cities = await _AppDb.City.ToListAsync();
             Username = userName;
             GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
             CityList = _AppDb.City.Select(x => new SelectListItem() { Text = x.CityName, Value = x.Id.ToString() }).AsEnumerable();
@@ -142,7 +145,6 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             {
                 Input.CityId = CityList.FirstOrDefault(x => x.Value == Input.CityId).Value;
             }
-
             if (user.Province == null && Input.ProvinceId == null)
             {
                 Input.ProvinceId = "1";
@@ -263,7 +265,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             }
 
             ProvinceList = _AppDb.Province.Select(x => new SelectListItem() { Text = x.ProvinceName, Value = x.Id.ToString() }).AsEnumerable();
-            var selectedProvince = GenderList.FirstOrDefault(x => x.Value == Input.ProvinceId);
+            var selectedProvince = ProvinceList.FirstOrDefault(x => x.Value == Input.ProvinceId);
             if (user.Province == null)
             {
                 user.Province = selectedProvince.Text;

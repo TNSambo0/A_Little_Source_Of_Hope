@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
@@ -12,10 +13,12 @@ namespace A_Little_Source_Of_Hope.Controllers
     {
         private readonly ILogger<NewsletterController> _logger;
         private readonly AppDbContext _AppDb;
-        public NewsletterController(ILogger<NewsletterController> logger, AppDbContext AppDb)
+        private readonly IEmailSender _emailSender;
+        public NewsletterController(ILogger<NewsletterController> logger, AppDbContext AppDb, IEmailSender emailSender)
         {
             _logger = logger;
             _AppDb = AppDb;
+            _emailSender = emailSender;
         }
         public IActionResult Create()
         {
@@ -45,6 +48,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                     };
                     await _AppDb.NewsSubscriptions.AddAsync(subscribe);
                     await _AppDb.SaveChangesAsync();
+                    await _emailSender.SendEmailAsync(Email,"Welcome to our Newsletter", "You have s" +
+                        "uccessfully subscribed to our news letter.");
                     TempData["success"] = "Successfully subscribed to our news letter.";
                 }
             }
