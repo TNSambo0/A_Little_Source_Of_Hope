@@ -19,7 +19,7 @@ namespace A_Little_Source_Of_Hope.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public int Quantity { get; set; }
-        public string Imageurl { get; set; }
+        public string? Imageurl { get; set; }
         [ForeignKey("Category")]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
@@ -32,9 +32,9 @@ namespace A_Little_Source_Of_Hope.Models
         [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
         [NotMapped]
-        public IEnumerable<SelectListItem> CategoryNames { get; set; }
+        public IEnumerable<SelectListItem>? CategoryNames { get; set; }
         [NotMapped]
         public IFormFile? File { get; set; }
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }
