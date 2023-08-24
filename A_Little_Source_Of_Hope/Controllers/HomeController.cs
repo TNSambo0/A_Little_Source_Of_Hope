@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize]
     public class HomeController : Controller 
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,7 +25,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
         }
-        [AllowAnonymous]
         public IActionResult About()
         {
             try
@@ -42,7 +40,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-        [AllowAnonymous]
         public IActionResult Contact()
         {
             try
@@ -87,7 +84,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View(contact);
             }
         }
-        [AllowAnonymous]
         public IActionResult Donate()
         {
             try
@@ -103,7 +99,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-        [AllowAnonymous]
         public IActionResult Index()
         {
             try
@@ -119,6 +114,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
+        [Authorize(Policy = "Customers")]
         public async Task<IActionResult> MarketPlace()
         {
             try

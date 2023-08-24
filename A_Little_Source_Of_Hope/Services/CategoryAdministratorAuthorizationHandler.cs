@@ -8,7 +8,7 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Services
 {
-    public class CategoryAdministratorsAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Category>
+    public class CategoryAdministratorAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Category>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Category categoryResource)
         {
@@ -16,15 +16,14 @@ namespace A_Little_Source_Of_Hope.Services
             {
                 return Task.CompletedTask;
             }
-            if (!context.User.IsInRole(Constants.CategoryAdministratorsRole) &&
-                requirement.Name != Constants.CreateOperationName &&
+            if (requirement.Name != Constants.CreateOperationName &&
+                requirement.Name != Constants.DeleteOperationName &&
                 requirement.Name != Constants.ReadOperationName &&
-                requirement.Name != Constants.UpdateOperationName &&
-                requirement.Name != Constants.DeleteOperationName)
+                requirement.Name != Constants.UpdateOperationName)
             {
                 return Task.CompletedTask;
             }
-            else
+            if (context.User.IsInRole(Constants.CategoryAdministratorsRole))
             {
                 context.Succeed(requirement);
             }

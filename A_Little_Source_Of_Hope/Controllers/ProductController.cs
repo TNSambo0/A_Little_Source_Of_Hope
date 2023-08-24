@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProductController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
@@ -42,15 +42,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to see Product.";
-                    return RedirectToAction("Index", "Admin");
-                }
                 IEnumerable<Product> objProduct = _AppDb.Product;
                 if (_AppDb.Product.Any()) { ViewData["Product"] = "not null"; }
                 else { ViewData["Product"] = null; }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, objProduct, Operations.Read);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to see Products.";
+                    return Forbid();
+                }
                 return View(objProduct);
             }
             catch (Exception ex)
@@ -103,11 +103,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-
-
-              product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
-                   
-               
+                product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
                 if (ModelState.IsValid)
                 {
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Create);
@@ -131,7 +127,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                                 Directory.CreateDirectory(path);
                             }
                             string fileNameWithPath = Path.Combine(path, myfile);
-                            product.Imageurl = fileNameWithPath;
+                            product.Imageurl = $"images/Product/{myfile}";
                         }
                         product.CreatedDate = DateTime.Now;
                         product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
@@ -192,13 +188,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to edit a product.";
-                    return RedirectToAction("Index");
-                }
-
                 if (id is null or 0)
                 {
                     return NotFound();
@@ -207,6 +196,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (productFromDb == null)
                 {
                     return NotFound();
+                }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, productFromDb, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to edit a product.";
+                    return RedirectToAction("Index");
                 }
                 productFromDb.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
                 return View(productFromDb);
@@ -230,7 +225,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-
+                product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
                 if (ModelState.IsValid)
                 {
                     var user = await _userManager.GetUserAsync(User);
@@ -250,22 +245,35 @@ namespace A_Little_Source_Of_Hope.Controllers
                     {
                         return NotFound();
                     }
-                    productFromDb.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
-                    var selectedProduct = productFromDb.CategoryNames.FirstOrDefault(x => x.Value == product.Id.ToString());
-                    if (selectedProduct == null)
+                    var selectedCategory = productFromDb.CategoryNames.FirstOrDefault(x => x.Value == product.Id.ToString());
+                    if (selectedCategory == null)
                     {
                         return View(product);
                     }
                     if (productFromDb.CategoryId.ToString() == null)
                     {
-                        productFromDb.CategoryId = int.Parse(selectedProduct.Value);
+                        productFromDb.CategoryId = int.Parse(selectedCategory.Value);
                     }
                     else
                     {
-                        if (selectedProduct != null && selectedProduct.Value != productFromDb.CategoryId.ToString())
+                        if (selectedCategory != null && selectedCategory.Value != productFromDb.CategoryId.ToString())
                         {
-                            productFromDb.CategoryId = int.Parse(selectedProduct.Value);
+                            productFromDb.CategoryId = int.Parse(selectedCategory.Value);
                         }
+                    }
+                    if (product.File != null && product.File.FileName != null)
+                    {
+                        var filename = Path.GetFileName(product.File.FileName);
+                        var fileExt = Path.GetExtension(product.File.FileName);
+                        string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
+                        string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        string fileNameWithPath = Path.Combine(path, myfile);
+                        product.Imageurl = $"images/Product/{myfile}";
                     }
                     _AppDb.Product.Update(productFromDb);
                     await _AppDb.SaveChangesAsync();

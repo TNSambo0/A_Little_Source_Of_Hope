@@ -14,7 +14,6 @@ namespace A_Little_Source_Of_Hope.Models
         public string ProductName { get; set; }
         [DataType(DataType.Text)]
         public string Description { get; set; }
-        [Range(1,100)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }

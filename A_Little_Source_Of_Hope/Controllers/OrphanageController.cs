@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace A_Little_Source_Of_Hope.Models
 {
-    [Authorize(Roles = "ProductAdministrators")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class OrphanageController : Controller
     {
         private readonly ILogger<OrphanageController> _logger;
@@ -39,15 +39,15 @@ namespace A_Little_Source_Of_Hope.Models
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to see orphanages.";
-                    return RedirectToAction("Index", "Admin");
-                }
                 IEnumerable<Orphanage> objOrphanage = _AppDb.Orphanage;
                 if (_AppDb.Orphanage.Any()) { ViewData["orphanages"] = "not null"; }
                 else { ViewData["orphanages"] = null; }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, objOrphanage, Operations.Read);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to see orphanges.";
+                    return Forbid();
+                }
                 return View(objOrphanage);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace A_Little_Source_Of_Hope.Models
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
+            var isAuthorized = User.IsInRole(Constants.OrphanageAdministratorsRole);
             if (!isAuthorized)
             {
                 TempData["error"] = "You don't have the permission to create orphanages.";
@@ -101,9 +101,8 @@ namespace A_Little_Source_Of_Hope.Models
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    //var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Create);
-                    var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                    if (!isAuthorized)
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Create);
+                    if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to create an orphanage.";
                         return RedirectToAction("Index");
@@ -117,6 +116,13 @@ namespace A_Little_Source_Of_Hope.Models
                         await _AppDb.Orphanage.AddAsync(orphanage);
                         await _AppDb.SaveChangesAsync();
                         TempData["success"] = "Orphanage successfully created";
+                        var oldRoles = await _userManager.GetRolesAsync(user);
+                        var oldRole = oldRoles.Contains("Customer");
+                        if (oldRole)
+                        {
+                            await _userManager.RemoveFromRoleAsync(user,"Customer");
+                        }
+                        await _userManager.AddToRoleAsync(user, "Orphanage Manager");
                         return RedirectToAction("Index");
                     }
                     else
@@ -149,13 +155,6 @@ namespace A_Little_Source_Of_Hope.Models
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to edit an orphanage.";
-                    return RedirectToAction("Index");
-                }
-
                 if (id is null or 0)
                 {
                     return NotFound();
@@ -164,6 +163,12 @@ namespace A_Little_Source_Of_Hope.Models
                 if (orphanageFromDb == null)
                 {
                     return NotFound();
+                }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanageFromDb, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to edit an orphanage.";
+                    return Forbid();
                 }
                 var ManagersList = from aManager in _AppDb.Users
                                    join anOrphanage in _AppDb.Orphanage
@@ -222,9 +227,8 @@ namespace A_Little_Source_Of_Hope.Models
                         await sessionHandler.SignUserOut(_signInManager, _logger);
                         return Problem("Please try login in again.");
                     }
-                    //var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Update);
-                    var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-                    if (!isAuthorized)
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Update);
+                    if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to edit an orphanage.";
                         return RedirectToAction("Index");

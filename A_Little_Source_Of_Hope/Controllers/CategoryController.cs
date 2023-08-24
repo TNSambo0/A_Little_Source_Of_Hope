@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Roles = "CategoryAdministrators")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class CategoryController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
@@ -39,15 +39,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to see category.";
-                    return RedirectToAction("Index", "Admin");
-                }
                 IEnumerable<Category> objcategory = _AppDb.Category;
                 if (_AppDb.Category.Any()) { ViewData["Category"] = "not null"; }
                 else { ViewData["Category"] = null; }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, objcategory, Operations.Read);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to see categories.";
+                    return Forbid();
+                }
                 return View(objcategory);
             }
             catch (Exception ex)
@@ -97,8 +97,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 if (ModelState.IsValid)
                 {
-                    category.CreatedDate = DateTime.Now;
-                    category.Imageurl = "hjvbufjgnrnrd";
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Create);
                     if (!isAuthorized.Succeeded)
                     {
@@ -120,7 +118,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                                 Directory.CreateDirectory(path);
                             }
                             string fileNameWithPath = Path.Combine(path, myfile);
-                            category.Imageurl = fileNameWithPath;
+                            category.Imageurl = $"images/Category/{myfile}";
                         }
                         category.CreatedDate = DateTime.Now;
                         await _AppDb.Category.AddAsync(category);
@@ -165,13 +163,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return Problem("Please try login in again.");
                 }
-                var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
-                if (!isAuthorized)
-                {
-                    TempData["error"] = "You don't have the permission to edit a category.";
-                    return RedirectToAction("Index");
-                }
-
                 if (id is null or 0)
                 {
                     return NotFound();
@@ -180,6 +171,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (categoryFromDb == null)
                 {
                     return NotFound();
+                }
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, categoryFromDb, Operations.Update);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to edit a category.";
+                    return Forbid();
                 }
                 return View(categoryFromDb);
             }
@@ -215,12 +212,26 @@ namespace A_Little_Source_Of_Hope.Controllers
                     if (!isAuthorized.Succeeded)
                     {
                         TempData["error"] = "You don't have the permission to edit a category.";
-                        return RedirectToAction("Index");
+                        return Forbid();
                     }
                     var categoryFromDb = await _AppDb.Category.FindAsync(category.Id);
                     if (categoryFromDb == null)
                     {
                         return NotFound();
+                    }
+                    if (category.File != null && category.File.FileName != null)
+                    {
+                        var filename = Path.GetFileName(category.File.FileName);
+                        var fileExt = Path.GetExtension(category.File.FileName);
+                        string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
+                        string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        string fileNameWithPath = Path.Combine(path, myfile);
+                        category.Imageurl = $"images/Category/{myfile}";
                     }
                     _AppDb.Category.Update(categoryFromDb);
                     await _AppDb.SaveChangesAsync();

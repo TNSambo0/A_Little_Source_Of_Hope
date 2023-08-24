@@ -9,7 +9,6 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    //[Authorize(Roles = "ProductAdministrators")]
     public class VolunteerController : Controller
     {
         private readonly ILogger<VolunteerController> _logger;
@@ -27,8 +26,9 @@ namespace A_Little_Source_Of_Hope.Controllers
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Authorize(Policy = "VolunteerAdministrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
@@ -39,22 +39,23 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-            if (!isAuthorized)
-            {
-                TempData["error"] = "You don't have the permission to change application status.";
-                return RedirectToAction("Index", "Admin");
-            }
             var applicationFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(x => x.Id == Id && x.AppUserId == userID);
             if (applicationFromDb == null)
             {
                 return Problem("Application not found.");
             }
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, applicationFromDb, Operations.Approve);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to change application status.";
+                return RedirectToAction("Index", "Admin");
+            }
             applicationFromDb.Status = "Approved";
             _AppDb.Volunteer.Update(applicationFromDb);
             await _AppDb.SaveChangesAsync();
-            return RedirectToAction("Details",new { id = Id, UserID = userID });
+            return RedirectToAction("Details", new { id = Id, UserID = userID });
         }
+        [Authorize(Policy = "VolunteerAdministrator")]
         public async Task<IActionResult> Details(int id, string UserID)
         {
             var sessionHandler = new SessionHandler();
@@ -64,12 +65,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
-            }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-            if (!isAuthorized)
-            {
-                TempData["error"] = "You don't have the permission to see application details.";
-                return RedirectToAction("Index", "Admin");
             }
             var UserDb = await _AppDb.Users.FindAsync(UserID);
             if (UserDb == null)
@@ -90,6 +85,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                                         ApplicantFullName = UserDb.FirstName + " " + UserDb.LastName,
                                         AppUserId = UserDb.Id
                                     };
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, applicationFromDb, Operations.Read);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to see application details.";
+                return RedirectToAction("Index", "Admin");
+            }
             if (!await applicationFromDb.AnyAsync())
             {
                 return View();
@@ -108,6 +109,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             };
             return View(application);
         }
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Index()
         {
             var sessionHandler = new SessionHandler();
@@ -117,12 +119,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
-            }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-            if (!isAuthorized)
-            {
-                TempData["error"] = "You don't have the permission to see application details.";
-                return RedirectToAction("Index", "Admin");
             }
             var applicationFromDb = from volunteer in _AppDb.Volunteer
                                     join orphanage in _AppDb.Orphanage
@@ -142,6 +138,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                                         OrphanageManager = manager.FirstName + " " + manager.LastName,
                                         OrphanageContact = orphanage.CellNumber
                                     };
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, applicationFromDb, Operations.Read);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to see applications.";
+                return RedirectToAction("Index", "Admin");
+            }
             if (!await applicationFromDb.AnyAsync())
             {
                 return View();
@@ -149,8 +151,9 @@ namespace A_Little_Source_Of_Hope.Controllers
             ViewData["VApplications"] = "Not Null";
             return View(applicationFromDb);
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        [Authorize(Policy = "VolunteerAdministrator")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
@@ -161,22 +164,23 @@ namespace A_Little_Source_Of_Hope.Controllers
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 return Problem("Please try login in again.");
             }
-            var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
-            if (!isAuthorized)
-            {
-                TempData["error"] = "You don't have the permission to change application status.";
-                return RedirectToAction("Index", "Admin");
-            }
             var applicationFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(x => x.Id == Id && x.AppUserId == userID);
             if (applicationFromDb == null)
             {
                 return Problem("Application not found.");
+            }
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, applicationFromDb, Operations.Reject);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to change application status.";
+                return RedirectToAction("Index", "Admin");
             }
             applicationFromDb.Status = "Rejected";
             _AppDb.Volunteer.Update(applicationFromDb);
             await _AppDb.SaveChangesAsync();
             return RedirectToAction("Details", new { id = Id, UserID = userID });
         }
+        [Authorize(Policy = "Customers")]
         public async Task<ActionResult> VolunteerApplication()
         {
             var sessionHandler = new SessionHandler();
@@ -194,9 +198,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                 Status = "Pending",
                 AppUserId = user.Id
             };
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, volunteer, Operations.Create);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to create application.";
+                return RedirectToAction("Index", "Admin");
+            }
             return View(volunteer);
         }
-
+        [Authorize(Policy = "Customers")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VolunteerApplication(Volunteer VApplication)
@@ -219,6 +229,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                 VApplication.OrphanageId = int.Parse(VApplication.OrphanageID);
                 if (ModelState.IsValid)
                 {
+                    var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, VApplication, Operations.Create);
+                    if (!isAuthorized.Succeeded)
+                    {
+                        TempData["error"] = "You don't have the permission to submit an application.";
+                        return RedirectToAction("Index", "Admin");
+                    }
                     var VApplicationFromDb = _AppDb.Volunteer.Contains(VApplication);
                     if (VApplicationFromDb != true)
                     {
@@ -250,6 +266,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View(VApplication);
             }
         }
+        [Authorize(Policy = "Customers")]
         public async Task<IActionResult> ViewVolunteeringApplication()
         {
             var sessionHandler = new SessionHandler();
@@ -277,6 +294,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                                    OrphanageManager = manager.FirstName + " " + manager.LastName,
                                    OrphanageContact = orphanage.CellNumber
                                };
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Applications, Operations.Read);
+            if (!isAuthorized.Succeeded)
+            {
+                TempData["error"] = "You don't have the permission to see applications.";
+                return RedirectToAction("Index", "Admin");
+            }
             if (!await Applications.AnyAsync())
             {
                 return View();

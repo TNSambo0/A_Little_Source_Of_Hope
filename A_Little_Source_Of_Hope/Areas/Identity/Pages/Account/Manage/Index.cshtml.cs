@@ -61,7 +61,6 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            //[Required(ErrorMessage = "Please select a gender.")]
             [Display(Name = "Gender")]
             public string GenderId { get; set; }
             public IFormFile ImageFile { get; set; }
@@ -76,14 +75,12 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Address line 2")]
             public string AddressLine2 { get; set; }
 
-            //[Required(ErrorMessage = "Please select a city.")]
             [Display(Name = "City")]
             public string CityId { get; set; }
             [Required]
             [Display(Name = "Province")]
             public string ProvinceId { get; set; }
 
-            //[Required(ErrorMessage = "Please select a city.")]
             [DataType(DataType.PostalCode)]
             [Display(Name = "Postal code")]
             public string PostalCode { get; set; }
@@ -93,9 +90,6 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            //var Cities = await _AppDb.City.ToListAsync();
-            //var Cities = await _AppDb.City.ToListAsync();
-            //var Cities = await _AppDb.City.ToListAsync();
             Username = userName;
             GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
             CityList = _AppDb.City.Select(x => new SelectListItem() { Text = x.CityName, Value = x.Id.ToString() }).AsEnumerable();

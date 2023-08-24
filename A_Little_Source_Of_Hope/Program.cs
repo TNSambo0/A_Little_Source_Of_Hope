@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using A_Little_Source_Of_Hope.Data;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using A_Little_Source_Of_Hope.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -29,9 +30,29 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
 });
-builder.Services.AddAuthorization(options => {
-    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator", "CategoryAdministrators", "ProductAdministrators"));
+// Authorization Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Customers", policy => policy.RequireRole("Customer", "Orphanage Manager"));
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator", "Orphanage Administrator",
+        "Volunteer Administrator", "Category Administrator", "Product Administrator"));
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Users", policy => policy.RequireRole("Administrator", "Orphanage Administrator",
+        "Volunteer Administrator", "Category Administrator", "Product Administrator", "Customer", "Orphanage Manager"));
+});
+// Authorization handlers
+//builder.Services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, CategoryAdministratorAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, OrphanageAdministratorAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, ProductAdministratorAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, ShoppingCartCustomerAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, VolunteerAdministratorAuthorizationHandler>();
+//builder.Services.AddSingleton<IAuthorizationHandler, VolunteerCustomerAuthorizationHandler>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o =>

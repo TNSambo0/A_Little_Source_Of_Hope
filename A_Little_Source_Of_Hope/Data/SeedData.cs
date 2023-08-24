@@ -15,13 +15,20 @@ namespace A_Little_Source_Of_Hope.Data
             await EnsureRole(serviceProvider, adminID, Constants.AdministratorsRole);
             var CaregoryAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "CaregoryAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, CaregoryAdminID, Constants.CategoryAdministratorsRole);
+            var OrphanageAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageAdmin@outlook.com", "Employee");
+            await EnsureRole(serviceProvider, OrphanageAdminID, Constants.OrphanageAdministratorsRole);
             var ProductAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "ProductAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, ProductAdminID, Constants.ProductAdministratorsRole);
+            var VolunteerAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "VolunteerAdmin@outlook.com", "Employee");
+            await EnsureRole(serviceProvider, VolunteerAdminID, Constants.VolunteerAdministratorsRole);
             var managerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "manager@outlook.com", " Employee");
             await EnsureRole(serviceProvider, managerID, Constants.ProductAdministratorsRole);
             var OrphanageManagerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager@outlook.com", "Orphanage Manager");
+            await EnsureRole(serviceProvider, OrphanageManagerID, Constants.OrphanageManagersRole);
             var OrphanageManagerID2 = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageManager1@outlook.com", "Orphanage Manager");
+            await EnsureRole(serviceProvider, OrphanageManagerID2, Constants.OrphanageManagersRole);
             var CustomerID = await EnsureUser(serviceProvider, "@littl3Sourc3", "Customer@outlook.com", "Customer");
+            await EnsureRole(serviceProvider, CustomerID, Constants.CustomersRole);
             await SeedDataOnDb(context);
             await SDOrphanage(context, OrphanageManagerID, OrphanageManagerID2);
         }

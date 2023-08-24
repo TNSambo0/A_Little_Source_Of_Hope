@@ -11,21 +11,23 @@ using Microsoft.AspNetCore.Http;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "Customers")]
     public class ShoppingCartController : Controller
     {
         private readonly ILogger<ShoppingCartController> _logger;
         private readonly AppDbContext _AppDb;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        protected IAuthorizationService _AuthorizationService;
 
         public ShoppingCartController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager)
+            SignInManager<AppUser> signInManager, IAuthorizationService AuthorizationService)
         {
             _logger = logger;
             _AppDb = AppDb;
             _userManager = userManager;
             _signInManager = signInManager;
+            _AuthorizationService = AuthorizationService;
         }
         public async Task<IActionResult> Index()
         {
@@ -57,6 +59,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                                                          TotalPerItem = Math.Round(((decimal)(cart.Quantity == null ? 0 : cart.Quantity * (product.ClaimStatus ? 0 : product.Price))), 2),
                                                          AppUserId = cart.AppUserId,
                                                      };
+                var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, UserCart, Operations.Read);
+                if (!isAuthorized.Succeeded)
+                {
+                    TempData["error"] = "You don't have the permission to see items on cart.";
+                    return Forbid();
+                }
                 if (!UserCart.Any())
                 {
                     return View();
@@ -95,6 +103,22 @@ namespace A_Little_Source_Of_Hope.Controllers
                 TempData["error"] = "Selected item not found";
                 results.Status = "error";
                 results.Message = "Selected item not found.";
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            var cart = new ShoppingCart
+            {
+                ProductId = ProductFromDb.Id,
+                ProductName = ProductFromDb.ProductName,
+                Description = ProductFromDb.Description,
+                PricePerItem = ProductFromDb.Price,
+                Quantity = ProductFromDb.Quantity,
+                ImageUrl = ProductFromDb.Imageurl
+            };
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, cart, Operations.Add);
+            if (!isAuthorized.Succeeded)
+            {
+                results.Status = "error";
+                results.Message = "You don't have the permission to add items to cart.";
                 return Json(JsonConvert.SerializeObject(results));
             }
             if (ProductFromDb.Quantity < 1)
@@ -148,6 +172,13 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Message = "Selected item not found.";
                 return Json(JsonConvert.SerializeObject(results));
             }
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, cartFromDb, Operations.Delete);
+            if (!isAuthorized.Succeeded)
+            {
+                results.Status = "error";
+                results.Message = "You don't have the permission to delete items on cart.";
+                return Json(JsonConvert.SerializeObject(results));
+            }
             _AppDb.ShoppingCart.Remove(cartFromDb);
             await _AppDb.SaveChangesAsync();
             var UpdatedCartFromDb = await _AppDb.ShoppingCart.AnyAsync(x => x.AppUserId == user.Id);
@@ -172,11 +203,18 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             var UserCart = _AppDb.ShoppingCart.Where(cart => cart.AppUserId == user.Id);
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, UserCart, Operations.Delete);
+            if (!isAuthorized.Succeeded)
+            {
+                results.Status = "error";
+                results.Message = "You don't have the permission to delete items on cart.";
+                return Json(JsonConvert.SerializeObject(results));
+            }
             foreach (var CartItem in UserCart)
             {
                 _AppDb.ShoppingCart.Remove(CartItem);
             }
-            ViewData["Cart"] = null; 
+            ViewData["Cart"] = null;
             await _AppDb.SaveChangesAsync();
             results.Status = "success";
             results.Message = "Cart successfully cleared.";
@@ -204,11 +242,18 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Status = "error";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            var product = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId==Id && x.AppUserId==user.Id);
+            var product = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId == Id && x.AppUserId == user.Id);
             if (product == null)
             {
                 results.Message = "Product not found";
                 results.Status = "error";
+                return Json(JsonConvert.SerializeObject(results));
+            }
+            var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                results.Status = "error";
+                results.Message = "You don't have the permission to edit items on cart.";
                 return Json(JsonConvert.SerializeObject(results));
             }
             product.Quantity = quantity;

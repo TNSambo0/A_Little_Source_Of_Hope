@@ -5,26 +5,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
-
 namespace A_Little_Source_Of_Hope.Services
 {
-    public class ProductAdministratorsAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Product>
+    public class OrphanageAdministratorAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Orphanage>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Product productResource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Orphanage orphanageResource)
         {
             if (context.User == null)
             {
                 return Task.CompletedTask;
             }
-            if (!context.User.IsInRole(Constants.ProductAdministratorsRole) &&
-                requirement.Name != Constants.CreateOperationName &&
+            if (requirement.Name != Constants.CreateOperationName &&
+                requirement.Name != Constants.DeleteOperationName &&
                 requirement.Name != Constants.ReadOperationName &&
-                requirement.Name != Constants.UpdateOperationName &&
-                requirement.Name != Constants.DeleteOperationName)
+                requirement.Name != Constants.UpdateOperationName)
             {
                 return Task.CompletedTask;
             }
-            else
+            if (context.User.IsInRole(Constants.OrphanageAdministratorsRole))
             {
                 context.Succeed(requirement);
             }
