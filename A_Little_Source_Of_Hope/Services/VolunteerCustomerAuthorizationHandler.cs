@@ -8,7 +8,7 @@ namespace A_Little_Source_Of_Hope.Services
 {
     public class VolunteerCustomerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Volunteer>
     {
-        private readonly UserManager<AppUser> _userManager;
+        UserManager<AppUser> _userManager;
         public VolunteerCustomerAuthorizationHandler(UserManager<AppUser> userManager)
         {
             _userManager = userManager;

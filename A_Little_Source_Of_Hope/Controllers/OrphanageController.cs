@@ -78,7 +78,8 @@ namespace A_Little_Source_Of_Hope.Models
             var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
             var orphanage = new Orphanage
             {
-                Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id })
+                Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }),
+                AppUserId = (await ManagersList.FirstAsync()).Id,
             };
             return View(orphanage);
         }
@@ -107,7 +108,7 @@ namespace A_Little_Source_Of_Hope.Models
                         TempData["error"] = "You don't have the permission to create an orphanage.";
                         return RedirectToAction("Index");
                     }
-                    var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.Id == orphanage.ManagerId);
+                    var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.Id == orphanage.AppUserId);
                     var aManager = selectedManager.Id;
                     var orphanageFromDb = _AppDb.Orphanage.Contains(orphanage);
                     if (orphanageFromDb != true)
@@ -120,7 +121,7 @@ namespace A_Little_Source_Of_Hope.Models
                         var oldRole = oldRoles.Contains("Customer");
                         if (oldRole)
                         {
-                            await _userManager.RemoveFromRoleAsync(user,"Customer");
+                            await _userManager.RemoveFromRoleAsync(user, "Customer");
                         }
                         await _userManager.AddToRoleAsync(user, "Orphanage Manager");
                         return RedirectToAction("Index");
@@ -170,20 +171,9 @@ namespace A_Little_Source_Of_Hope.Models
                     TempData["error"] = "You don't have the permission to edit an orphanage.";
                     return Forbid();
                 }
-                var ManagersList = from aManager in _AppDb.Users
-                                   join anOrphanage in _AppDb.Orphanage
-                                   on aManager.Id equals anOrphanage.AppUserId
-                                   select new Orphanage
-                                   {
-                                       Id = anOrphanage.Id,
-                                       OrphanageName = anOrphanage.OrphanageName,
-                                       OrphanageAddress = anOrphanage.OrphanageAddress,
-                                       OrphanageEmail = anOrphanage.OrphanageEmail,
-                                       AppUserId = aManager.Id,
-                                       AppUser = aManager,
-                                       Manager = $"{aManager.FirstName} {aManager.LastName} ({anOrphanage.OrphanageName})"
-                                   };
-                orphanageFromDb.Managers = ManagersList.Select(x => new SelectListItem { Text = x.Manager, Value = x.Id.ToString() });
+                var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
+                orphanageFromDb.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id });
+                orphanageFromDb.AppUserId = (await ManagersList.FirstAsync()).Id;
                 return View(orphanageFromDb);
             }
             catch (Exception ex)
@@ -204,21 +194,8 @@ namespace A_Little_Source_Of_Hope.Models
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var ManagersList = from aManager in _AppDb.Users
-                                   join anOrphanage in _AppDb.Orphanage
-                                   on aManager.Id equals anOrphanage.AppUserId
-                                   select new Orphanage
-                                   {
-                                       Id = anOrphanage.Id,
-                                       OrphanageName = anOrphanage.OrphanageName,
-                                       OrphanageAddress = anOrphanage.OrphanageAddress,
-                                       OrphanageEmail = anOrphanage.OrphanageEmail,
-                                       AppUserId = aManager.Id,
-                                       AppUser = aManager,
-                                       Manager = $"{aManager.FirstName} {aManager.LastName} ({anOrphanage.OrphanageName})"
-                                   };
-                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = x.Manager, Value = x.Id.ToString() });
-
+                var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
+                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id });
                 if (ModelState.IsValid)
                 {
                     var user = await _userManager.GetUserAsync(User);
@@ -238,8 +215,8 @@ namespace A_Little_Source_Of_Hope.Models
                     {
                         return NotFound();
                     }
-                    var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.ManagerId == orphanage.ManagerId);
-                    orphanageFromDb.AppUserId = selectedManager.AppUserId;
+                    var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.Id == orphanage.AppUserId);
+                    orphanageFromDb.AppUserId = selectedManager.Id;
                     _AppDb.Orphanage.Update(orphanageFromDb);
                     await _AppDb.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));

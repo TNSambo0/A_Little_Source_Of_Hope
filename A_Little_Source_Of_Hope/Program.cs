@@ -46,13 +46,13 @@ builder.Services.AddAuthorization(options =>
         "Volunteer Administrator", "Category Administrator", "Product Administrator", "Customer", "Orphanage Manager"));
 });
 // Authorization handlers
-//builder.Services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, CategoryAdministratorAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, OrphanageAdministratorAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, ProductAdministratorAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, ShoppingCartCustomerAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, VolunteerAdministratorAuthorizationHandler>();
-//builder.Services.AddSingleton<IAuthorizationHandler, VolunteerCustomerAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CategoryAdministratorAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, OrphanageAdministratorAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, ProductAdministratorAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ShoppingCartCustomerAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, VolunteerAdministratorAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, VolunteerCustomerAuthorizationHandler>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o =>

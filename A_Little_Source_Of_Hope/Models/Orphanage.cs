@@ -13,8 +13,6 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.Text)]
         [Display(Name = "Orphanage Name")]
         public string OrphanageName { get; set; }
-        [NotMapped]
-        public string ManagerId { get; set; }
         public string? Manager { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> Managers { get; set; }
@@ -31,7 +29,7 @@ namespace A_Little_Source_Of_Hope.Models
         [Display(Name = "Cell No")]
         public string  CellNumber { get; set; }
         [ForeignKey("AppUser")]
-        public string? AppUserId { get; set; }
+        public string AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
     }
 }

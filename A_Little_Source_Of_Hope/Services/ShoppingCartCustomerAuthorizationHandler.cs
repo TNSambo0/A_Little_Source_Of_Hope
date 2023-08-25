@@ -11,12 +11,12 @@ namespace A_Little_Source_Of_Hope.Services
 {
     public class ShoppingCartCustomerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, ShoppingCart>
     {
-        private readonly UserManager<AppUser> _userManager;
+        UserManager<AppUser> _userManager;
         public ShoppingCartCustomerAuthorizationHandler(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
         }
-        protected override async Task<Task> HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, ShoppingCart shoppingCartResource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, ShoppingCart shoppingCartResource)
         {
             if (context.User == null)
             {
@@ -29,9 +29,8 @@ namespace A_Little_Source_Of_Hope.Services
             {
                 return Task.CompletedTask;
             }
-            var user = await _userManager.GetUserAsync(context.User);
-            if ((shoppingCartResource.AppUserId == user.Id && context.User.IsInRole(Constants.CustomersRole)) || 
-                (shoppingCartResource.AppUserId == user.Id && context.User.IsInRole(Constants.OrphanageManagersRole)))
+            if ((shoppingCartResource.AppUserId == _userManager.GetUserId(context.User) && context.User.IsInRole(Constants.CustomersRole)) || 
+                (shoppingCartResource.AppUserId == _userManager.GetUserId(context.User) && context.User.IsInRole(Constants.OrphanageManagersRole)))
             {
                 context.Succeed(requirement);
             }
