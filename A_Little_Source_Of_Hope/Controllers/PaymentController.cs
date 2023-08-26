@@ -23,6 +23,12 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
             return View(payment);
+
+        }
+        public IActionResult CashDonation()
+        {
+
+            return View();
         }
     }
 }

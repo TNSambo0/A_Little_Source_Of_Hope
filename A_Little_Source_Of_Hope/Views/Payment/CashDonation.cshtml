@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Payment>
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="p-4">
+    @if (ViewData["CashDonation"] != null)
+    {
+        <h2>Cash Donations</h2>
+
+        <label class="d-none DisplayTable">@ViewBag.Payment</label>
+        <input id="NumberofItems" type="hidden" value="@Model.Count()" />
+        <table class="table table-hover Payment-table">
+            <thead>
+                <tr>
+
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Date Created</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr class="row-Id">
+                        <td>@obj.FirstName</td>
+                        <td>@obj.LastName</td>
+                        <td>@obj.DateCreated</td>
+                        <td>@obj.Amount</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <div class="row mt-2">
+            <div class="colsm-12 text-center">
+                <p class="mb-3">No cash donation has been made yet</p>
+            </div>
+        </div>
+    }
+</div>
+@*@section Scripts{
+    <script>
+        const DeleteItemsArray = [];
+        function BtnDeleteSelectedItems() {
+            if (DeleteItemsArray.length == 0) {
+                $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
+            }
+            else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
+        } BtnDeleteSelectedItems();
+
+        function SelectItem(input, CategoryId) {
+            const item = input.checked;
+            var Index = DeleteItemsArray.indexOf(CategoryId);
+            if (item) {
+                DeleteItemsArray.push(CategoryId)
+            }
+            else {
+                if (Index != -1) {
+                    DeleteItemsArray.splice(Index, 1);
+                }
+            }
+            BtnDeleteSelectedItems();
+        }
+                                                //$(".btn-DeleteSelectedItems").on('click', function () {
+                                                //    $.ajax({
+                                                //        type: "POST",
+                                                //        dataType: "JSON",
+                                                //        contentType: "application/json; charset=utf-8",
+                                                        //        url: '/Category/Delete',
+                                                //        data: { CategoryIds: DeleteItemsArray },
+                                                //        success:
+                                                //            function (response) {
+                                                //                if (response.Status == "error") {
+                                                //                    alert("Error: " + response.Message);
+                                                //                    console.log("Error: " + response.Message);
+                                                //                }
+                                                //                else {
+                                                //                    var NumberofItems = $("#NumberofItems").val();
+                                                //                    if (DeleteItemsArray.length == NumberofItems) {
+                                                //                        while (DeleteItemsArray.length != 0) {
+                                                //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+                                                //                            DeleteItemsArray.splice(0, 1);
+                                                //                        }
+                                                        //                        $(".tm-Category-table").fadeOut("slow");
+                                                        //                        $(".Create-Category-div").removeClass("d-none");
+                                                //                    }
+                                                //                    else {
+                                                //                        while (DeleteItemsArray.length != 0) {
+                                                //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
+                                                //                            DeleteItemsArray.splice(0, 1);
+                                                //                        }
+                                                //                    }
+                                                //                    alert("Success: " + response.Status);
+                                                //                    console.log("Success: " + response.Message);
+                                                //                    BtnDeleteSelectedItems();
+                                                //                }
+                                                //            },
+                                                //        error:
+                                                //            function (response) {
+                                                //                console.log("Error: " + response.Message);
+                                                //                console.log("Error: " + response);
+                                                //                BtnDeleteSelectedItems();
+                                                //            }
+                                                //    });
+                                                //
+                                                //});
+    </script>
+*@
