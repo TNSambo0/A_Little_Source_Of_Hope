@@ -24,27 +24,20 @@
                             <span asp-validation-for='CellNumber' class='text-danger'></span>
                         </div>
                         <div class='form-group'>
-                            <label asp-for='Manager' class='form-label'></label>
-                            <input asp-for='Manager' class='form-control' aria-required='true' />
-                            <span asp-validation-for='Manager' class='text-danger'></span>
-                        </div>
-                        <div class='form-group'>
-                            <label asp-for='OrphanageEmail' class='form-label'></label>
-                            <input asp-for='OrphanageEmail' class='form-control' aria-required='true' />
-                            <span asp-validation-for='OrphanageEmail' class='text-danger'></span>
-                        </div>
+                            <label asp-for='AppUserId' class='form-label'></label>
+                            <select asp-for='AppUserId' asp-items="Model.Managers" class='form-control'></select>
+                            <span asp-validation-for='AppUserId' class='text-danger'></span>
+                        </div> 
                         <div class='form-group'>
                             <label asp-for='OrphanageAddress' class='form-label'></label>
                             <input asp-for='OrphanageAddress' class='form-control' aria-required='true' />
                             <span asp-validation-for='OrphanageAddress' class='text-danger'></span>
                         </div>
                     </div>
-
                     <div class="btn-group ml-3 mb-3">
                         <button type="submit" class="btn btn-primary" id="btn_create">Submit</button>
                         <a asp-action="Index" asp-controller="Orphanage" class="btn btn-secondary">Cancel</a>
                     </div>
-
                 </form>
             </div>
         </div>

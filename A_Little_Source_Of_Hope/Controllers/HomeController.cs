@@ -125,7 +125,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (_AppDb.Product == null)
                 {

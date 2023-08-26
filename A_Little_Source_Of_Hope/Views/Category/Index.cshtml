@@ -12,7 +12,6 @@
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Category
             </a>
         </div>
-        <label class="d-none DisplayTable">@ViewBag.Category</label>
         <input id="NumberofItems" type="hidden" value="@Model.Count()" />
         <table class="table table-hover Category-table">
             <thead>
@@ -42,9 +41,9 @@
                             <a asp-controller="Category" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-CategoryId="@obj.Id">
+                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.Id)">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 }
@@ -77,11 +76,11 @@
             else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
         } BtnDeleteSelectedItems();
 
-        function SelectItem(input, CategoryId) {
+        function SelectItem(input, ProductId) {
             const item = input.checked;
-            var Index = DeleteItemsArray.indexOf(CategoryId);
+            var Index = DeleteItemsArray.indexOf(ProductId);
             if (item) {
-                DeleteItemsArray.push(CategoryId)
+                DeleteItemsArray.push(ProductId)
             }
             else {
                 if (Index != -1) {
@@ -90,48 +89,49 @@
             }
             BtnDeleteSelectedItems();
         }
-                        //$(".btn-DeleteSelectedItems").on('click', function () {
-                        //    $.ajax({
-                        //        type: "POST",
-                        //        dataType: "JSON",
-                        //        contentType: "application/json; charset=utf-8",
-                                //        url: '/Category/Delete',
-                        //        data: { CategoryIds: DeleteItemsArray },
-                        //        success:
-                        //            function (response) {
-                        //                if (response.Status == "error") {
-                        //                    alert("Error: " + response.Message);
-                        //                    console.log("Error: " + response.Message);
-                        //                }
-                        //                else {
-                        //                    var NumberofItems = $("#NumberofItems").val();
-                        //                    if (DeleteItemsArray.length == NumberofItems) {
-                        //                        while (DeleteItemsArray.length != 0) {
-                        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                        //                            DeleteItemsArray.splice(0, 1);
-                        //                        }
-                                //                        $(".tm-Category-table").fadeOut("slow");
-                                //                        $(".Create-Category-div").removeClass("d-none");
-                        //                    }
-                        //                    else {
-                        //                        while (DeleteItemsArray.length != 0) {
-                        //                            $(".row-" + DeleteItemsArray[0]).fadeOut("slow");
-                        //                            DeleteItemsArray.splice(0, 1);
-                        //                        }
-                        //                    }
-                        //                    alert("Success: " + response.Status);
-                        //                    console.log("Success: " + response.Message);
-                        //                    BtnDeleteSelectedItems();
-                        //                }
-                        //            },
-                        //        error:
-                        //            function (response) {
-                        //                console.log("Error: " + response.Message);
-                        //                console.log("Error: " + response);
-                        //                BtnDeleteSelectedItems();
-                        //            }
-                        //    });
-                        //
-                        //});
+        function DeleteSingleItem(ProductId) {
+            Delete([ProductId]);
+        }
+        $(".btn-DeleteSelectedItems").on('click', function () {
+            Delete(DeleteItemsArray);
+        });
+        function Delete(itemsArray) {
+            $.ajax({
+                method: "POST",
+                url: '/Category/Delete',
+                data: { ProductIds: itemsArray },
+                success:
+                    function (data) {
+                        data = JSON.parse(data);
+                        if (data.Status == "error") {
+                            toastr.error('error');
+                        }
+                        else {
+                            var NumberofItems = $("#NumberofItems").val();
+                            if (data.DeleteItemsIds.length == NumberofItems) {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                                $(".tm-product-table").fadeOut("slow");
+                            }
+                            else {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                            }
+                            toastr.error('success');
+                            window.location.reload();
+                            BtnDeleteSelectedItems();
+                        }
+                    },
+                error:
+                    function (err) {
+                        toastr.error('error');
+                    }
+            });
+
+        }
     </script>
 }

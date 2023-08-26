@@ -104,7 +104,7 @@
         });
         function Delete(itemsArray) {
             $.ajax({
-                method: "GET",
+                method: "POST",
                 url: '/Product/Delete',
                 data: { ProductIds: itemsArray },
                 success:
@@ -121,7 +121,6 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                                 $(".tm-product-table").fadeOut("slow");
-                                $(".Create-Product-div").removeClass("d-none");
                             }
                             else {
                                 while (data.DeleteItemsIds.length != 0) {
@@ -129,7 +128,8 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                             }
-                            toastr.error('success');;
+                            toastr.error('success');
+                            window.location.reload();
                             BtnDeleteSelectedItems();
                         }
                     },

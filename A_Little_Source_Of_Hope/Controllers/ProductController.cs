@@ -40,7 +40,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 IEnumerable<Product> objProduct = _AppDb.Product;
                 if (_AppDb.Product.Any()) { ViewData["Product"] = "not null"; }
@@ -72,7 +72,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var isAuthorized = User.IsInRole(Constants.ProductAdministratorsRole);
             if (!isAuthorized)
@@ -101,7 +101,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
                 if (ModelState.IsValid)
@@ -186,7 +186,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (id is null or 0)
                 {
@@ -232,7 +232,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     if (user == null)
                     {
                         await sessionHandler.SignUserOut(_signInManager, _logger);
-                        return Problem("Please try login in again.");
+                        return RedirectToPage("Login");
                     }
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, product, Operations.Update);
                     if (!isAuthorized.Succeeded)
@@ -240,25 +240,25 @@ namespace A_Little_Source_Of_Hope.Controllers
                         TempData["error"] = "You don't have the permission to edit a product.";
                         return RedirectToAction("Index");
                     }
-                    var productFromDb = await _AppDb.Product.FindAsync(product.Id);
-                    if (productFromDb == null)
+                    var productFromDb = await _AppDb.Product.ContainsAsync(product);
+                    if (!productFromDb)
                     {
                         return NotFound();
                     }
-                    var selectedCategory = productFromDb.CategoryNames.FirstOrDefault(x => x.Value == product.Id.ToString());
+                    var selectedCategory = product.CategoryNames.FirstOrDefault(x => x.Value == product.Id.ToString());
                     if (selectedCategory == null)
                     {
                         return View(product);
                     }
-                    if (productFromDb.CategoryId.ToString() == null)
+                    if (product.CategoryId.ToString() == null)
                     {
-                        productFromDb.CategoryId = int.Parse(selectedCategory.Value);
+                        product.CategoryId = int.Parse(selectedCategory.Value);
                     }
                     else
                     {
-                        if (selectedCategory != null && selectedCategory.Value != productFromDb.CategoryId.ToString())
+                        if (selectedCategory != null && selectedCategory.Value != product.CategoryId.ToString())
                         {
-                            productFromDb.CategoryId = int.Parse(selectedCategory.Value);
+                            product.CategoryId = int.Parse(selectedCategory.Value);
                         }
                     }
                     if (product.File != null && product.File.FileName != null)
@@ -275,9 +275,9 @@ namespace A_Little_Source_Of_Hope.Controllers
                         string fileNameWithPath = Path.Combine(path, myfile);
                         product.Imageurl = $"images/Product/{myfile}";
                     }
-                    _AppDb.Product.Update(productFromDb);
+                    _AppDb.Product.Update(product);
                     await _AppDb.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index");
                 }
                 return View(product);
             }

@@ -37,7 +37,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 IEnumerable<Category> objcategory = _AppDb.Category;
                 if (_AppDb.Category.Any()) { ViewData["Category"] = "not null"; }
@@ -69,7 +69,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var isAuthorized = User.IsInRole(Constants.CategoryAdministratorsRole);
             if (!isAuthorized)
@@ -93,7 +93,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (ModelState.IsValid)
                 {
@@ -161,7 +161,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (id is null or 0)
                 {
@@ -206,7 +206,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     if (user == null)
                     {
                         await sessionHandler.SignUserOut(_signInManager, _logger);
-                        return Problem("Please try login in again.");
+                        return RedirectToPage("Login");
                     }
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Update);
                     if (!isAuthorized.Succeeded)
@@ -214,8 +214,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                         TempData["error"] = "You don't have the permission to edit a category.";
                         return Forbid();
                     }
-                    var categoryFromDb = await _AppDb.Category.FindAsync(category.Id);
-                    if (categoryFromDb == null)
+                    var categoryFromDb = await _AppDb.Category.ContainsAsync(category);
+                    if (!categoryFromDb)
                     {
                         return NotFound();
                     }
@@ -233,9 +233,9 @@ namespace A_Little_Source_Of_Hope.Controllers
                         string fileNameWithPath = Path.Combine(path, myfile);
                         category.Imageurl = $"images/Category/{myfile}";
                     }
-                    _AppDb.Category.Update(categoryFromDb);
+                    _AppDb.Category.Update(category);
                     await _AppDb.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index");
                 }
                 return View(category);
             }

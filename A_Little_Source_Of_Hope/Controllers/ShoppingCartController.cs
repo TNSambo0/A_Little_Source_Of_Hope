@@ -164,7 +164,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Message = "Login";
                 return Json(JsonConvert.SerializeObject(results));
             }
-
             var cartFromDb = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.ProductId == productId);
             if (cartFromDb == null)
             {

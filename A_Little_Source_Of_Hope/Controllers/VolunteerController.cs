@@ -37,7 +37,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var applicationFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(x => x.Id == Id && x.AppUserId == userID);
             if (applicationFromDb == null)
@@ -64,7 +64,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var UserDb = await _AppDb.Users.FindAsync(UserID);
             if (UserDb == null)
@@ -118,7 +118,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var applicationFromDb = from volunteer in _AppDb.Volunteer
                                     join orphanage in _AppDb.Orphanage
@@ -162,7 +162,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var applicationFromDb = await _AppDb.Volunteer.FirstOrDefaultAsync(x => x.Id == Id && x.AppUserId == userID);
             if (applicationFromDb == null)
@@ -189,7 +189,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var volunteer = new Volunteer
             {
@@ -219,7 +219,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (!await _AppDb.Orphanage.AnyAsync())
                 {
@@ -275,7 +275,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var Applications = from volunteer in _AppDb.Volunteer
                                join orphanage in _AppDb.Orphanage

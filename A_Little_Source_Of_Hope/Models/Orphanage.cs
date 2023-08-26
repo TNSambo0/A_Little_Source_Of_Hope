@@ -13,13 +13,13 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.Text)]
         [Display(Name = "Orphanage Name")]
         public string OrphanageName { get; set; }
+        [NotMapped]
         public string? Manager { get; set; }
         [NotMapped]
-        public IEnumerable<SelectListItem> Managers { get; set; }
-        [Required]
-        [DataType(DataType.EmailAddress)]
+        public IEnumerable<SelectListItem>? Managers { get; set; }
+        [NotMapped]
         [Display(Name = "Orphanage Email")]
-        public string OrphanageEmail { get; set; }
+        public string? OrphanageEmail { get; set; }
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Physical Address")]

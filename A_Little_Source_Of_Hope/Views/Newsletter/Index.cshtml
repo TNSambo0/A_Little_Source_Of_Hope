@@ -12,7 +12,6 @@
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create Newletter
             </a>
         </div>
-        <label class="d-none DisplayTable">@ViewBag.Newsletter</label>
         <input id="NumberofItems" type="hidden" value="@Model.Count()" />
         <table class="table table-hover product-table">
             <thead>
@@ -48,7 +47,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-primary btn-block text-uppercase btn-DeleteSelectedItems">
-                    Delete selected Product
+                    Delete selected Newsletter
                 </button>
             </div>
         </div>
@@ -72,11 +71,11 @@
             else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
         } BtnDeleteSelectedItems();
 
-        function SelectItem(input, ProductId) {
+        function SelectItem(input, NewsLetterId) {
             const item = input.checked;
-            var Index = DeleteItemsArray.indexOf(ProductId);
+            var Index = DeleteItemsArray.indexOf(NewsLetterId);
             if (item) {
-                DeleteItemsArray.push(ProductId)
+                DeleteItemsArray.push(NewsLetterId)
             }
             else {
                 if (Index != -1) {
@@ -85,17 +84,17 @@
             }
             BtnDeleteSelectedItems();
         }
-        function DeleteSingleItem(ProductId) {
-            Delete([ProductId]);
+        function DeleteSingleItem(NewsLetterId) {
+            Delete([NewsLetterId]);
         }
         $(".btn-DeleteSelectedItems").on('click', function () {
             Delete(DeleteItemsArray);
         });
         function Delete(itemsArray) {
             $.ajax({
-                method: "GET",
-                url: '/Product/Delete',
-                data: { ProductIds: itemsArray },
+                method: "POST",
+                url: '/NewsLetter/Delete',
+                data: { NewsLetterIds: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);
@@ -110,7 +109,6 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                                 $(".tm-product-table").fadeOut("slow");
-                                $(".Create-Product-div").removeClass("d-none");
                             }
                             else {
                                 while (data.DeleteItemsIds.length != 0) {
@@ -118,7 +116,8 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                             }
-                            toastr.error('success');;
+                            toastr.error('success');
+                            window.location.reload();
                             BtnDeleteSelectedItems();
                         }
                     },

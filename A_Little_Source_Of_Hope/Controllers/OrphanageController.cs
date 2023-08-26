@@ -37,9 +37,21 @@ namespace A_Little_Source_Of_Hope.Models
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
-                IEnumerable<Orphanage> objOrphanage = _AppDb.Orphanage;
+                var objOrphanage = from orphanage in _AppDb.Orphanage
+                                   join aManager in _AppDb.Users on
+                                   orphanage.AppUserId equals aManager.Id
+                                   select new Orphanage
+                                   {
+                                       Id = orphanage.Id,
+                                       OrphanageName = orphanage.OrphanageName,
+                                       Manager = $"{aManager.FirstName} {aManager.LastName}",
+                                       OrphanageEmail = orphanage.OrphanageEmail,
+                                       OrphanageAddress = orphanage.OrphanageAddress,
+                                       CellNumber = orphanage.CellNumber,
+                                       AppUserId = aManager.Id
+                                   };
                 if (_AppDb.Orphanage.Any()) { ViewData["orphanages"] = "not null"; }
                 else { ViewData["orphanages"] = null; }
                 var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, objOrphanage, Operations.Read);
@@ -67,7 +79,7 @@ namespace A_Little_Source_Of_Hope.Models
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                return Problem("Please try login in again.");
+                return RedirectToPage("Login");
             }
             var isAuthorized = User.IsInRole(Constants.OrphanageAdministratorsRole);
             if (!isAuthorized)
@@ -75,10 +87,10 @@ namespace A_Little_Source_Of_Hope.Models
                 TempData["error"] = "You don't have the permission to create orphanages.";
                 return RedirectToAction("Index", "Admin");
             }
-            var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
+            var ManagersList = _AppDb.Users.Where(x => x.UserType == "Orphanage Manager");
             var orphanage = new Orphanage
             {
-                Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }),
+                Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }).AsEnumerable(),
                 AppUserId = (await ManagersList.FirstAsync()).Id,
             };
             return View(orphanage);
@@ -92,15 +104,19 @@ namespace A_Little_Source_Of_Hope.Models
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
-                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id });
+                var ManagersListA = from aManager in _AppDb.Users
+                                    join anOrphanage in _AppDb.Orphanage on
+                               aManager.Id equals anOrphanage.AppUserId
+                                    select aManager;
+                var ManagersList = _AppDb.Users.Where(x => x.UserType == "Orphanage Manager");
+                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }).AsEnumerable();
                 if (ModelState.IsValid)
                 {
                     var user = await _userManager.GetUserAsync(User);
                     if (user == null)
                     {
                         await sessionHandler.SignUserOut(_signInManager, _logger);
-                        return Problem("Please try login in again.");
+                        return RedirectToPage("Login");
                     }
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Create);
                     if (!isAuthorized.Succeeded)
@@ -109,14 +125,11 @@ namespace A_Little_Source_Of_Hope.Models
                         return RedirectToAction("Index");
                     }
                     var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.Id == orphanage.AppUserId);
-                    var aManager = selectedManager.Id;
-                    var orphanageFromDb = _AppDb.Orphanage.Contains(orphanage);
-                    if (orphanageFromDb != true)
+                    var orphanageFromDb = await _AppDb.Orphanage.FirstOrDefaultAsync(x => x.AppUserId == orphanage.AppUserId);
+                    if (orphanageFromDb != null)
                     {
-                        orphanage.Manager = $"{selectedManager.FirstName} {selectedManager.LastName}";
                         await _AppDb.Orphanage.AddAsync(orphanage);
                         await _AppDb.SaveChangesAsync();
-                        TempData["success"] = "Orphanage successfully created";
                         var oldRoles = await _userManager.GetRolesAsync(user);
                         var oldRole = oldRoles.Contains("Customer");
                         if (oldRole)
@@ -124,12 +137,19 @@ namespace A_Little_Source_Of_Hope.Models
                             await _userManager.RemoveFromRoleAsync(user, "Customer");
                         }
                         await _userManager.AddToRoleAsync(user, "Orphanage Manager");
+                        TempData["success"] = "Orphanage successfully created";
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Orphanage already exists.");
-                        TempData["error"] = "Orphanage already exists";
+                        if (orphanageFromDb.OrphanageName == orphanage.OrphanageName)
+                        {
+                            ModelState.AddModelError("", "An orphanage with the provided manager already exists.");
+                            TempData["error"] = "An orphanage with the provided manager already exists.";
+                            return View(orphanage);
+                        }
+                        ModelState.AddModelError("", "The provided manager is already linked with another orphanage.");
+                        TempData["error"] = "The provided manager is already linked with another orphanage.";
                         return View(orphanage);
                     }
                 }
@@ -154,7 +174,7 @@ namespace A_Little_Source_Of_Hope.Models
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
                 if (id is null or 0)
                 {
@@ -171,8 +191,8 @@ namespace A_Little_Source_Of_Hope.Models
                     TempData["error"] = "You don't have the permission to edit an orphanage.";
                     return Forbid();
                 }
-                var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
-                orphanageFromDb.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id });
+                var ManagersList = _AppDb.Users.Where(x => x.UserType == "Orphanage Manager");
+                orphanageFromDb.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }).AsEnumerable();
                 orphanageFromDb.AppUserId = (await ManagersList.FirstAsync()).Id;
                 return View(orphanageFromDb);
             }
@@ -194,15 +214,15 @@ namespace A_Little_Source_Of_Hope.Models
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var ManagersList = from aManager in _AppDb.Users where aManager.UserType == "Orphanage Manager" select aManager;
-                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id });
+                var ManagersList = _AppDb.Users.Where(x => x.UserType == "Orphanage Manager");
+                orphanage.Managers = ManagersList.Select(x => new SelectListItem { Text = $"{x.FirstName} {x.LastName} ({x.Email})", Value = x.Id }).AsEnumerable();
                 if (ModelState.IsValid)
                 {
                     var user = await _userManager.GetUserAsync(User);
                     if (user == null)
                     {
                         await sessionHandler.SignUserOut(_signInManager, _logger);
-                        return Problem("Please try login in again.");
+                        return RedirectToPage("Login");
                     }
                     var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, orphanage, Operations.Update);
                     if (!isAuthorized.Succeeded)
@@ -210,16 +230,14 @@ namespace A_Little_Source_Of_Hope.Models
                         TempData["error"] = "You don't have the permission to edit an orphanage.";
                         return RedirectToAction("Index");
                     }
-                    var orphanageFromDb = await _AppDb.Orphanage.FindAsync(orphanage.Id);
-                    if (orphanageFromDb == null)
+                    var orphanageFromDb = await _AppDb.Orphanage.ContainsAsync(orphanage);
+                    if (!orphanageFromDb)
                     {
                         return NotFound();
                     }
-                    var selectedManager = await ManagersList.FirstOrDefaultAsync(x => x.Id == orphanage.AppUserId);
-                    orphanageFromDb.AppUserId = selectedManager.Id;
-                    _AppDb.Orphanage.Update(orphanageFromDb);
+                    _AppDb.Orphanage.Update(orphanage);
                     await _AppDb.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index");
                 }
                 return View(orphanage);
             }
@@ -280,8 +298,6 @@ namespace A_Little_Source_Of_Hope.Models
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if (await _AppDb.Orphanage.AnyAsync()) { ViewData["orphanages"] = "not null"; }
-            else { ViewData["orphanages"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = orphanageIds;

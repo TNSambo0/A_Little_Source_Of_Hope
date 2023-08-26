@@ -86,7 +86,7 @@
         });
         function Delete(itemsArray) {
             $.ajax({
-                method: "GET",
+                method: "POST",
                 url: '/Orphanage/Delete',
                 data: { OrphanageId: itemsArray },
                 success:
@@ -112,6 +112,7 @@
                                 }
                             }
                             toastr.success('success');;
+                            window.location.reload();
                             BtnDeleteSelectedItems();
                         }
                     },
