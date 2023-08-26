@@ -39,7 +39,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 if (user == null)
                 {
                     await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return Problem("Please try login in again.");
+                    return RedirectToPage("Login");
                 }
 
                 IEnumerable<ShoppingCart> UserCart = from cart in _AppDb.ShoppingCart
@@ -93,14 +93,13 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 results.Status = "error";
-                results.Message = "Unable to load user data, try try refreshing the page.";
+                results.Message = "Login";
                 return Json(JsonConvert.SerializeObject(results));
             }
 
             var ProductFromDb = await _AppDb.Product.FirstOrDefaultAsync(p => p.Id == productID && p.Quantity >= 1 && p.IsActive == true);
             if (ProductFromDb == null)
             {
-                TempData["error"] = "Selected item not found";
                 results.Status = "error";
                 results.Message = "Selected item not found.";
                 return Json(JsonConvert.SerializeObject(results));
@@ -112,7 +111,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 Description = ProductFromDb.Description,
                 PricePerItem = ProductFromDb.Price,
                 Quantity = ProductFromDb.Quantity,
-                ImageUrl = ProductFromDb.Imageurl
+                ImageUrl = ProductFromDb.Imageurl,
+                AppUserId = user.Id
             };
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, cart, Operations.Add);
             if (!isAuthorized.Succeeded)
@@ -161,7 +161,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 results.Status = "error";
-                results.Message = "Unable to load user data, try try refreshing the page.";
+                results.Message = "Login";
                 return Json(JsonConvert.SerializeObject(results));
             }
 
@@ -199,7 +199,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
                 results.Status = "error";
-                results.Message = "Unable to load user data, try try refreshing the page.";
+                results.Message = "Login";
                 return Json(JsonConvert.SerializeObject(results));
             }
             var UserCart = _AppDb.ShoppingCart.Where(cart => cart.AppUserId == user.Id);
@@ -238,8 +238,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                results.Message = "Not Authorized";
                 results.Status = "error";
+                results.Message = "Login";
                 return Json(JsonConvert.SerializeObject(results));
             }
             var product = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId == Id && x.AppUserId == user.Id);

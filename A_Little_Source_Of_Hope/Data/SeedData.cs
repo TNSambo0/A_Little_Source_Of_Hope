@@ -13,7 +13,7 @@ namespace A_Little_Source_Of_Hope.Data
              serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>());
             var adminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "Admin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, adminID, Constants.AdministratorsRole);
-            var CaregoryAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "CaregoryAdmin@outlook.com", "Employee");
+            var CaregoryAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "CategoryAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, CaregoryAdminID, Constants.CategoryAdministratorsRole);
             var OrphanageAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, OrphanageAdminID, Constants.OrphanageAdministratorsRole);

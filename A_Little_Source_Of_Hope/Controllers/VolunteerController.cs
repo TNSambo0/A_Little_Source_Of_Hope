@@ -26,7 +26,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
         }
-        [Authorize(Policy = "VolunteerAdministrator")]
+        [Authorize(Roles = "Volunteer Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int Id, string userID)
@@ -55,7 +55,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             await _AppDb.SaveChangesAsync();
             return RedirectToAction("Details", new { id = Id, UserID = userID });
         }
-        [Authorize(Policy = "VolunteerAdministrator")]
+        [Authorize(Roles = "Volunteer Administrator")]
         public async Task<IActionResult> Details(int id, string UserID)
         {
             var sessionHandler = new SessionHandler();
@@ -151,7 +151,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             ViewData["VApplications"] = "Not Null";
             return View(applicationFromDb);
         }
-        [Authorize(Policy = "VolunteerAdministrator")]
+        [Authorize(Roles = "Volunteer Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int Id, string userID)
