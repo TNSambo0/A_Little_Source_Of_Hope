@@ -15,6 +15,7 @@ namespace A_Little_Source_Of_Hope.Models
         public DateTime? VolunteerDate { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? OrphanageList { get; set; }
+        [Display(Name = "Orphanages")]
         [NotMapped]
         public string OrphanageID { get; set; }
         [ForeignKey("Orphanage")]

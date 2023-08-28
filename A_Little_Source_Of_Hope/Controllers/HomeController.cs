@@ -29,7 +29,8 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             try
             {
-                return View();
+                return RedirectToPage("Login");
+                //return View();
             }
             catch (Exception ex)
             {

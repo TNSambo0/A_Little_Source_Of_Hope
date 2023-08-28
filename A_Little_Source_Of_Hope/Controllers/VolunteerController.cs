@@ -27,7 +27,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             _signInManager = signInManager;
         }
         [Authorize(Roles = "Volunteer Administrator")]
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int Id, string userID)
         {
@@ -152,7 +151,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             return View(applicationFromDb);
         }
         [Authorize(Roles = "Volunteer Administrator")]
-        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int Id, string userID)
         {
