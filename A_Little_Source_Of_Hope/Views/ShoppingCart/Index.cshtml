@@ -92,6 +92,10 @@
                     if (data.Status == "error") {
                         toastr.error(data.Message);
                     }
+                    else if (data.Status == "Login") {
+                        toastr.error(data.Message);
+                        window.location.href = "Identity/Account/Login";
+                    }
                     else {
                         toastr.success(data.Message);
                         window.location.reload();
@@ -119,6 +123,10 @@
                     data = JSON.parse(data);
                     if (data.Status == "error") {
                         toastr.error(data.Message);;
+                    }
+                    else if (data.Status == "Login") {
+                        toastr.error(data.Message);
+                        window.location.href = "Areas/Account/Login";
                     }
                     else {
                         toastr.success(data.Message);

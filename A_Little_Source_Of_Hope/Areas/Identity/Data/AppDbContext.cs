@@ -19,7 +19,6 @@ namespace A_Little_Source_Of_Hope.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
-        public DbSet<Payment> Payment { get; set; }
         public DbSet<Gender> Gender { get; set; }
         public DbSet<DeleteAccount> DeletedAccount { get; set; }
         public DbSet<Province> Province { get; set; }

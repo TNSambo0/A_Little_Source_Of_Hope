@@ -48,6 +48,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CategoryAdministratorAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, OrphanageAdministratorAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, PaymentAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ProductAdministratorAuthorizationHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ShoppingCartCustomerAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, VolunteerAdministratorAuthorizationHandler>();

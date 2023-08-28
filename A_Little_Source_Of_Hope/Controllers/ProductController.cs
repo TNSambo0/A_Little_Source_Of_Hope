@@ -300,6 +300,9 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
+                return Json(JsonConvert.SerializeObject(results));
             }
             if (ProductIds.Count == 0)
             {

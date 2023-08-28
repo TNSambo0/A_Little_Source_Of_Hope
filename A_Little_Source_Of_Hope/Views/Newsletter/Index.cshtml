@@ -99,7 +99,11 @@
                     function (data) {
                         data = JSON.parse(data);
                         if (data.Status == "error") {
-                            toastr.error('error');
+                            toastr.error(data.Message);;
+                        }
+                        else if (data.Status == "Login") {
+                            toastr.error(data.Message);
+                            window.location.href = "Identity/Account/Login";
                         }
                         else {
                             var NumberofItems = $("#NumberofItems").val();

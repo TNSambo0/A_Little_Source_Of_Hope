@@ -260,6 +260,9 @@ namespace A_Little_Source_Of_Hope.Models
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
+                return Json(JsonConvert.SerializeObject(results));
             }
             if (orphanageIds.Count == 0)
             {

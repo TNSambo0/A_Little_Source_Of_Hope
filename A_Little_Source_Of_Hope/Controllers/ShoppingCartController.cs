@@ -92,8 +92,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                results.Status = "error";
-                results.Message = "Login";
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
 
@@ -160,8 +160,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                results.Status = "error";
-                results.Message = "Login";
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
             var cartFromDb = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.ProductId == productId);
@@ -197,11 +197,11 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                results.Status = "error";
-                results.Message = "Login";
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            var UserCart = _AppDb.ShoppingCart.Where(cart => cart.AppUserId == user.Id);
+            var UserCart = from aCart in _AppDb.ShoppingCart where aCart.AppUserId == user.Id select aCart;
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, UserCart, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
@@ -213,8 +213,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             {
                 _AppDb.ShoppingCart.Remove(CartItem);
             }
-            ViewData["Cart"] = null;
             await _AppDb.SaveChangesAsync();
+            ViewData["Cart"] = null;
             results.Status = "success";
             results.Message = "Cart successfully cleared.";
             return Json(JsonConvert.SerializeObject(results));
@@ -237,8 +237,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             if (user == null)
             {
                 await sessionHandler.SignUserOut(_signInManager, _logger);
-                results.Status = "error";
-                results.Message = "Login";
+                results.Status = "Login";
+                results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
             var product = await _AppDb.ShoppingCart.FirstOrDefaultAsync(x => x.ProductId == Id && x.AppUserId == user.Id);
