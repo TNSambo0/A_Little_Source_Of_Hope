@@ -27,7 +27,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             _signInManager = signInManager;
         }
         [Authorize(Roles = "Volunteer Administrator")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
@@ -151,7 +150,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             return View(applicationFromDb);
         }
         [Authorize(Roles = "Volunteer Administrator")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int Id, string userID)
         {
             var sessionHandler = new SessionHandler();
