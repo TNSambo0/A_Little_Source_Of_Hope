@@ -51,6 +51,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             applicationFromDb.Status = "Approved";
             _AppDb.Volunteer.Update(applicationFromDb);
             await _AppDb.SaveChangesAsync();
+            TempData["success"] = "Application successfully approved.";
             return RedirectToAction("Details", new { id = Id, UserID = userID });
         }
         [Authorize(Roles = "Volunteer Administrator")]
@@ -175,6 +176,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             applicationFromDb.Status = "Rejected";
             _AppDb.Volunteer.Update(applicationFromDb);
             await _AppDb.SaveChangesAsync();
+            TempData["success"] = "Application successfully rejected.";
             return RedirectToAction("Details", new { id = Id, UserID = userID });
         }
         [Authorize(Policy = "Customers")]

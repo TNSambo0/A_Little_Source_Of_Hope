@@ -28,7 +28,7 @@ namespace A_Little_Source_Of_Hope.Models
             _signInManager = signInManager;
         }
         public async Task<IActionResult> Index()
-        {
+        { 
             try
             {
                 var sessionHandler = new SessionHandler();
