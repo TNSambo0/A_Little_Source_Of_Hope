@@ -8,15 +8,15 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Services
 {
-    public class OrphanageManagerAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, Product>
+    public class NewsLetterAdministratorAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, News>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, Product productResource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, News newsResource)
         {
             if (context.User == null)
             {
                 return Task.CompletedTask;
             }
-            if (context.User.IsInRole(Constants.ProductAdministratorsRole))
+            if (context.User.IsInRole(Constants.NewsLetterAdministratorsRole))
             {
                 context.Succeed(requirement);
             }

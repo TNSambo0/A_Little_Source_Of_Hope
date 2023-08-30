@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace A_Little_Source_Of_Hope.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230818221603_InitialCreate")]
+    [Migration("20230830114516_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -127,6 +127,38 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.CashDonation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("CashDonations");
+                });
+
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -224,17 +256,11 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("DeletedAccount");
                 });
@@ -325,15 +351,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Manager")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("OrphanageAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrphanageEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -346,41 +364,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Orphanage");
-                });
-
-            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CVVNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ExpiryDate")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Product", b =>
@@ -405,7 +388,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Imageurl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -456,7 +438,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ProductId")
@@ -644,6 +625,15 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.CashDonation", b =>
+                {
+                    b.HasOne("A_Little_Source_Of_Hope.Areas.Identity.Data.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.City", b =>
                 {
                     b.HasOne("A_Little_Source_Of_Hope.Models.Province", "Province")
@@ -653,17 +643,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .IsRequired();
 
                     b.Navigation("Province");
-                });
-
-            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.DeleteAccount", b =>
-                {
-                    b.HasOne("A_Little_Source_Of_Hope.Areas.Identity.Data.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Orphanage", b =>
@@ -692,9 +671,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                 {
                     b.HasOne("A_Little_Source_Of_Hope.Areas.Identity.Data.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("A_Little_Source_Of_Hope.Models.Product", "Product")
                         .WithMany()

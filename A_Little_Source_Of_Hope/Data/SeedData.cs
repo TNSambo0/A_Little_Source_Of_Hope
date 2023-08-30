@@ -15,6 +15,8 @@ namespace A_Little_Source_Of_Hope.Data
             await EnsureRole(serviceProvider, adminID, Constants.AdministratorsRole);
             var CaregoryAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "CategoryAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, CaregoryAdminID, Constants.CategoryAdministratorsRole);
+            var NewsletterAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "NewsletterAdmin@outlook.com", "Employee");
+            await EnsureRole(serviceProvider, NewsletterAdminID, Constants.NewsLetterAdministratorsRole);
             var OrphanageAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "OrphanageAdmin@outlook.com", "Employee");
             await EnsureRole(serviceProvider, OrphanageAdminID, Constants.OrphanageAdministratorsRole);
             var ProductAdminID = await EnsureUser(serviceProvider, "@littl3Sourc3", "ProductAdmin@outlook.com", "Employee");

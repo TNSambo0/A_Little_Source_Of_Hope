@@ -80,8 +80,9 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-            var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
+            var aUser = user;
+            var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
                 _logger.LogInformation("An error ocurred while trying to delete account.", userId);
@@ -92,8 +93,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             await _signInManager.SignOutAsync();
             DeleteAccount deleteAccount = new() { 
             DeactivatingReason = Input.ReasonToDeactivate,
-            Username = user.UserName,
-            UserId = user.Id
+            Username = aUser.UserName,
             };
             await _appDb.DeletedAccount.AddAsync(deleteAccount);
             await _appDb.SaveChangesAsync();

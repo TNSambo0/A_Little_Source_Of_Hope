@@ -120,8 +120,7 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                             }
-                            toastr.error('success');
-                            window.location.reload();
+                            toastr.success(data.Message);
                             BtnDeleteSelectedItems();
                         }
                     },

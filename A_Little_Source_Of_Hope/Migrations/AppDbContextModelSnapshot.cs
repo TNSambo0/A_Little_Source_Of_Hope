@@ -124,6 +124,38 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.CashDonation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("CashDonations");
+                });
+
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -221,17 +253,11 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("DeletedAccount");
                 });
@@ -596,6 +622,15 @@ namespace A_Little_Source_Of_Hope.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.CashDonation", b =>
+                {
+                    b.HasOne("A_Little_Source_Of_Hope.Areas.Identity.Data.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.City", b =>
                 {
                     b.HasOne("A_Little_Source_Of_Hope.Models.Province", "Province")
@@ -605,17 +640,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .IsRequired();
 
                     b.Navigation("Province");
-                });
-
-            modelBuilder.Entity("A_Little_Source_Of_Hope.Models.DeleteAccount", b =>
-                {
-                    b.HasOne("A_Little_Source_Of_Hope.Areas.Identity.Data.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("A_Little_Source_Of_Hope.Models.Orphanage", b =>

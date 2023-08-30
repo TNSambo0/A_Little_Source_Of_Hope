@@ -24,6 +24,7 @@ namespace A_Little_Source_Of_Hope.Data
         public static readonly string CustomersRole = "Customer";
         public static readonly string OrphanageManagersRole = "Orphanage Manager";
         public static readonly string AdministratorsRole = "Administrator";
+        public static readonly string NewsLetterAdministratorsRole = "Newsletter Administrator";
         public static readonly string ProductAdministratorsRole = "Product Administrator";
         public static readonly string CategoryAdministratorsRole = "Category Administrator";
         public static readonly string OrphanageAdministratorsRole = "Orphanage Administrator";

@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="col-md-3 offset-9">
-                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Save</button>
+                <button id="update-profile-button" type="button" class="w-100 btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Deactivate</button>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <p>Please note that once you press "deactivate", the action can not be undone</p>
+                        <p>Please note that once you press "Submit", the action can not be undone</p>
                         <div class="form-group">
                             <label asp-for="Input.Password" class="form-label"></label>
                             <input asp-for="Input.Password" class="form-control" autocomplete="Password" aria-required="true" />
@@ -42,7 +42,7 @@
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">Submit</button>
                     </div>
                 </div>
             </div>

@@ -94,6 +94,20 @@ namespace A_Little_Source_Of_Hope.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeletedAccount",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeactivatingReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeletedAccount", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Gender",
                 columns: table => new
                 {
@@ -135,23 +149,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NewsSubscriptions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CardNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ExpiryDate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CVVNumber = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,24 +271,25 @@ namespace A_Little_Source_Of_Hope.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeletedAccount",
+                name: "CashDonations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DeactivatingReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeletedAccount", x => x.Id);
+                    table.PrimaryKey("PK_CashDonations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DeletedAccount_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_CashDonations_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -301,8 +299,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrphanageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Manager = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrphanageEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrphanageAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CellNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -328,7 +324,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Imageurl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Imageurl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ClaimStatus = table.Column<bool>(type: "bit", nullable: false),
@@ -402,7 +398,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -411,8 +407,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                         name: "FK_ShoppingCart_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ShoppingCart_Product_ProductId",
                         column: x => x.ProductId,
@@ -461,14 +456,14 @@ namespace A_Little_Source_Of_Hope.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CashDonations_AppUserId",
+                table: "CashDonations",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_City_ProvinceId",
                 table: "City",
                 column: "ProvinceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeletedAccount_UserId",
-                table: "DeletedAccount",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orphanage_AppUserId",
@@ -520,6 +515,9 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CashDonations");
+
+            migrationBuilder.DropTable(
                 name: "City");
 
             migrationBuilder.DropTable(
@@ -536,9 +534,6 @@ namespace A_Little_Source_Of_Hope.Migrations
 
             migrationBuilder.DropTable(
                 name: "NewsSubscriptions");
-
-            migrationBuilder.DropTable(
-                name: "Payment");
 
             migrationBuilder.DropTable(
                 name: "ShoppingCart");

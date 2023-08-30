@@ -119,15 +119,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                         {
                             var filename = Path.GetFileName(product.File.FileName);
                             var fileExt = Path.GetExtension(product.File.FileName);
-                            string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
-                            string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
-                            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
-                            if (!Directory.Exists(path))
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-                            string fileNameWithPath = Path.Combine(path, myfile);
-                            product.Imageurl = $"images/Product/{myfile}";
+                            //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
+                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
+                            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
+                            //if (!Directory.Exists(path))
+                            //{
+                            //    Directory.CreateDirectory(path);
+                            //}
+                            //string fileNameWithPath = Path.Combine(path, myfile);
+                            product.Imageurl = $"images/Product/{filename}";
                         }
                         product.CreatedDate = DateTime.Now;
                         product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();

@@ -79,8 +79,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
             return View();
         }
-
-        // POST: categoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Category category)
@@ -110,15 +108,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                         {
                             var filename = Path.GetFileName(category.File.FileName);
                             var fileExt = Path.GetExtension(category.File.FileName);
-                            string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
-                            string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
-                            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
-                            if (!Directory.Exists(path))
-                            {
-                                Directory.CreateDirectory(path);
-                            }
-                            string fileNameWithPath = Path.Combine(path, myfile);
-                            category.Imageurl = $"images/Category/{myfile}";
+                            //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
+                            //string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
+                            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
+                            //if (!Directory.Exists(path))
+                            //{
+                            //    Directory.CreateDirectory(path);
+                            //}
+                            //string fileNameWithPath = Path.Combine(path, myfile);
+                            category.Imageurl = $"images/Category/{filename}";
                         }
                         category.CreatedDate = DateTime.Now;
                         await _AppDb.Category.AddAsync(category);
@@ -223,15 +221,15 @@ namespace A_Little_Source_Of_Hope.Controllers
                     {
                         var filename = Path.GetFileName(category.File.FileName);
                         var fileExt = Path.GetExtension(category.File.FileName);
-                        string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
-                        string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-                        string fileNameWithPath = Path.Combine(path, myfile);
-                        category.Imageurl = $"images/Category/{myfile}";
+                        //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
+                        //string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
+                        //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
+                        //if (!Directory.Exists(path))
+                        //{
+                        //    Directory.CreateDirectory(path);
+                        //}
+                        //string fileNameWithPath = Path.Combine(path, myfile);
+                        category.Imageurl = $"images/Category/{filename}";
                     }
                     _AppDb.Category.Update(category);
                     await _AppDb.SaveChangesAsync();
@@ -249,7 +247,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult> Delete(List<int> categoryIds)
+        public async Task<JsonResult> Delete(List<int> CategoryIds)
         {
             ItemRemoveStatusModel results = new();
             var sessionHandler = new SessionHandler();
@@ -262,48 +260,48 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            if (categoryIds.Count == 0)
+            if (CategoryIds.Count == 0)
             {
                 results.Message = "An error occured while deleting selected item, please try again.";
                 results.Status = "error";
-                results.DeleteItemsIds = categoryIds;
+                results.DeleteItemsIds = CategoryIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
-            Category category = await _AppDb.Category.FindAsync(categoryIds[0]);
+            Category category = await _AppDb.Category.FindAsync(CategoryIds[0]);
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
-                results.Message = "You don't have the permission to Delete a category.";
+                results.Message = "You don't have the permission to Delete a Category.";
                 results.Status = "error";
-                results.DeleteItemsIds = categoryIds;
+                results.DeleteItemsIds = CategoryIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
             string errorList = "";
-            foreach (var categoryId in categoryIds)
+            foreach (var CategoryId in CategoryIds)
             {
-                var categoryFromDb = await _AppDb.Category.FindAsync(categoryId);
-                if (categoryFromDb == null)
+                var CategoryFromDb = await _AppDb.Category.FindAsync(CategoryId);
+                if (CategoryFromDb == null)
                 {
-                    errorList += categoryId.ToString() + " ";
+                    errorList += CategoryId.ToString() + " ";
                 }
                 else
                 {
-                    _AppDb.Category.Remove(categoryFromDb);
+                    _AppDb.Category.Remove(CategoryFromDb);
                 }
             }
             if (!String.IsNullOrEmpty(errorList))
             {
-                results.Message = $"An error ocuured while trying to remove category with categoryId {errorList}.";
+                results.Message = $"An error ocuured while trying to remove Category with CategoryId {errorList}.";
                 results.Status = "error";
-                results.DeleteItemsIds = categoryIds;
+                results.DeleteItemsIds = CategoryIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
             if (await _AppDb.Category.AnyAsync()) { ViewData["Category"] = "not null"; }
             else { ViewData["Category"] = null; }
-            results.Message = "category have been deleted successfully.";
+            results.Message = "Category have been deleted successfully.";
             results.Status = "success";
-            results.DeleteItemsIds = categoryIds;
+            results.DeleteItemsIds = CategoryIds;
             return Json(JsonConvert.SerializeObject(results));
         }
     }

@@ -37,16 +37,17 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator", "Orphanage Administrator",
-        "Volunteer Administrator", "Category Administrator", "Product Administrator"));
+        "Volunteer Administrator", "Category Administrator", "Product Administrator", "Newsletter Administrator"));
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Users", policy => policy.RequireRole("Administrator", "Orphanage Administrator",
+    options.AddPolicy("Users", policy => policy.RequireRole("Administrator", "Newsletter Administrator", "Orphanage Administrator",
         "Volunteer Administrator", "Category Administrator", "Product Administrator", "Customer", "Orphanage Manager"));
 });
 // Authorization handlers
 builder.Services.AddSingleton<IAuthorizationHandler, AdministratorAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CategoryAdministratorAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, NewsLetterAdministratorAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, OrphanageAdministratorAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, PaymentAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ProductAdministratorAuthorizationHandler>();

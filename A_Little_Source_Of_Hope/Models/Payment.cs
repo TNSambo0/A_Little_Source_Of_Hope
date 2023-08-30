@@ -13,12 +13,7 @@ namespace A_Little_Source_Of_Hope.Models
         public string ExpiryDate { get; set; }
         public int CVVNumber { get; set; }
         public string Address { get; set; }
-        [NotMapped]
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DateCreated { get; set; }
-
         public decimal Amount { get; set; }
-        
+
     }
 }
