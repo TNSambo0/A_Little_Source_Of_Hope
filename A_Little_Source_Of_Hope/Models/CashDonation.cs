@@ -8,7 +8,7 @@ namespace A_Little_Source_Of_Hope.Models
     {
         [Key]
         public int Id { get; set; }
-        public string FirstName { get; set; }
+        public string FirstName { get; set; }   
         public string LastName { get; set; }
         public DateTime DateCreated { get; set; }
         [Column(TypeName = "decimal(18,2)")]

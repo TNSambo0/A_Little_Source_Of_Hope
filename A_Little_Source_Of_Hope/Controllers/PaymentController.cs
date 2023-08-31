@@ -7,7 +7,7 @@ using A_Little_Source_Of_Hope.Areas.Identity.Data;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Policy = "Customers")]
+    //[Authorize(Policy = "Customers")]
     public class PaymentController : Controller
     {
         private readonly AppDbContext _AppDb;
@@ -24,6 +24,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             _logger = logger;
             _AuthorizationService = AuthorizationService;
         }
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Payment(decimal Amount)
         {
             try
@@ -57,6 +58,45 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
+        
+        public async Task <IActionResult> CashDonation()
+        {
+            try
+            {
+                var sessionHandler = new SessionHandler();
+                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    await sessionHandler.SignUserOut(_signInManager, _logger);
+                    return RedirectToPage("Login");
+                }
+                //var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, payment, Operations.Create);
+                //if (!isAuthorized.Succeeded)
+                //{
+                //    TempData["error"] = "You don't have the permission to see submit a payment.";
+                //    return Forbid();
+                //}
+                var CashDonationHistory = _AppDb.CashDonations;
+                if( _AppDb.CashDonations.Any())
+                {
+                    ViewData["CashDonationHistory"] = true;
+                    return View(CashDonationHistory.AsEnumerable());
+                }
+                ViewData["CashDonationHistory"] = null;
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                if (ex != null)
+                {
+                    ViewData["error"] = ex.ToString();
+                }
+                return View();
+            }
+        }
+        [Authorize(Policy = "RequireAdministratorRole")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Payment(Payment payment)
