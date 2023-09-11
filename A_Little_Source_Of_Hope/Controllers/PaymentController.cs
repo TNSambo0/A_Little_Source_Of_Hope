@@ -4,6 +4,7 @@ using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Data;
 using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using System.Security.Cryptography;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
@@ -15,7 +16,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<PaymentController> _logger;
         protected IAuthorizationService _AuthorizationService;
-        public PaymentController(AppDbContext AppDb, UserManager<AppUser> userManager ,SignInManager<AppUser> signInManager, 
+        public PaymentController(AppDbContext AppDb, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
             ILogger<PaymentController> logger, IAuthorizationService AuthorizationService)
         {
             _AppDb = AppDb;
@@ -24,8 +25,8 @@ namespace A_Little_Source_Of_Hope.Controllers
             _logger = logger;
             _AuthorizationService = AuthorizationService;
         }
-        [Authorize(Policy = "RequireAdministratorRole")]
-        public async Task<IActionResult> Payment(decimal Amount)
+        [Authorize(Policy = "Customers")]
+        public async Task<IActionResult> Payment(decimal Amount, string type)
         {
             try
             {
@@ -39,7 +40,10 @@ namespace A_Little_Source_Of_Hope.Controllers
                 }
                 Payment paymentAmount = new()
                 {
-                    Amount = Math.Round(Amount, 2)
+                    Amount = Math.Round(Amount, 2),
+                    Type = type,
+                    AppUserId = user.Id,
+
                 };
                 var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, paymentAmount, Operations.Read);
                 if (!isAuthorized.Succeeded)
@@ -58,8 +62,8 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-        
-        public async Task <IActionResult> CashDonation()
+
+        public async Task<IActionResult> Transaction()
         {
             try
             {
@@ -77,13 +81,26 @@ namespace A_Little_Source_Of_Hope.Controllers
                 //    TempData["error"] = "You don't have the permission to see submit a payment.";
                 //    return Forbid();
                 //}
-                var CashDonationHistory = _AppDb.CashDonations;
-                if( _AppDb.CashDonations.Any())
+                var TransactionHistory = from transaction in _AppDb.Transactions
+                                         join aUser in _AppDb.Users
+                                        on transaction.AppUserId equals aUser.Id
+                                         select new Transaction
+                                         {
+                                             Id = transaction.Id,
+                                             FirstName = aUser.FirstName,
+                                             Type = transaction.Type,
+                                             LastName = aUser.LastName,
+                                             DateCreated = transaction.DateCreated,
+                                             Amount = transaction.Amount,
+                                             AppUserId = aUser.Id
+                                         };
+
+                if (_AppDb.Transactions.Any())
                 {
-                    ViewData["CashDonationHistory"] = true;
-                    return View(CashDonationHistory.AsEnumerable());
+                    ViewData["TransactionHistory"] = true;
+                    return View(TransactionHistory.AsEnumerable());
                 }
-                ViewData["CashDonationHistory"] = null;
+                ViewData["TransactionHistory"] = null;
                 return View();
 
             }
@@ -96,7 +113,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-        [Authorize(Policy = "RequireAdministratorRole")]
+        [Authorize(Policy = "Customers")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Payment(Payment payment)
@@ -119,8 +136,25 @@ namespace A_Little_Source_Of_Hope.Controllers
                         TempData["error"] = "You don't have the permission to see submit a payment.";
                         return Forbid();
                     }
-                    return View();
+                    Transaction transaction = new()
+                    {
+                        FirstName = user.FirstName,
+                        Type = payment.Type,
+                        LastName = user.LastName,
+                        DateCreated = DateTime.Now,
+
+                        Amount = payment.Amount,
+                        AppUserId = payment.AppUserId,
+
+                    };
+                    await _AppDb.Transactions.AddAsync(transaction);
+                    await _AppDb.Payments.AddAsync(payment);
+                    await _AppDb.SaveChangesAsync();
+                    TempData["success"] = "Payment successful";
+                    return RedirectToAction("Index","Home");
                 }
+                ModelState.AddModelError(String.Empty, "Please provide all the required information");
+                TempData["error"] = "Please provide all the required information";
                 return View(payment);
             }
             catch (Exception ex)

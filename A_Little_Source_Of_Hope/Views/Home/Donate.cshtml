@@ -52,9 +52,22 @@
                             <input type="text" class="text_input amountInput" id="amountInput" />
                             <button class="btn_ btn-donate">Donate</button>
                         </div>
+                        @{
+                            var parms = new Dictionary<string, string>
+                        {
+                        { "Amount", Convert.ToDecimal(100).ToString()},
+                        { "type", "donate" }
+                        };
+                        }
 
                         <div class="amount_1">
-                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@Convert.ToDecimal(100)">
+                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@{
+                                new Dictionary<string, string>
+                        {
+                        { "Amount", Convert.ToDecimal(100).ToString()},
+                        { "type", "donate" }
+                        };
+}">
                                 R100
                             </a>
                             <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@Convert.ToDecimal(250)">
@@ -86,6 +99,6 @@
     });
     $(".btn-donate").on('click', function () {
         var Amount = Number.parseFloat(value.replace(",", "."));
-        window.location.href = "../Payment/Payment?Amount=" + Amount;
+        window.location.href = "../Payment/Payment?Amount=" + Amount + "type=donate";
     });
 </script>

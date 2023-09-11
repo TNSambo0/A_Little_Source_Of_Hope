@@ -9,7 +9,7 @@
     <li class="nav-item">
             @{
                 var user = await UserManager.GetUserAsync(User);
-                var userFullName = new AppUser
+                var userFullName = new AppUser()
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName

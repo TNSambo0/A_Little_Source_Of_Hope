@@ -271,28 +271,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CashDonations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CashDonations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CashDonations_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orphanage",
                 columns: table => new
                 {
@@ -308,6 +286,53 @@ namespace A_Little_Source_Of_Hope.Migrations
                     table.PrimaryKey("PK_Orphanage", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orphanage_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CardNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ExpiryDate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CVVNumber = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -456,11 +481,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CashDonations_AppUserId",
-                table: "CashDonations",
-                column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_City_ProvinceId",
                 table: "City",
                 column: "ProvinceId");
@@ -468,6 +488,11 @@ namespace A_Little_Source_Of_Hope.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Orphanage_AppUserId",
                 table: "Orphanage",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_AppUserId",
+                table: "Payments",
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
@@ -484,6 +509,11 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "IX_ShoppingCart_ProductId",
                 table: "ShoppingCart",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_AppUserId",
+                table: "Transactions",
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Volunteer_AppUserId",
@@ -515,9 +545,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CashDonations");
-
-            migrationBuilder.DropTable(
                 name: "City");
 
             migrationBuilder.DropTable(
@@ -536,7 +563,13 @@ namespace A_Little_Source_Of_Hope.Migrations
                 name: "NewsSubscriptions");
 
             migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
                 name: "ShoppingCart");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Volunteer");

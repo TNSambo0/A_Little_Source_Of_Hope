@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CashDonation>
+﻿@model IEnumerable<Transaction>
 @{
     ViewData["Title"] = "CashDonation";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -13,6 +13,7 @@
                 <tr>
                     <th scope="col">First name</th>
                     <th scope="col">Last name</th>
+                    <th scope="col">Type</th>
                     <th scope="col">DateCreated</th>
                     <th scope="col">Amount</th>
                     <th scope="col">&nbsp;</th>
@@ -25,6 +26,7 @@
                         
                         <td>@obj.FirstName</td>
                         <td>@obj.LastName</td>
+                        <td>@obj.Type</td>
                         <td>@obj.DateCreated</td>
                         <td>@obj.Amount</td>
 

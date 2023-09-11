@@ -16,6 +16,7 @@ namespace A_Little_Source_Of_Hope.Data
         {
         }
         public DbSet<Contact> Contact { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
@@ -27,7 +28,7 @@ namespace A_Little_Source_Of_Hope.Data
         public DbSet<Volunteer> Volunteer { get; set; } 
         public DbSet<News> News { get; set; } 
         public DbSet<NewsSubscription> NewsSubscriptions { get; set; } 
-        public DbSet<CashDonation> CashDonations { get; set; } 
+        public DbSet<Transaction> Transactions { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
