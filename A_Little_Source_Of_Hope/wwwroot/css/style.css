@@ -1159,3 +1159,56 @@ input[type="email"], input[type="text"], input[type="password"] {
     border: none;
     border-radius: 2px;
 }
+
+.content {
+    position: relative;
+    padding: 10px 10px 10px 10px;
+    min-height: 90vh;
+}
+
+    .content .cards {
+        padding: 10px;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+        .content .cards .card {
+            width: fit-content;
+            height: 125px;
+            background: #cfcf5a;
+            margin: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            flex-direction:row;
+            padding:1.5rem;
+        }
+
+.box{
+    margin-right:1.5rem;
+}
+
+.box h4{
+    font-weight:bold;
+}
+
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.row{
+    margin:60px;
+}
+
+ul li {
+    list-style: none;
+    text-decoration: none;
+}
+
