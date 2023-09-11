@@ -27,8 +27,14 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
             {
                 var sessionHandler = new SessionHandler();
                 await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    await sessionHandler.SignUserOut(_signInManager, _logger);
+                    return RedirectToPage("Login");
+                }
 
-                return View();
+                return View(); 
             }
             catch (Exception ex)
             {
