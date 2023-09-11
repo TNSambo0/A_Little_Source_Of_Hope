@@ -2,25 +2,85 @@
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<div class="card borderless-card">
-    <div class="card-block danger-breadcrumb">
-        <div class="page-header-breadcrumb">
-            <ul class="breadcrumb-title">
-                <li class="breadcrumb-item">
-                    <a href="#!">
-                        <i class="icofont icofont-home"></i>
-                    </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="#!">Breadcrumb</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="#!">Caption Breadcrumb</a>
-                </li>
-            </ul>
+<div class="content">
+    <div class="cards">
+        <div class="card">
+            <div class="box">
+                <h4>Products</h4>
+                <h4>34</h4>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/products.png" alt="products" width="65px" height="65px">
+            </div>
+        </div>
+        <div class="card ">
+            <div class="box">
+                <h4>Orders</h4>
+                <h4>8</h4>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/checkout.png" alt="orders" width="65px" height="65px">
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <h4>Current Cash Raised</h4>
+                <h4>R500</h4>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/cash.png" alt="cash" width="65px" height="65px">
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <h4>Orphanages</h4>
+                <h4>3</h4>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/orphanage.png" alt="orphanage" width="65px" height="65px">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 text-center">
+            <h2>Volunteers</h2>
+            <canvas id="volunteersChart" width="300" height="300"></canvas>
+        </div>
+        <div class="col-6 text-center">
+                <h2>Subscribers List</h2>
+                <ul id="subscribersList">
+                    <li>awakhiwesibambo@gmail.com has subscribed to get more updates</li>
+                    
+                    <li>awakhiwesibambo@gmail.com has subscribed to get more updates</li>
+                </ul>
         </div>
     </div>
 </div>
+<script>
+    var volunteersData = {
+        labels: ['Accepted', 'Rejected', 'Pending'],
+        datasets: [{
+            data: [20, 30, 10],
+            backgroundColor: ['green', 'red', 'yellow'],
+        }]
+    };
+
+    var volunteersOptions = {
+        responsive: true,
+    };
+
+    var volunteersChart = new Chart(document.getElementById("volunteersChart"), {
+        type: 'pie',
+        data: volunteersData,
+        options: volunteersOptions
+    });
+    var subscribersList = document.getElementById("subscribersList");
+                    // You can dynamically add subscribers here using JavaScript
+                    // For example:
+                    //var newSubscriber = document.createElement("li");
+                    //newSubscriber.textContent = "New Subscriber";
+                    //subscribersList.appendChild(newSubscriber);
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
