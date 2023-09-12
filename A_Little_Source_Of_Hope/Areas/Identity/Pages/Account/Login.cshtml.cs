@@ -81,11 +81,11 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                     //return LocalRedirect(returnUrl);
                     if(User.IsInRole("Customer") || User.IsInRole("Customer"))
                     {
-                        return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Admin");
                     }
                 }
                 if (result.RequiresTwoFactor)
