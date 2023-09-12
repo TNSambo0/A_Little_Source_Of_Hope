@@ -1,4 +1,4 @@
-﻿using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
 using A_Little_Source_Of_Hope.Models;
 using Microsoft.AspNetCore.Authorization;
