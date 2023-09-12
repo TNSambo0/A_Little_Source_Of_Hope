@@ -42,5 +42,22 @@ namespace A_Little_Source_Of_Hope.Services
                 ? $"Email to {toEmail} queued successfully!" :
                 $"Failure Email to {toEmail}");
         }
+        public async Task SendEnquiry(string apiKey, string subject, string message, string fromEmail)
+        {
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress(fromEmail, subject),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress("alittlesourceofhope@outlook.com"));
+            msg.SetClickTracking(false, false);
+            var response = await client.SendEmailAsync(msg);
+            _logger.LogInformation(response.IsSuccessStatusCode
+                ? $"Email to {fromEmail} queued successfully!" :
+                $"Failure Email to {fromEmail}");
+        }
     }
 }

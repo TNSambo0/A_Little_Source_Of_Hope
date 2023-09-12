@@ -101,7 +101,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(user, "Customer");
                     _logger.LogInformation("User created a new account with password.");
-
+                    
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

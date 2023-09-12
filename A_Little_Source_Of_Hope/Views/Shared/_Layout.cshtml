@@ -177,11 +177,10 @@
                     function (data) {
                         data = JSON.parse(data);
                         if (data.Status == "error") {
-                            alert("Error: " + data.Message);
-                            console.log("Error: " + data.Message);
+                            toastr.error(data.Message);
                         }
                         else {
-                            toastr.success('Success');
+                            toastr.success(data.Message);
                         }
                     },
                 error:

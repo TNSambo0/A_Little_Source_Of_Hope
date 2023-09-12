@@ -1,7 +1,9 @@
 ﻿using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
+using A_Little_Source_Of_Hope.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace A_Little_Source_Of_Hope.Controllers.Admin
@@ -33,9 +35,21 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return RedirectToPage("Login");
                 }
-
-                return View(); 
-            }
+                AdminDashboard adminDashboard = new()
+                {
+                    NumberofProducts = _AppDb.Product.Count(),
+                    NumberofOrders = 0,
+                    NumberofOrphanages = _AppDb.Orphanage.Count(),
+                    SubscribersList = _AppDb.NewsSubscriptions
+                };
+                if (adminDashboard.SubscribersList.Any())
+                {
+                    ViewData["SubscribersList"] = true;
+                }
+                else
+                    ViewData["SubscribersList"] = null;
+                return View(adminDashboard); 
+            } 
             catch (Exception ex)
             {
                 if (ex != null)

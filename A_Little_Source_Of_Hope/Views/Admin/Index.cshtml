@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AdminDashboard
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
@@ -7,7 +8,7 @@
         <div class="card">
             <div class="box">
                 <h4>Products</h4>
-                <h4>34</h4>
+                <h4>@Model.NumberofProducts</h4>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/products.png" alt="products" width="65px" height="65px">
@@ -16,7 +17,7 @@
         <div class="card ">
             <div class="box">
                 <h4>Orders</h4>
-                <h4>8</h4>
+                <h4>@Model.NumberofOrders</h4>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/checkout.png" alt="orders" width="65px" height="65px">
@@ -25,7 +26,7 @@
         <div class="card">
             <div class="box">
                 <h4>Current Cash Raised</h4>
-                <h4>R500</h4>
+                <h4>@Model.DonatedAmount</h4>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/cash.png" alt="cash" width="65px" height="65px">
@@ -34,7 +35,7 @@
         <div class="card">
             <div class="box">
                 <h4>Orphanages</h4>
-                <h4>3</h4>
+                <h4>@Model.NumberofOrphanages</h4>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/orphanage.png" alt="orphanage" width="65px" height="65px">
@@ -47,12 +48,16 @@
             <canvas id="volunteersChart" width="300" height="300"></canvas>
         </div>
         <div class="col-6 text-center">
-                <h2>Subscribers List</h2>
-                <ul id="subscribersList">
-                    <li>awakhiwesibambo@gmail.com has subscribed to get more updates</li>
-                    
-                    <li>awakhiwesibambo@gmail.com has subscribed to get more updates</li>
-                </ul>
+            <h2>Subscribers List</h2>
+            <ul id="subscribersList">
+                @if (ViewData["SubscribersList"] != null)
+                {
+                    @foreach (var obj in Model.SubscribersList)
+                    {
+                        <li>@obj.Email has subscribed to get more updates</li>
+                    }                    
+                }
+            </ul>
         </div>
     </div>
 </div>
@@ -75,11 +80,11 @@
         options: volunteersOptions
     });
     var subscribersList = document.getElementById("subscribersList");
-                    // You can dynamically add subscribers here using JavaScript
-                    // For example:
-                    //var newSubscriber = document.createElement("li");
-                    //newSubscriber.textContent = "New Subscriber";
-                    //subscribersList.appendChild(newSubscriber);
+                        // You can dynamically add subscribers here using JavaScript
+                        // For example:
+                        //var newSubscriber = document.createElement("li");
+                        //newSubscriber.textContent = "New Subscriber";
+                        //subscribersList.appendChild(newSubscriber);
 </script>
 
 @section Scripts {
