@@ -81,14 +81,6 @@
     @if (ViewData["Title"].ToString() == "Home")
     {
         <section class="slider_section">
-            @*<div class="slider_bg_box">
-        <img src="~/images/icons/milada-vigerova-iQWvVYMtv1k-unsplash.jpg" alt="Slider image">
-        </div>*@
-            @* <div class="slider-text">
-        <p>
-        Help us give Children a Little Source of Hope
-        </p>
-        </div>*@
             <div class="myBody">
                 <div class="myInfo">
                     <h1 class="typewriter">Help us give Children</h1>
@@ -116,8 +108,6 @@
                         <div class="information_f">
                             <p><strong>ADDRESS:</strong> 28 White tower, DFC, Johannesburg, South Africa</p>
                             <p><strong>TELEPHONE:</strong> +27 66 348 7693</p>
-                            @*<p><strong>EMAIL:</strong> alittlesourceofhope@outlook.com</p>*@
- 
                             <label>
                                 <strong class="mr-1">EMAIL: </strong>
                                 <a class="text-white" href="mailto:abc@example.com?subject = Feedback&body = Message">
@@ -127,9 +117,9 @@
                             <label>
                                 <strong class="mr-1">WHATSAPP: </strong>
                                 <a class="text-white" href="whatsapp://send?text=This is WhatsApp sharing example using link" data-action="share/whatsapp/share"
-                                   target="_blank">+27 66 348 7693 </a>                                
-                            </label> 
-                            
+                                   target="_blank">+27 66 348 7693 </a>
+                            </label>
+
                         </div>
                     </div>
                 </div>
@@ -160,24 +150,12 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            @*@*<div class="widget_menu">
-                                <h3>Newsletter</h3>
-                                <div class="information_f">
-                                    <p>Subscribe to our newsletter and get more updates</p>
-                                </div>
-                                <div class="form_sub">*@
-                                    <form>
-                                       @* <fieldset>
-                                            <div class="field">*@
-                                                <input class="form-control EmailSubscribe" type="email" placeholder="Enter Your Mail"/>
-                                                <input type="submit" value="Subscribe" class="btn btn-primary Subscribe" />
-@*                                            </div>
-                                        </fieldset>
-*@                                    </form>
-                              @*  </div>
-                            </div>
+                            <form>
+                                <input class="form-control EmailSubscribe" type="email" placeholder="Enter Your Mail" />
+                                <input type="button" value="Subscribe" class="btn btn-primary Subscribe" />
+                            </form>
                         </div>
-*@                    </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -188,7 +166,7 @@
         </p>
     </div>
     <script>
-        $(".Subscribe").on("click",function () {
+        $(".Subscribe").on("click", function () {
             var email = $(".EmailSubscribe").val();
             $.ajax({
                 method: "POST",

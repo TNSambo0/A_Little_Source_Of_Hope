@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    
     public class NewsletterController : Controller
     {
         private readonly ILogger<NewsletterController> _logger;
@@ -280,39 +279,32 @@ namespace A_Little_Source_Of_Hope.Controllers
             results.DeleteItemsIds = NewsletterIds;
             return Json(JsonConvert.SerializeObject(results));
         }
-        
-        public async Task Subscribe(string Email)
+
+        public async Task<JsonResult> Subscribe(string Email)
         {
             ItemRemoveStatusModel results = new();
-            try
+            var subcriber = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
+            if (subcriber != null)
             {
-                var subcriber = await _AppDb.NewsSubscriptions.FirstOrDefaultAsync(x => x.Email == Email);
-                if (subcriber != null)
-                {
-                    TempData["error"] = "Already subscribed.";
-                }
-                else
-                {
-                    var subscribe = new NewsSubscription
-                    {
-                        Email = Email,
-                        Subscribed = true,
-                        CreatedDate = DateTime.Now
-                    };
-                    await _AppDb.NewsSubscriptions.AddAsync(subscribe);
-                    await _AppDb.SaveChangesAsync();
-                    await _emailSender.SendEmailAsync(Email, "Welcome to our Newsletter", "You have s" +
-                        "uccessfully subscribed to our news letter.");
-                    TempData["success"] = "Successfully subscribed to our news letter.";
-                }
+                results.Status = "error";
+                results.Message = "Already subscribed.";
+                return Json(JsonConvert.SerializeObject(results));
             }
-            catch (Exception ex)
+            else
             {
-                if (ex != null)
+                var subscribe = new NewsSubscription
                 {
-                    TempData["error"] = "An error occured please try again.";
-                    ViewData["error"] = ex.ToString();
-                }
+                    Email = Email,
+                    Subscribed = true,
+                    CreatedDate = DateTime.Now
+                };
+                await _AppDb.NewsSubscriptions.AddAsync(subscribe);
+                await _AppDb.SaveChangesAsync();
+                await _emailSender.SendEmailAsync(Email, "Welcome to our Newsletter", "You have s" +
+                    "uccessfully subscribed to our news letter.");
+                results.Status = "success";
+                results.Message = "Successfully subscribed to our news letter.";
+                return Json(JsonConvert.SerializeObject(results));
             }
         }
     }
