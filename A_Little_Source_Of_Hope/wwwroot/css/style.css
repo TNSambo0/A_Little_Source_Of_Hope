@@ -254,7 +254,7 @@ footer {
 }
 
 .widget_menu h3 {
-    color: white;
+    color: #cfcf5a;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
@@ -275,7 +275,7 @@ footer {
 
         .widget_menu ul li a {
             font-size: 15px;
-            color: #2403ff;
+            color: white;
             margin-bottom: 0;
             float: left;
             width: 100%;
