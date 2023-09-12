@@ -52,34 +52,55 @@
                             <input type="text" class="text_input amountInput" id="amountInput" />
                             <button class="btn_ btn-donate">Donate</button>
                         </div>
-                        @{
+                        <div class="amount_1">
+                            @{
                             var parms = new Dictionary<string, string>
                         {
-                        { "Amount", Convert.ToDecimal(100).ToString()},
+                        { "Amount", $"{Convert.ToDecimal(100)}"},
                         { "type", "donate" }
                         };
                         }
-
-                        <div class="amount_1">
-                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@{
-                                new Dictionary<string, string>
-                        {
-                        { "Amount", Convert.ToDecimal(100).ToString()},
-                        { "type", "donate" }
-                        };
-}">
+                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-all-route-data="@parms">
                                 R100
                             </a>
-                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-route-Amount="@Convert.ToDecimal(250)">
+                            @{
+                                var parms2 = new Dictionary<string, string>
+                            {
+                            { "Amount", $"{Convert.ToDecimal(250)}"},
+                            { "type", "donate" }
+                            };
+                            }
+                            <a class="amountBtn" asp-controller="Payment" asp-action="Payment" asp-all-route-data="@parms2">
                                 R250
                             </a>
-                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(500)">
+                            @{
+                                var parms3 = new Dictionary<string, string>
+                            {
+                            { "Amount", $"{Convert.ToDecimal(500)}"},
+                            { "type", "donate" }
+                            };
+                            }
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-all-route-data="@parms3">
                                 R500
                             </a>
-                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(750)">
+                            @{
+                                var parms4 = new Dictionary<string, string>
+                            {
+                            { "Amount", $"{Convert.ToDecimal(750)}"},
+                            { "type", "donate" }
+                            };
+                            }
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-all-route-data="@parms4">
                                 R750
                             </a>
-                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@Convert.ToDecimal(1000)">
+                            @{
+                                var parms5 = new Dictionary<string, string>
+                            {
+                            { "Amount", $"{Convert.ToDecimal(1000)}"},
+                            { "type", "donate" }
+                            };
+                            }
+                            <a class="amountBtn" asp-action="Payment" asp-controller="Payment" asp-route-Amount="@parms5">
                                 R1000
                             </a>
                         </div>
@@ -99,6 +120,6 @@
     });
     $(".btn-donate").on('click', function () {
         var Amount = Number.parseFloat(value.replace(",", "."));
-        window.location.href = "../Payment/Payment?Amount=" + Amount + "type=donate";
+        window.location.href = "../Payment/Payment?Amount=" + Amount + "&type=donate";
     });
 </script>

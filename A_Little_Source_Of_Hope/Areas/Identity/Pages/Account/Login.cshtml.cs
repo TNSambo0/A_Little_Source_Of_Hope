@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using A_Little_Source_Of_Hope.Data;
 
 namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
 {
@@ -23,7 +24,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<AppUser> signInManager, 
-            ILogger<LoginModel> logger)
+            ILogger<LoginModel> logger, IAuthorizationService AuthorizationService)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -77,7 +78,15 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     HttpContext.Session.SetString("AnnouncementOnce", "true");
-                    return LocalRedirect(returnUrl);
+                    //return LocalRedirect(returnUrl);
+                    if(User.IsInRole("Customer") || User.IsInRole("Customer"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
