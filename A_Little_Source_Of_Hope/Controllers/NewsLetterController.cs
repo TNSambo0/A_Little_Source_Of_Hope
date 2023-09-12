@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace A_Little_Source_Of_Hope.Controllers
 {
-    [Authorize(Policy = "RequireAdministratorRole")]
+    
     public class NewsletterController : Controller
     {
         private readonly ILogger<NewsletterController> _logger;
@@ -30,6 +30,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             _signInManager = signInManager;
         }
         // GET: NewsController
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<ActionResult> Index()
         {
             try
@@ -64,6 +65,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
 
         // GET: NewsController/Create
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<ActionResult> Create()
         {
             var sessionHandler = new SessionHandler();
@@ -84,6 +86,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<ActionResult> Create(News news)
         {
             try
@@ -133,6 +136,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
 
         // GET: NewsController/Edit/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<ActionResult> Edit(int? id)
         {
             try
@@ -175,6 +179,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         // POST: NewsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<ActionResult> Edit(News news)
         {
             try
@@ -217,6 +222,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<JsonResult> Delete(List<int> NewsletterIds)
         {
             ItemRemoveStatusModel results = new();
@@ -274,6 +280,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             results.DeleteItemsIds = NewsletterIds;
             return Json(JsonConvert.SerializeObject(results));
         }
+        
         public async Task Subscribe(string Email)
         {
             ItemRemoveStatusModel results = new();
