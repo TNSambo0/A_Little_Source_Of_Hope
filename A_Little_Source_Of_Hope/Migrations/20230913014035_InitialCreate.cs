@@ -278,7 +278,7 @@ namespace A_Little_Source_Of_Hope.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrphanageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrphanageAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CellNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -302,7 +302,6 @@ namespace A_Little_Source_Of_Hope.Migrations
                     CardNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ExpiryDate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CVVNumber = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
