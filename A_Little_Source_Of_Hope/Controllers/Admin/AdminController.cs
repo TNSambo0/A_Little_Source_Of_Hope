@@ -40,7 +40,14 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                     NumberofProducts = _AppDb.Product.Count(),
                     NumberofOrders = 0,
                     NumberofOrphanages = _AppDb.Orphanage.Count(),
-                    SubscribersList = _AppDb.NewsSubscriptions
+                    SubscribersList = _AppDb.NewsSubscriptions,
+                    VolunteerApps = new()
+                    {
+                        NumberofApprovedApps = _AppDb.Volunteer.Select(x => x.Status == "Approved").Count(),
+                        NumberofPendingApps = _AppDb.Volunteer.Select(x => x.Status == "Pending").Count(),
+                        NumberofRejectedApps = _AppDb.Volunteer.Select(x => x.Status == "Rejected").Count(),
+                        NumbnerOfApplications = _AppDb.Volunteer.Count()
+                    }
                 };
                 if (adminDashboard.SubscribersList.Any())
                 {

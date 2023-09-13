@@ -11,23 +11,23 @@ namespace A_Little_Source_Of_Hope.Models
         public int Id { get; set; }
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Orphanage Name")]
+        [Display(Name = "Orphanage name")]
         public string OrphanageName { get; set; }
         [NotMapped]
         public string? Manager { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? Managers { get; set; }
         [NotMapped]
-        [Display(Name = "Orphanage Email")]
+        [Display(Name = "Orphanage email")]
         public string? OrphanageEmail { get; set; }
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Physical Address")]
+        [Display(Name = "Orphanage physical address")]
         public string OrphanageAddress { get; set; }
         [Required]
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Cell No")]
-        public string  CellNumber { get; set; }
+        [Display(Name = "Mobile No")]
+        public string  PhoneNumber { get; set; }
         [ForeignKey("AppUser")]
         public string AppUserId { get; set; }
         public AppUser? AppUser { get; set; }

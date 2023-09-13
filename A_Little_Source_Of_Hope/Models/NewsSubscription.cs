@@ -14,7 +14,6 @@ namespace A_Little_Source_Of_Hope.Models
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
         [Column(TypeName = "bit")]
-        [Display(Name = "Is active")]
         public bool Subscribed { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

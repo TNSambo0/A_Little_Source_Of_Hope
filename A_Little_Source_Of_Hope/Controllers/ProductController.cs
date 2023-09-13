@@ -119,7 +119,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                             var filename = Path.GetFileName(product.File.FileName);
                             var fileExt = Path.GetExtension(product.File.FileName);
                             //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
-                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
+                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt; 
                             //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
                             //if (!Directory.Exists(path))
                             //{

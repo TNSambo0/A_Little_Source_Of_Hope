@@ -15,6 +15,7 @@ namespace A_Little_Source_Of_Hope.Models
         [Display(Name = "Is active")]
         [Column(TypeName = "bit")]
         public bool IsActive { get; set; }
+        [Display(Name = "Created date")]
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         [NotMapped]

@@ -5,15 +5,17 @@
 }
 <div class="content">
     <div class="cards">
-        <div class="card">
-            <div class="box">
-                <h4>Products</h4>
-                <h4>@Model.NumberofProducts</h4>
+        <a class="text-decoration-none" asp-action="Index" asp-controller="Products">
+            <div class="card">
+                <div class="box">
+                    <h4>Products</h4>
+                    <h4>@Model.NumberofProducts</h4>
+                </div>
+                <div class="icon-case">
+                    <img src="/images/icons/products.png" alt="products" width="65px" height="65px">
+                </div>
             </div>
-            <div class="icon-case">
-                <img src="/images/icons/products.png" alt="products" width="65px" height="65px">
-            </div>
-        </div>
+        </a>
         <div class="card ">
             <div class="box">
                 <h4>Orders</h4>
@@ -44,6 +46,12 @@
     </div>
     <div class="row">
         <div class="col-6 text-center">
+            <div class="d-none PieChart">
+                <label asp-for="@Model.VolunteerApps.NumberofApprovedApps" value="@Model.VolunteerApps.NumberofApprovedApps"></label>
+                <label asp-for="@Model.VolunteerApps.NumberofPendingApps" value="@Model.VolunteerApps.NumberofPendingApps"></label>
+                <label asp-for="@Model.VolunteerApps.NumberofRejectedApps" value="@Model.VolunteerApps.NumberofRejectedApps"></label>
+            </div>
+            <label class="d-none TotalApps" asp-for="@Model.VolunteerApps.NumbnerOfApplications" value="@Model.VolunteerApps.NumbnerOfApplications"></label>
             <h2>Volunteers</h2>
             <canvas id="volunteersChart" width="300" height="300"></canvas>
         </div>
@@ -55,21 +63,28 @@
                     @foreach (var obj in Model.SubscribersList)
                     {
                         <li>@obj.Email has subscribed to get more updates</li>
-                    }                    
+                    }
                 }
             </ul>
         </div>
     </div>
 </div>
 <script>
+    const pieChartLabel = [];
+    const pieChartData = [];
+    $(".PieChart").children().each(
+        function () {
+            pieChartLabel.push($(this).text());
+            pieChartData.push($(this).val();
+        }
+    );
     var volunteersData = {
-        labels: ['Accepted', 'Rejected', 'Pending'],
+        labels: pieChartLabel,
         datasets: [{
-            data: [20, 30, 10],
+            data: pieChartData,
             backgroundColor: ['green', 'red', 'yellow'],
         }]
     };
-
     var volunteersOptions = {
         responsive: true,
     };
@@ -79,12 +94,6 @@
         data: volunteersData,
         options: volunteersOptions
     });
-    var subscribersList = document.getElementById("subscribersList");
-                        // You can dynamically add subscribers here using JavaScript
-                        // For example:
-                        //var newSubscriber = document.createElement("li");
-                        //newSubscriber.textContent = "New Subscriber";
-                        //subscribersList.appendChild(newSubscriber);
 </script>
 
 @section Scripts {

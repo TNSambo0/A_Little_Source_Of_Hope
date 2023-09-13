@@ -30,7 +30,7 @@
                     <tr class="row-OrphanageId">
                         <td class="product-name">@obj.OrphanageName</td>
                         <td>@obj.Manager</td>
-                        <td>@obj.CellNumber</td>
+                        <td>@obj.PhoneNumber</td>
                         <td>@obj.OrphanageEmail</td>
                         <td>@obj.OrphanageAddress</td>
                         <td>
@@ -88,7 +88,7 @@
             $.ajax({
                 method: "POST",
                 url: '/Orphanage/Delete',
-                data: { OrphanageId: itemsArray },
+                data: { orphanageIds: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);

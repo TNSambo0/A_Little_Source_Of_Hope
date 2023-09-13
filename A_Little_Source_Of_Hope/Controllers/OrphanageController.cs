@@ -49,7 +49,7 @@ namespace A_Little_Source_Of_Hope.Models
                                        Manager = $"{aManager.FirstName} {aManager.LastName}",
                                        OrphanageEmail = orphanage.OrphanageEmail,
                                        OrphanageAddress = orphanage.OrphanageAddress,
-                                       CellNumber = orphanage.CellNumber,
+                                       PhoneNumber = orphanage.PhoneNumber,
                                        AppUserId = aManager.Id
                                    };
                 if (_AppDb.Orphanage.Any()) { ViewData["orphanages"] = "not null"; }
@@ -266,7 +266,7 @@ namespace A_Little_Source_Of_Hope.Models
             }
             if (orphanageIds.Count == 0)
             {
-                results.Message = "An error occured while deleting selected item, please try again.";
+                results.Message = "An error occured while deleting selected item, please try again."; 
                 results.Status = "error";
                 results.DeleteItemsIds = orphanageIds;
                 return Json(JsonConvert.SerializeObject(results));

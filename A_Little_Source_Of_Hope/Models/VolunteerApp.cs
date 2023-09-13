@@ -10,6 +10,7 @@ namespace A_Little_Source_Of_Hope.Models
         public int Id { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
+        [Display(Name = "Volunteering date")]
         public DateTime VolunteerDate { get; set; }
         [Display(Name = "Orphanage name")]
         public string OrphanageName { get; set; }

@@ -1447,7 +1447,7 @@ namespace A_Little_Source_Of_Hope.Data
                     OrphanageEmail = "Hope2023@gmail.com",
                     OrphanageAddress = "5 Avenue, Johannesburg,8130",
                     Manager = "Sheldon Cooper",
-                    CellNumber = "0786178662",
+                    PhoneNumber = "0786178662",
                     AppUserId = UserId,
 
 
@@ -1457,7 +1457,7 @@ namespace A_Little_Source_Of_Hope.Data
                     OrphanageEmail = "home23@outlook.com",
                     OrphanageAddress = "5 Ave Botha, Pretoria,0081",
                     Manager = "Rajesh Kothrappoli",
-                    CellNumber = "0715566997",
+                    PhoneNumber = "0715566997",
                     AppUserId = UserId2,
                 });
                 await context.SaveChangesAsync();

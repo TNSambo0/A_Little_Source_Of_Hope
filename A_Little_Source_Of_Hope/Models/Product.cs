@@ -29,6 +29,7 @@ namespace A_Little_Source_Of_Hope.Models
         [Display(Name = "Claim status")]
         public bool ClaimStatus { get; set; }
         [Column(TypeName = "datetime")]
+        [Display(Name = "Created date")]
         public DateTime CreatedDate { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? CategoryNames { get; set; }
