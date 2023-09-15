@@ -79,9 +79,9 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
                     HttpContext.Session.SetString("AnnouncementOnce", "true");
                     //return LocalRedirect(returnUrl);
-                    if(User.IsInRole("Customer") || User.IsInRole("Customer"))
+                    if(User.IsInRole(Constants.CustomersRole) || User.IsInRole(Constants.OrphanageManagersRole))
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home"); 
                     }
                     else
                     {

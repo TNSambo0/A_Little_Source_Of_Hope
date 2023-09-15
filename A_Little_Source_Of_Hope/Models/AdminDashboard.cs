@@ -9,8 +9,8 @@ namespace A_Little_Source_Of_Hope.Models
         public int NumberofOrders { get; set; }
         [Display(Name = "Orphanages")]
         public int NumberofOrphanages { get; set; }
-        [Display(Name = "DonatedAmount")]
-        public int DonatedAmount { get; set; }
+        [Display(Name = "Current Cash Raised")]
+        public decimal DonatedAmount { get; set; }
         public IEnumerable<NewsSubscription> SubscribersList { get; set; }
         public VolunteerAdminDashboard VolunteerApps { get; set; }
     }

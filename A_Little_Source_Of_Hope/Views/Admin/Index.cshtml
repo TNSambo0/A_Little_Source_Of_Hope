@@ -5,39 +5,39 @@
 }
 <div class="content">
     <div class="cards">
-        <a class="text-decoration-none" asp-action="Index" asp-controller="Products">
+        <a class="text-decoration-none" asp-action="Index" asp-controller="Product">
             <div class="card">
-                <div class="box">
-                    <h4>Products</h4>
-                    <h4>@Model.NumberofProducts</h4>
+                <div class="box d-flex flex-column">
+                    <label class="h4 fw-bold" asp-for="NumberofProducts"></label>
+                    <label class="h4 fw-bold text-center">@Model.NumberofProducts</label>
                 </div>
                 <div class="icon-case">
                     <img src="/images/icons/products.png" alt="products" width="65px" height="65px">
                 </div>
             </div>
         </a>
-        <div class="card ">
-            <div class="box">
-                <h4>Orders</h4>
-                <h4>@Model.NumberofOrders</h4>
+        <div class="card">
+            <div class="box d-flex flex-column">
+                <label class="h4 fw-bold" asp-for="NumberofOrders"></label>
+                <label class="h4 fw-bold text-center">@Model.NumberofOrders</label>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/checkout.png" alt="orders" width="65px" height="65px">
             </div>
         </div>
         <div class="card">
-            <div class="box">
-                <h4>Current Cash Raised</h4>
-                <h4>@Model.DonatedAmount</h4>
+            <div class="box d-flex flex-column">
+                <label class="h4 fw-bold" asp-for="DonatedAmount"></label>
+                <label class="h4 fw-bold text-center">R @Model.DonatedAmount</label>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/cash.png" alt="cash" width="65px" height="65px">
             </div>
         </div>
         <div class="card">
-            <div class="box">
-                <h4>Orphanages</h4>
-                <h4>@Model.NumberofOrphanages</h4>
+            <div class="box d-flex flex-column">
+                <label class="h4 fw-bold" asp-for="NumberofOrphanages"></label>
+                <label class="h4 fw-bold text-center">@Model.NumberofOrphanages</label>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/orphanage.png" alt="orphanage" width="65px" height="65px">
@@ -47,9 +47,9 @@
     <div class="row">
         <div class="col-6 text-center">
             <div class="d-none PieChart">
-                <label asp-for="@Model.VolunteerApps.NumberofApprovedApps" value="@Model.VolunteerApps.NumberofApprovedApps"></label>
-                <label asp-for="@Model.VolunteerApps.NumberofPendingApps" value="@Model.VolunteerApps.NumberofPendingApps"></label>
-                <label asp-for="@Model.VolunteerApps.NumberofRejectedApps" value="@Model.VolunteerApps.NumberofRejectedApps"></label>
+                <label asp-for="VolunteerApps.NumberofApprovedApps" data-value="@Model.VolunteerApps.NumberofApprovedApps"></label>
+                <label asp-for="VolunteerApps.NumberofPendingApps" data-value="@Model.VolunteerApps.NumberofPendingApps"></label>
+                <label asp-for="VolunteerApps.NumberofRejectedApps" data-value="@Model.VolunteerApps.NumberofRejectedApps"></label>
             </div>
             <label class="d-none TotalApps" asp-for="@Model.VolunteerApps.NumbnerOfApplications" value="@Model.VolunteerApps.NumbnerOfApplications"></label>
             <h2>Volunteers</h2>
@@ -57,15 +57,19 @@
         </div>
         <div class="col-6 text-center">
             <h2>Subscribers List</h2>
-            <ul id="subscribersList">
-                @if (ViewData["SubscribersList"] != null)
-                {
+            @if (ViewData["SubscribersList"] != null)
+            {
+                <ul id="subscribersList">
                     @foreach (var obj in Model.SubscribersList)
                     {
                         <li>@obj.Email has subscribed to get more updates</li>
                     }
-                }
-            </ul>
+                </ul>
+            }
+            else
+            {
+                <p>No subscribers yet.</p>
+            }
         </div>
     </div>
 </div>
@@ -75,7 +79,7 @@
     $(".PieChart").children().each(
         function () {
             pieChartLabel.push($(this).text());
-            pieChartData.push($(this).val();
+            pieChartData.push($(this).attr("data-value"));
         }
     );
     var volunteersData = {

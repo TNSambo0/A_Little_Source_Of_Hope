@@ -35,17 +35,20 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return RedirectToPage("Login");
                 }
+                var transactions = await _AppDb.Transactions.FirstOrDefaultAsync(x => x.Type == "Donate");
+                var amount = transactions == null? 0 : transactions.Amount;
                 AdminDashboard adminDashboard = new()
                 {
                     NumberofProducts = _AppDb.Product.Count(),
                     NumberofOrders = 0,
+                    DonatedAmount = amount,
                     NumberofOrphanages = _AppDb.Orphanage.Count(),
                     SubscribersList = _AppDb.NewsSubscriptions,
-                    VolunteerApps = new()
+                    VolunteerApps = new() 
                     {
-                        NumberofApprovedApps = _AppDb.Volunteer.Select(x => x.Status == "Approved").Count(),
-                        NumberofPendingApps = _AppDb.Volunteer.Select(x => x.Status == "Pending").Count(),
-                        NumberofRejectedApps = _AppDb.Volunteer.Select(x => x.Status == "Rejected").Count(),
+                        NumberofApprovedApps = (_AppDb.Volunteer.Select(x => x.Status == "Approved")).Count(),
+                        NumberofPendingApps = (_AppDb.Volunteer.Select(x => x.Status == "Pending")).Count(),
+                        NumberofRejectedApps = (_AppDb.Volunteer.Select(x => x.Status == "Rejected")).Count(),
                         NumbnerOfApplications = _AppDb.Volunteer.Count()
                     }
                 };

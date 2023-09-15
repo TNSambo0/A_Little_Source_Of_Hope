@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using System.Security.Cryptography;
 
@@ -62,57 +63,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return View();
             }
         }
-
-        public async Task<IActionResult> Transaction()
-        {
-            try
-            {
-                var sessionHandler = new SessionHandler();
-                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    await sessionHandler.SignUserOut(_signInManager, _logger);
-                    return RedirectToPage("Login");
-                }
-                //var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, payment, Operations.Create);
-                //if (!isAuthorized.Succeeded)
-                //{
-                //    TempData["error"] = "You don't have the permission to see submit a payment.";
-                //    return Forbid();
-                //}
-                var TransactionHistory = from transaction in _AppDb.Transactions
-                                         join aUser in _AppDb.Users
-                                        on transaction.AppUserId equals aUser.Id
-                                         select new Transaction
-                                         {
-                                             Id = transaction.Id,
-                                             FirstName = aUser.FirstName,
-                                             Type = transaction.Type,
-                                             LastName = aUser.LastName,
-                                             DateCreated = transaction.DateCreated,
-                                             Amount = transaction.Amount,
-                                             AppUserId = aUser.Id
-                                         };
-
-                if (_AppDb.Transactions.Any())
-                {
-                    ViewData["TransactionHistory"] = true;
-                    return View(TransactionHistory.AsEnumerable());
-                }
-                ViewData["TransactionHistory"] = null;
-                return View();
-
-            }
-            catch (Exception ex)
-            {
-                if (ex != null)
-                {
-                    ViewData["error"] = ex.ToString();
-                }
-                return View();
-            }
-        }
         [Authorize(Policy = "Customers")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -120,7 +70,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     var sessionHandler = new SessionHandler();
                     await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
@@ -156,6 +106,56 @@ namespace A_Little_Source_Of_Hope.Controllers
                 ModelState.AddModelError(String.Empty, "Please provide all the required information");
                 TempData["error"] = "Please provide all the required information";
                 return View(payment);
+            }
+            catch (Exception ex)
+            {
+                if (ex != null)
+                {
+                    ViewData["error"] = ex.ToString();
+                }
+                return View();
+            }
+        }
+        public async Task<IActionResult> Transaction()
+        {
+            try
+            {
+                var sessionHandler = new SessionHandler();
+                await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    await sessionHandler.SignUserOut(_signInManager, _logger);
+                    return RedirectToPage("Login");
+                }
+                //var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, payment, Operations.Create);
+                //if (!isAuthorized.Succeeded)
+                //{
+                //    TempData["error"] = "You don't have the permission to see submit a payment.";
+                //    return Forbid();
+                //}
+                var TransactionHistory = from transaction in _AppDb.Transactions
+                                         join aUser in _AppDb.Users
+                                        on transaction.AppUserId equals aUser.Id
+                                        where transaction.Type == "Donate"
+                                         select new Transaction
+                                         {
+                                             Id = transaction.Id,
+                                             FirstName = aUser.FirstName,
+                                             Type = transaction.Type,
+                                             LastName = aUser.LastName,
+                                             DateCreated = transaction.DateCreated,
+                                             Amount = transaction.Amount,
+                                             AppUserId = aUser.Id
+                                         };
+
+                if (await TransactionHistory.AnyAsync())
+                {
+                    ViewData["CashDonationHistory"] = true;
+                    return View(TransactionHistory.AsEnumerable());
+                }
+                ViewData["CashDonationHistory"] = null;
+                return View();
             }
             catch (Exception ex)
             {
