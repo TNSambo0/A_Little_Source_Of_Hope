@@ -46,14 +46,15 @@
     </div>
     <div class="row">
         <div class="col-6 text-center">
-            <div class="d-none PieChart">
-                <label asp-for="VolunteerApps.NumberofApprovedApps" data-value="@Model.VolunteerApps.NumberofApprovedApps"></label>
-                <label asp-for="VolunteerApps.NumberofPendingApps" data-value="@Model.VolunteerApps.NumberofPendingApps"></label>
-                <label asp-for="VolunteerApps.NumberofRejectedApps" data-value="@Model.VolunteerApps.NumberofRejectedApps"></label>
-            </div>
-            <label class="d-none TotalApps" asp-for="@Model.VolunteerApps.NumbnerOfApplications" value="@Model.VolunteerApps.NumbnerOfApplications"></label>
-            <h2>Volunteers</h2>
-            <canvas id="volunteersChart" width="300" height="300"></canvas>
+            @if(ViewData["VolunteeringApps"] != null){
+                <div class="d-none PieChart">
+                    <label asp-for="VolunteerApps.NumberofApprovedApps" data-value="@Model.VolunteerApps.NumberofApprovedApps"></label>
+                    <label asp-for="VolunteerApps.NumberofPendingApps" data-value="@Model.VolunteerApps.NumberofPendingApps"></label>
+                    <label asp-for="VolunteerApps.NumberofRejectedApps" data-value="@Model.VolunteerApps.NumberofRejectedApps"></label>
+                </div>
+                <label class="d-none TotalApps" asp-for="@Model.VolunteerApps.NumbnerOfApplications" value="@Model.VolunteerApps.NumbnerOfApplications"></label>
+                <canvas id="volunteersChart" width="250" height="250"></canvas>
+            }
         </div>
         <div class="col-6 text-center">
             <h2>Subscribers List</h2>
@@ -74,29 +75,30 @@
     </div>
 </div>
 <script>
-    const pieChartLabel = [];
-    const pieChartData = [];
+    const xValues = [];
+    const yValues = [];
+    const barColors = ['green', 'red', 'yellow'];
     $(".PieChart").children().each(
         function () {
-            pieChartLabel.push($(this).text());
-            pieChartData.push($(this).attr("data-value"));
+            xValues.push($(this).text());
+            yValues.push($(this).attr("data-value"));
         }
     );
-    var volunteersData = {
-        labels: pieChartLabel,
-        datasets: [{
-            data: pieChartData,
-            backgroundColor: ['green', 'red', 'yellow'],
-        }]
-    };
-    var volunteersOptions = {
-        responsive: true,
-    };
-
-    var volunteersChart = new Chart(document.getElementById("volunteersChart"), {
+    new Chart("volunteersChart", {
         type: 'pie',
-        data: volunteersData,
-        options: volunteersOptions
+        data: {
+            labels : xValues,
+            datasets : [{
+                backgroundColor : barColors,
+                data : yValues
+            }]
+        },
+        options: {
+            title : {
+                display : true,
+                text: "Volunteers"
+            }
+        }
     });
 </script>
 

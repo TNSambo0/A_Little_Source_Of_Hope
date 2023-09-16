@@ -39,25 +39,27 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                 var amount = transactions == null? 0 : transactions.Amount;
                 AdminDashboard adminDashboard = new()
                 {
-                    NumberofProducts = _AppDb.Product.Count(),
+                    NumberofProducts = await _AppDb.Product.CountAsync(),
                     NumberofOrders = 0,
                     DonatedAmount = amount,
-                    NumberofOrphanages = _AppDb.Orphanage.Count(),
+                    NumberofOrphanages = await _AppDb.Orphanage.CountAsync(),
                     SubscribersList = _AppDb.NewsSubscriptions,
                     VolunteerApps = new() 
                     {
-                        NumberofApprovedApps = (_AppDb.Volunteer.Select(x => x.Status == "Approved")).Count(),
-                        NumberofPendingApps = (_AppDb.Volunteer.Select(x => x.Status == "Pending")).Count(),
-                        NumberofRejectedApps = (_AppDb.Volunteer.Select(x => x.Status == "Rejected")).Count(),
-                        NumbnerOfApplications = _AppDb.Volunteer.Count()
+                        NumberofApprovedApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Approved"),
+                        NumberofPendingApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Pending"),
+                        NumberofRejectedApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Rejected"),
+                        NumbnerOfApplications = await _AppDb.Volunteer.CountAsync()
                     }
                 };
-                if (adminDashboard.SubscribersList.Any())
-                {
+                if (await _AppDb.NewsSubscriptions.AnyAsync())
                     ViewData["SubscribersList"] = true;
-                }
                 else
                     ViewData["SubscribersList"] = null;
+                if (await _AppDb.Volunteer.AnyAsync())
+                    ViewData["VolunteeringApps"] = true;
+                else
+                    ViewData["VolunteeringApps"] = null;
                 return View(adminDashboard); 
             } 
             catch (Exception ex)
