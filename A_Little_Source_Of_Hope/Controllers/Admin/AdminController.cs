@@ -43,6 +43,7 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                     NumberofOrders = 0,
                     DonatedAmount = amount,
                     NumberofOrphanages = await _AppDb.Orphanage.CountAsync(),
+                    NumberofCategories = await _AppDb.Category.CountAsync(),
                     SubscribersList = _AppDb.NewsSubscriptions,
                     VolunteerApps = new() 
                     {
