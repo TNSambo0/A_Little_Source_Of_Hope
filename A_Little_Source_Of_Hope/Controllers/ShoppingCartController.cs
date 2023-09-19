@@ -181,8 +181,6 @@ namespace A_Little_Source_Of_Hope.Controllers
             _AppDb.ShoppingCart.Remove(cartFromDb);
             await _AppDb.SaveChangesAsync();
             var UpdatedCartFromDb = await _AppDb.ShoppingCart.AnyAsync(x => x.AppUserId == user.Id);
-            if (UpdatedCartFromDb) { ViewData["Cart"] = "not null"; }
-            else { ViewData["Cart"] = null; }
             results.Status = "success";
             results.Message = "Item successfully removed from cart.";
             return Json(JsonConvert.SerializeObject(results));
@@ -214,7 +212,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 _AppDb.ShoppingCart.Remove(CartItem);
             }
             await _AppDb.SaveChangesAsync();
-            ViewData["Cart"] = null;
             results.Status = "success";
             results.Message = "Cart successfully cleared.";
             return Json(JsonConvert.SerializeObject(results));

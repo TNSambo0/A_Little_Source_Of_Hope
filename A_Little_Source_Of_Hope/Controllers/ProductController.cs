@@ -340,8 +340,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if (await _AppDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
-            else { ViewData["Product"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = ProductIds;
