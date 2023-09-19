@@ -18,6 +18,15 @@
         </a>
         <div class="card">
             <div class="box d-flex flex-column">
+                <label class="h4 fw-bold" asp-for="NumberofCategories"></label>
+                <label class="h4 fw-bold text-center">@Model.NumberofCategories</label>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/categories.png" alt="products" width="65px" height="65px">
+            </div>
+        </div>
+        <div class="card">
+            <div class="box d-flex flex-column">
                 <label class="h4 fw-bold" asp-for="NumberofOrders"></label>
                 <label class="h4 fw-bold text-center">@Model.NumberofOrders</label>
             </div>
@@ -27,20 +36,20 @@
         </div>
         <div class="card">
             <div class="box d-flex flex-column">
-                <label class="h4 fw-bold" asp-for="DonatedAmount"></label>
-                <label class="h4 fw-bold text-center">R @Model.DonatedAmount</label>
-            </div>
-            <div class="icon-case">
-                <img src="/images/icons/cash.png" alt="cash" width="65px" height="65px">
-            </div>
-        </div>
-        <div class="card">
-            <div class="box d-flex flex-column">
                 <label class="h4 fw-bold" asp-for="NumberofOrphanages"></label>
                 <label class="h4 fw-bold text-center">@Model.NumberofOrphanages</label>
             </div>
             <div class="icon-case">
                 <img src="/images/icons/orphanage.png" alt="orphanage" width="65px" height="65px">
+            </div>
+        </div>
+        <div class="card">
+            <div class="box d-flex flex-column">
+                <label class="h4 fw-bold" asp-for="DonatedAmount"></label>
+                <label class="h4 fw-bold text-center">R @Model.DonatedAmount</label>
+            </div>
+            <div class="icon-case">
+                <img src="/images/icons/cash.png" alt="cash" width="65px" height="65px">
             </div>
         </div>
     </div>
