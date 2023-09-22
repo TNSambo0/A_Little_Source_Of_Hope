@@ -267,7 +267,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 results.DeleteItemsIds = CategoryIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
-            Category category = await _AppDb.Category.FindAsync(CategoryIds[0]);
+            Category category = await _AppDb.Category.FindAsync(CategoryIds[0]); 
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, category, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
@@ -297,8 +297,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if (await _AppDb.Category.AnyAsync()) { ViewData["Category"] = "not null"; }
-            else { ViewData["Category"] = null; }
             results.Message = "Category have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = CategoryIds;

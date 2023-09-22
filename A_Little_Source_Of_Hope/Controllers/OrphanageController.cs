@@ -251,7 +251,7 @@ namespace A_Little_Source_Of_Hope.Models
             }
         }
         [HttpPost]
-        public async Task<JsonResult> Delete(List<int> orphanageIds)
+        public async Task<JsonResult> Delete(List<int> OrphanageIds)
         {
             ItemRemoveStatusModel results = new();
             var sessionHandler = new SessionHandler();
@@ -264,47 +264,48 @@ namespace A_Little_Source_Of_Hope.Models
                 results.Message = "User autometically logout due to session end";
                 return Json(JsonConvert.SerializeObject(results));
             }
-            if (orphanageIds.Count == 0)
+            if (OrphanageIds.Count == 0)
             {
-                results.Message = "An error occured while deleting selected item, please try again."; 
+                results.Message = "An error occured while deleting selected item(s), please try again.";
                 results.Status = "error";
-                results.DeleteItemsIds = orphanageIds;
+                results.DeleteItemsIds = OrphanageIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
-            Orphanage Orphanage = await _AppDb.Orphanage.FindAsync(orphanageIds[0]);
+            Orphanage Orphanage = await _AppDb.Orphanage.FindAsync(OrphanageIds[0]);
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Orphanage, Operations.Delete);
             if (!isAuthorized.Succeeded)
             {
                 results.Message = "You don't have the permission to Delete an orphanage.";
                 results.Status = "error";
-                results.DeleteItemsIds = orphanageIds;
+                results.DeleteItemsIds = OrphanageIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
             string errorList = "";
-            foreach (var OrphanageId in orphanageIds)
+            foreach (var OrphanageId in OrphanageIds)
             {
-                var orphanageFromDb = await _AppDb.Orphanage.FindAsync(OrphanageId);
-                if (orphanageFromDb == null)
+                var OrphanageFromDb = await _AppDb.Orphanage.FindAsync(OrphanageId);
+                if (OrphanageFromDb == null)
                 {
                     errorList += OrphanageId.ToString() + " ";
                 }
                 else
                 {
-                    _AppDb.Orphanage.Remove(orphanageFromDb);
+                    _AppDb.Orphanage.Remove(OrphanageFromDb);
                 }
             }
             if (!String.IsNullOrEmpty(errorList))
             {
                 results.Message = $"An error ocuured while trying to remove Orphanage with OrphanageId {errorList}.";
                 results.Status = "error";
-                results.DeleteItemsIds = orphanageIds;
+                results.DeleteItemsIds = OrphanageIds;
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            results.Message = "Product have been deleted successfully.";
+            results.Message = "Orphanage have been deleted successfully.";
             results.Status = "success";
-            results.DeleteItemsIds = orphanageIds;
+            results.DeleteItemsIds = OrphanageIds;
             return Json(JsonConvert.SerializeObject(results));
         }
     }
 }
+ 

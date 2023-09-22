@@ -27,7 +27,7 @@
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="category-row">
+                    <tr class="row-@obj.Id">
                         <td>
                             <input type="checkbox" onclick="SelectItem(this,@obj.Id)" />
                         </td>
@@ -99,7 +99,7 @@
             $.ajax({
                 method: "POST",
                 url: '/Category/Delete',
-                data: { ProductIds: itemsArray },
+                data: { CategoryIds: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);
@@ -117,7 +117,7 @@
                                     $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
-                                $(".tm-product-table").fadeOut("slow");
+                                $(".Category-table").fadeOut("slow");
                             }
                             else {
                                 while (data.DeleteItemsIds.length != 0) {
@@ -126,7 +126,9 @@
                                 }
                             }
                             toastr.success(data.Message);
-                            BtnDeleteSelectedItems();
+                            if (data.DeleteItemsIds.length == 0) {
+                                window.location.reload();
+                            }
                         }
                     },
                 error:
@@ -134,7 +136,6 @@
                         toastr.error('error');
                     }
             });
-
         }
     </script>
 }
