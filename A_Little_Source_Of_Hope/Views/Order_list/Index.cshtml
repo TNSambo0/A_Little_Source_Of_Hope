@@ -1,0 +1,131 @@
+﻿@model IEnumerable<ShoppingCart>
+@{
+    ViewData["Title"] = "Order_list";
+}
+<div class="p-4">
+    @if (ViewData["Order_list"] != null)
+    {
+        <div class="d-flex mb-2">
+            <h2>Order List</h2>
+            <a asp-action="Create" asp-controller="Order" class="btn btn-primary ml-auto">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New list
+            </a>
+        </div>
+        <table class="table table-hover product-table">
+            <thead>
+                <tr>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">payment</th>
+                    <th scope="col">Order_date</th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var obj in Model)
+                {
+                    <tr class="row-OrphanageId">
+                        <td>Thabo</td>
+                        <td>true</td>
+                        <td>2</td>
+                        <td>clothes</td>
+                        <td>online</td>
+                        <td>15may2023</td>
+                        <td>
+                            <a asp-controller="Orphanage" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.Id)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="row mt-2">
+            <div class="colsm-12 text-center">
+                <p>No Orphanage found. Click <a asp-action="Create" asp-controller="Orphanage">here</a> to add new list</p>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts{
+    <script>
+        const DeleteItemsArray = [];
+
+        function BtnDeleteSelectedItems() {
+            if (DeleteItemsArray.length == 0) {
+                $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
+            }
+            else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
+        } BtnDeleteSelectedItems();
+
+        function SelectItem(input, ProductId) {
+            const item = input.checked;
+            var Index = DeleteItemsArray.indexOf(ProductId);
+            if (item) {
+                DeleteItemsArray.push(ProductId)
+            }
+            else {
+                if (Index != -1) {
+                    DeleteItemsArray.splice(Index, 1);
+                }
+            }
+            BtnDeleteSelectedItems();
+        }
+        function DeleteSingleItem(ProductId) {
+            Delete([ProductId]);
+        }
+        $(".btn-DeleteSelectedItems").on('click', function () {
+            Delete(DeleteItemsArray);
+        });
+        function Delete(itemsArray) {
+            $.ajax({
+                method: "POST",
+                url: '/Orphanage/Delete',
+                data: { OrphanageId: itemsArray },
+                success:
+                    function (data) {
+                        data = JSON.parse(data);
+                        if (data.Status == "error") {
+                            toastr.error(data.Message);;
+                        }
+                        else if (data.Status == "Login") {
+                            toastr.error(data.Message);
+                            window.location.href = "Identity/Account/Login";
+                        }
+                        else {
+                            var NumberofItems = $("#NumberofItems").val();
+                            if (data.DeleteItemsIds.length == NumberofItems) {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                                $(".tm-product-table").fadeOut("slow");
+                                $(".Create-Product-div").removeClass("d-none");
+                 q           }
+                            else {
+                                while (data.DeleteItemsIds.length != 0) {
+                                    $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
+                                    data.DeleteItemsIds.splice(0, 1);
+                                }
+                            }
+                            toastr.success(data.Message);
+                            BtnDeleteSelectedItems();
+                        }
+                    },
+                error:
+                    function (err) {
+                        toastr.error('error');
+                    }
+            });
+
+        }
+    </script>
+}
