@@ -135,7 +135,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                                         OrphanageAddress = orphanage.OrphanageAddress,
                                         OrphanageEmail = orphanage.OrphanageEmail,
                                         OrphanageManager = manager.FirstName + " " + manager.LastName,
-                                        OrphanageContact = orphanage.CellNumber
+                                        OrphanageContact = orphanage.PhoneNumber
                                     };
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, applicationFromDb, Operations.Read);
             if (!isAuthorized.Succeeded)
@@ -291,7 +291,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                                    OrphanageAddress = orphanage.OrphanageAddress,
                                    OrphanageEmail = orphanage.OrphanageEmail,
                                    OrphanageManager = manager.FirstName + " " + manager.LastName,
-                                   OrphanageContact = orphanage.CellNumber
+                                   OrphanageContact = orphanage.PhoneNumber
                                };
             var isAuthorized = await _AuthorizationService.AuthorizeAsync(User, Applications, Operations.Read);
             if (!isAuthorized.Succeeded)

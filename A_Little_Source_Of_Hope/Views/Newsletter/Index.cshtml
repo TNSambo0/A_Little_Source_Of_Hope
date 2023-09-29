@@ -28,6 +28,9 @@
                 @foreach (var obj in Model)
                 {
                     <tr class="row-@obj.Id">
+                        <td>
+                            <input type="checkbox" onclick="SelectItem(this,@obj.Id)" />
+                        </td>
                         <td>@obj.Heading</td>
                         <td>@obj.Summary</td>
                         <td>@obj.Description</td>
@@ -121,7 +124,9 @@
                                 }
                             }
                             toastr.success(data.Message);
-                            BtnDeleteSelectedItems();
+                            if (data.DeleteItemsIds.length == 0) {
+                                window.location.reload();
+                            }
                         }
                     },
                 error:

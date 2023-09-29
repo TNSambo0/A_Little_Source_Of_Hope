@@ -9,11 +9,11 @@
         <div class="d-flex mb-2">
             <h2>Orphanage List</h2>
             <a asp-action="Create" asp-controller="Orphanage" class="btn btn-primary ml-auto">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New Orphanage
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Orphanage
             </a>
         </div>
-        <label class="d-none DisplayTable">@ViewBag.Orphanage</label>
-        <table class="table table-hover product-table">
+        <input id="NumberofItems" type="hidden" value="@Model.Count()" />
+        <table class="table table-hover product-table orphanage-table">
             <thead>
                 <tr>
                     <th scope="col">Orphanage name</th>
@@ -27,10 +27,10 @@
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="row-OrphanageId">
+                    <tr class="row-@obj.Id">
                         <td class="product-name">@obj.OrphanageName</td>
                         <td>@obj.Manager</td>
-                        <td>@obj.CellNumber</td>
+                        <td>@obj.PhoneNumber</td>
                         <td>@obj.OrphanageEmail</td>
                         <td>@obj.OrphanageAddress</td>
                         <td>
@@ -45,19 +45,26 @@
                 }
             </tbody>
         </table>
-    }
-    else{
-    <div class="row mt-2">
-        <div class="colsm-12 text-center">
-            <p>No Orphanage found. Click <a asp-action="Create" asp-controller="Orphanage">here</a> to create a orphanage.</p>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary btn-block text-uppercase btn-DeleteSelectedItems">
+                    Delete selected Orphanage
+                </button>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="row mt-2">
+            <div class="colsm-12 text-center">
+                <p>No Orphanages found. Click <a asp-action="Create" asp-controller="">here</a> to create an Orphanage.</p>
+            </div>
+        </div>
     }
 </div>
 @section Scripts{
     <script>
         const DeleteItemsArray = [];
-        
         function BtnDeleteSelectedItems() {
             if (DeleteItemsArray.length == 0) {
                 $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
@@ -65,11 +72,11 @@
             else { $(".btn-DeleteSelectedItems").removeAttr("disabled"); }
         } BtnDeleteSelectedItems();
 
-        function SelectItem(input, ProductId) {
+        function SelectItem(input, OrphanageId) {
             const item = input.checked;
-            var Index = DeleteItemsArray.indexOf(ProductId);
+            var Index = DeleteItemsArray.indexOf(OrphanageId);
             if (item) {
-                DeleteItemsArray.push(ProductId)
+                DeleteItemsArray.push(OrphanageId)
             }
             else {
                 if (Index != -1) {
@@ -78,8 +85,8 @@
             }
             BtnDeleteSelectedItems();
         }
-        function DeleteSingleItem(ProductId) {
-            Delete([ProductId]);
+        function DeleteSingleItem(OrphanageId) {
+            Delete([OrphanageId]);
         }
         $(".btn-DeleteSelectedItems").on('click', function () {
             Delete(DeleteItemsArray);
@@ -88,12 +95,12 @@
             $.ajax({
                 method: "POST",
                 url: '/Orphanage/Delete',
-                data: { OrphanageId: itemsArray },
+                data: { orphanageIds: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);
                         if (data.Status == "error") {
-                            toastr.error(data.Message);;
+                            toastr.error(data.Message);
                         }
                         else if (data.Status == "Login") {
                             toastr.error(data.Message);
@@ -106,8 +113,7 @@
                                     $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
-                                $(".tm-product-table").fadeOut("slow");
-                                $(".Create-Product-div").removeClass("d-none");
+                                $(".orphanage-table").fadeOut("slow");
                             }
                             else {
                                 while (data.DeleteItemsIds.length != 0) {
@@ -116,7 +122,9 @@
                                 }
                             }
                             toastr.success(data.Message);
-                            BtnDeleteSelectedItems();
+                            if (data.DeleteItemsIds.length == 0) {
+                                window.location.reload();
+                            }
                         }
                     },
                 error:

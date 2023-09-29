@@ -29,7 +29,7 @@ namespace A_Little_Source_Of_Hope.Controllers
             _signInManager = signInManager;
         }
         // GET: ProductController
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
@@ -63,7 +63,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
 
         // GET: ProductController/Create
-        public async Task<ActionResult> Create()
+        public async Task<IActionResult> Create()
         {
             var sessionHandler = new SessionHandler();
             await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
@@ -90,7 +90,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                             var filename = Path.GetFileName(product.File.FileName);
                             var fileExt = Path.GetExtension(product.File.FileName);
                             //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
-                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
+                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt; 
                             //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
                             //if (!Directory.Exists(path))
                             //{
@@ -175,7 +175,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         }
 
         // GET: ProductController/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             try
             {
@@ -218,7 +218,7 @@ namespace A_Little_Source_Of_Hope.Controllers
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Product product)
+        public async Task<IActionResult> Edit(Product product)
         {
             try
             {
@@ -340,8 +340,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if (await _AppDb.Product.AnyAsync()) { ViewData["Product"] = "not null"; }
-            else { ViewData["Product"] = null; }
             results.Message = "Product have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = ProductIds;

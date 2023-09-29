@@ -12,6 +12,7 @@ namespace A_Little_Source_Of_Hope.Models
         public string? Status { get; set; }
         public string? Description { get; set; }
         [DataType(DataType.Date)]
+        [Display(Name = "Volunteering date")]
         public DateTime? VolunteerDate { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? OrphanageList { get; set; }

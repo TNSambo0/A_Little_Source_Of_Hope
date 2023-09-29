@@ -1117,7 +1117,7 @@ input[type="email"], input[type="text"], input[type="password"] {
 
 .text_input {
     height: 44px;
-    width: 60%;
+    width: 300px;
     padding: 0;
     line-height: 30px;
     font-size: 25px;
@@ -1203,9 +1203,9 @@ input[type="email"], input[type="text"], input[type="password"] {
     clear: both;
 }
 
-.row{
+/*.row{
     margin:60px;
-}
+}*/
 
 ul li {
     list-style: none;

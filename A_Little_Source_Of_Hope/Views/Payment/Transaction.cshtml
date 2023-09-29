@@ -6,7 +6,6 @@
 <div class="p-4">
     @if (ViewData["CashDonationHistory"] != null)
     {
-
         <input id="NumberofItems" type="hidden" value="@Model.Count()" />
         <table class="table table-hover Catergory-table">
             <thead>
@@ -23,13 +22,11 @@
                 @foreach (var obj in Model)
                 {
                     <tr class="category-row">
-                        
                         <td>@obj.FirstName</td>
                         <td>@obj.LastName</td>
                         <td>@obj.Type</td>
                         <td>@obj.DateCreated</td>
                         <td>@obj.Amount</td>
-
                     </tr>
                 }
             </tbody>

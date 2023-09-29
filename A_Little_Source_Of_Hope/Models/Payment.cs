@@ -12,11 +12,14 @@ namespace A_Little_Source_Of_Hope.Models
         [StringLength(50)]
         public string Name { get; set; }
         [StringLength(50)]
+        [Display(Name = "Card number")]
         public string CardNumber { get; set; }
         [StringLength(50)]
+        [Display(Name = "Expiry date")]
         public string ExpiryDate { get; set; }
+        [Display(Name = "CVV number")]
         public int CVVNumber { get; set; }
-        public string Address { get; set; }
+        //public string Address { get; set; }
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }

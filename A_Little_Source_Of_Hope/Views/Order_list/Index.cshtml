@@ -1,50 +1,40 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<ShoppingCart>
 @{
-    ViewData["Title"] = "Product";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Order_list";
 }
 <div class="p-4">
-    @if (ViewData["Product"] != null)
+    @if (ViewData["Order_list"] != null)
     {
         <div class="d-flex mb-2">
-            <h2>Product List</h2>
-            <a asp-action="Create" asp-controller="Product" class="btn btn-primary ml-auto">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Create New Product
+            <h2>Order List</h2>
+            <a asp-action="Create" asp-controller="Order" class="btn btn-primary ml-auto">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp; Add New list
             </a>
         </div>
-        <input id="NumberofItems" type="hidden" value="@Model.Count()" />
         <table class="table table-hover product-table">
             <thead>
                 <tr>
-                    <th scope="col">&nbsp;</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">IsActive</th>
-                    <th scope="col">CreatedDate</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">payment</th>
+                    <th scope="col">Order_date</th>
                     <th scope="col">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var obj in Model)
                 {
-                    <tr class="row-@obj.Id">
+                    <tr class="row-OrphanageId">
+                        <td>Thabo</td>
+                        <td>true</td>
+                        <td>2</td>
+                        <td>clothes</td>
+                        <td>online</td>
+                        <td>15may2023</td>
                         <td>
-                            <input type="checkbox" onclick="SelectItem(this,@obj.Id)" />
-                        </td>
-                        <td>
-                            <img src="~/@obj.Imageurl" width="60" />
-                        </td>
-                        <td class="product-name">@obj.ProductName</td>
-                        <td>@obj.Description</td>
-                        <td>@obj.Quantity</td>
-                        <td>@obj.Price</td>
-                        <td>@obj.IsActive</td>
-                        <td>@obj.CreatedDate</td>
-                        <td>
-                            <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
+                            <a asp-controller="Orphanage" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                             <button class="btn btn-danger deleteItem" type="button" onclick="DeleteSingleItem(@obj.Id)">
@@ -55,19 +45,12 @@
                 }
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-primary btn-block text-uppercase btn-DeleteSelectedItems">
-                    Delete selected Product
-                </button>
-            </div>
-        </div>
     }
     else
     {
         <div class="row mt-2">
             <div class="colsm-12 text-center">
-                <p>No Product found. Click <a asp-action="Create" asp-controller="Product">here</a> to create a product.</p>
+                <p>No Orphanage found. Click <a asp-action="Create" asp-controller="Orphanage">here</a> to add new list</p>
             </div>
         </div>
     }
@@ -75,6 +58,7 @@
 @section Scripts{
     <script>
         const DeleteItemsArray = [];
+
         function BtnDeleteSelectedItems() {
             if (DeleteItemsArray.length == 0) {
                 $(".btn-DeleteSelectedItems")[0].setAttributeNode(document.createAttribute("disabled"));
@@ -104,13 +88,13 @@
         function Delete(itemsArray) {
             $.ajax({
                 method: "POST",
-                url: '/Product/Delete',
-                data: { ProductIds: itemsArray },
+                url: '/Orphanage/Delete',
+                data: { OrphanageId: itemsArray },
                 success:
                     function (data) {
                         data = JSON.parse(data);
                         if (data.Status == "error") {
-                            toastr.error(data.Message);
+                            toastr.error(data.Message);;
                         }
                         else if (data.Status == "Login") {
                             toastr.error(data.Message);
@@ -124,7 +108,8 @@
                                     data.DeleteItemsIds.splice(0, 1);
                                 }
                                 $(".tm-product-table").fadeOut("slow");
-                            }
+                                $(".Create-Product-div").removeClass("d-none");
+                 q           }
                             else {
                                 while (data.DeleteItemsIds.length != 0) {
                                     $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");

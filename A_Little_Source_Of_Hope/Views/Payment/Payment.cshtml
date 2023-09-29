@@ -1,28 +1,24 @@
 ﻿@model Payment
 @{
-    ViewData["Title"] = "Shop";
+    ViewData["Title"] = "Payment";
 }
-
-
 <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow">
             <div class="modal-header">
-               
                 <div class="d-flex align-items-center justify-content-between">
-
                     <span style="font-size:x-large">Payment</span>
                     <div class="icons">
                         <img src="~/images/visa.jpg" width="35">
                         <img src="~/images/Mastercard.jpg" width="35">
                         <img src="~/images/Maestro.png" width="35">
-                        <img src="~/images/americanExpress.png" width="30">                                                
+                        <img src="~/images/americanExpress.png" width="30">
                     </div>
-
                 </div>
             </div>
             <div class="modal-body p-5 pt-0">
-                <form method="post"> 
+                <form method="post">
+                    <input type="hidden" asp-for="AppUserId" />
                     <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                     <div class="row mt-2">
                         <div class="col col-md-12">
@@ -71,7 +67,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col col-md-12 text-center text-bold">
-                            <input type="submit" class="btn btn-primary"/>
+                            <input type="submit" class="btn btn-primary" />
                         </div>
                     </div>
                     <div class="row">

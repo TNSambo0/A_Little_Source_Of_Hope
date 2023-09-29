@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css"> 
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="~/css/app.css">
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" href="~/fontAwesomeIcons/css/font-awesome.css" />
@@ -21,13 +21,14 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript" src="~/js/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
         $(function () {
+            var url = window.location.href;
             $(".sidebar-nav a").each(function () {
-                $(this).on("click",function (){
+                if (url == (this.href)) {
                     $(this).closest("li").addClass("active");
-                });
+                }
             });
         });
     </script>
@@ -39,7 +40,6 @@
                 <a class="sidebar-brand">
                     <span class="align-middle text-white">A Little Source of Hope</span>
                 </a>
-
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">
                         Actions
@@ -48,7 +48,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" asp-controller="Admin" asp-action="Index">
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                        </a> 
+                        </a>
                     </li>
 
                     <li class="sidebar-header">
@@ -59,11 +59,6 @@
                             <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Category dashboard</span>
                         </a>
                     </li>
-                   @* <li class="sidebar-item">
-                        <a class="sidebar-link" asp-controller="Category" asp-action="Create">
-                            <i class="align-middle" data-feather="map"></i> <span class="align-middle">Add Category</span>
-                        </a>
-                    </li>*@
 
                     <li class="sidebar-header">
                         Product operations
@@ -73,11 +68,6 @@
                             <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Product dashboard</span>
                         </a>
                     </li>
-                    @*<li class="sidebar-item">
-                        <a class="sidebar-link" asp-controller="Product" asp-action="Create">
-                            <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Add Product</span>
-                        </a>
-                    </li>*@
                     <li class="sidebar-header">
                         Orphanage operations
                     </li>
@@ -106,15 +96,10 @@
                         Donate Cash operations
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" asp-controller="Payment" asp-action="CashDonation">
+                        <a class="sidebar-link" asp-controller="Payment" asp-action="Transaction">
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Cash Donations</span>
                         </a>
                     </li>
-                   @* <li class="sidebar-item">
-                        <a class="sidebar-link" asp-controller="NewsLetter" asp-action="Create">
-                            <i class="align-middle" data-feather="map"></i> <span class="align-middle">Add Newsletter</span>
-                        </a>
-                    </li>*@
                 </ul>
             </div>
         </nav>
@@ -127,7 +112,7 @@
 
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
-                        <li class="nav-item dropdown">
+                        @*<li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                                 <div class="position-relative">
                                     <i class="align-middle" data-feather="bell"></i>
@@ -258,14 +243,25 @@
                                     <a href="#" class="text-muted">Show all messages</a>
                                 </div>
                             </div>
-                        </li>
+                        </li>*@
                         <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                                 <i class="align-middle" data-feather="settings"></i>
                             </a>
-
+                            @{
+                                @using Microsoft.AspNetCore.Identity;
+                                @using A_Little_Source_Of_Hope.Areas.Identity.Data;
+                                @inject SignInManager<AppUser> SignInManager;
+                                @inject UserManager<AppUser> UserManager;
+                                var user = await UserManager.GetUserAsync(User);
+                                var userFullName = new AppUser()
+                                {
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName
+                                };
+                            }
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
+                                <img src="~/@user.ImageUrl" class="avatar img-fluid rounded me-1" alt="Profile picture" /> <span class="text-dark">@userFullName</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -299,7 +295,7 @@
                             <p class="mb-0 ">
                                 <label><strong>A Little Source Of Hope</strong></label> &copy;
                             </p>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </footer>

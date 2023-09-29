@@ -272,8 +272,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                 return Json(JsonConvert.SerializeObject(results));
             }
             await _AppDb.SaveChangesAsync();
-            if (await _AppDb.News.AnyAsync()) { ViewData["News"] = "not null"; }
-            else { ViewData["News"] = null; }
             results.Message = "News have been deleted successfully.";
             results.Status = "success";
             results.DeleteItemsIds = NewsletterIds;

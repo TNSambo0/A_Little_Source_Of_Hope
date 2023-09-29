@@ -35,19 +35,32 @@ namespace A_Little_Source_Of_Hope.Controllers.Admin
                     await sessionHandler.SignUserOut(_signInManager, _logger);
                     return RedirectToPage("Login");
                 }
+                var transactions = await _AppDb.Transactions.FirstOrDefaultAsync(x => x.Type == "Donate");
+                var amount = transactions == null? 0 : transactions.Amount;
                 AdminDashboard adminDashboard = new()
                 {
-                    NumberofProducts = _AppDb.Product.Count(),
+                    NumberofProducts = await _AppDb.Product.CountAsync(),
                     NumberofOrders = 0,
-                    NumberofOrphanages = _AppDb.Orphanage.Count(),
-                    SubscribersList = _AppDb.NewsSubscriptions
+                    DonatedAmount = amount,
+                    NumberofOrphanages = await _AppDb.Orphanage.CountAsync(),
+                    NumberofCategories = await _AppDb.Category.CountAsync(),
+                    SubscribersList = _AppDb.NewsSubscriptions,
+                    VolunteerApps = new() 
+                    {
+                        NumberofApprovedApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Approved"),
+                        NumberofPendingApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Pending"),
+                        NumberofRejectedApps = await _AppDb.Volunteer.CountAsync(x => x.Status == "Rejected"),
+                        NumbnerOfApplications = await _AppDb.Volunteer.CountAsync()
+                    }
                 };
-                if (adminDashboard.SubscribersList.Any())
-                {
+                if (await _AppDb.NewsSubscriptions.AnyAsync())
                     ViewData["SubscribersList"] = true;
-                }
                 else
                     ViewData["SubscribersList"] = null;
+                if (await _AppDb.Volunteer.AnyAsync())
+                    ViewData["VolunteeringApps"] = true;
+                else
+                    ViewData["VolunteeringApps"] = null;
                 return View(adminDashboard); 
             } 
             catch (Exception ex)
