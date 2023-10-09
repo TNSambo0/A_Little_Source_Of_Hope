@@ -94,7 +94,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    ImageUrl = "images/User/images.png",
+                    ImageUrl = "images.png",
                     UserType = "Customer"
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);

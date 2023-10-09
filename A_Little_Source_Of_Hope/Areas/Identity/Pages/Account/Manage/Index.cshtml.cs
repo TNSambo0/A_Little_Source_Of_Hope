@@ -211,7 +211,16 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             }
             if (Input.ImageFile != null)
             {
-                _imageService.deleteImageFromAzure(user.ImageUrl);
+                if(user.ImageUrl == "images.png")
+                {
+                    user.ImageUrl = _imageService.uploadImageToAzure(Input.ImageFile);
+                }                    
+                else
+                {
+                    _imageService.deleteImageFromAzure(user.ImageUrl);
+                    user.ImageUrl = _imageService.uploadImageToAzure(Input.ImageFile);
+                }
+                    _imageService.deleteImageFromAzure(user.ImageUrl);
                 user.ImageUrl = _imageService.uploadImageToAzure(Input.ImageFile);
             }
             GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();

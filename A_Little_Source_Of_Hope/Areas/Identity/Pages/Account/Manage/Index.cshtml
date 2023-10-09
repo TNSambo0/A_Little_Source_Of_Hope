@@ -10,7 +10,7 @@
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="text-center mb-4">
-                <img src="~/@Model.ImageSrc" name="Profile_Picture" class="rounded-circle shadow" style="height:150px;width:150px;" />
+                <img src="https://datapicsblobact.blob.core.windows.net/datapicscontainer1/{@Model.ImageSrc}" name="Profile_Picture" class="rounded-circle shadow" style="height:150px;width:150px;" />
                 <input asp-for="Input.ImageFile" type="file" multiple="false" accept="Image/*" class="d-none ProfileImage">
             </div>
             <div class="row">
