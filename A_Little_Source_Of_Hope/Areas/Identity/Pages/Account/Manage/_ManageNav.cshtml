@@ -33,7 +33,11 @@
                         <i class="align-middle" data-feather="user"></i> <span class="align-middle">View applications</span>
                     </a>
                 </li>
-
+                <li class="sidebar-item">
+                    <a class="sidebar-link" asp-action="Index" asp-controller="Order">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">View Orders</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link @ManageNavPages.DeletePersonalDataNavClass(ViewContext)" id="delete-personal-data" asp-page="./DeletePersonalData">
                         <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Deactivate account</span>
