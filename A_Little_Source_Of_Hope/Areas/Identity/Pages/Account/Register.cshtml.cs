@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using A_Little_Source_Of_Hope.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -99,7 +100,7 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Customer");
+                    await _userManager.AddToRoleAsync(user, Constants.CustomersRole);
                     _logger.LogInformation("User created a new account with password.");
                     
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

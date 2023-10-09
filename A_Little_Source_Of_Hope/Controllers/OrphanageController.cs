@@ -255,7 +255,7 @@ namespace A_Little_Source_Of_Hope.Models
         {
             ItemRemoveStatusModel results = new();
             var sessionHandler = new SessionHandler();
-            await sessionHandler.GetSession(HttpContext, _signInManager, _logger);
+            await sessionHandler.GetSession(HttpContext, _signInManager, _logger); 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

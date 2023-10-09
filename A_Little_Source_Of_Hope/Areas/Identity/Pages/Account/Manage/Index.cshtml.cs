@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using A_Little_Source_Of_Hope.Services.Abstract;
+using Microsoft.AspNetCore.Hosting;
 
 namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
 {
@@ -16,15 +18,17 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly AppDbContext _AppDb;
+        private readonly IImageService _imageService;
 
         public IndexModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            AppDbContext AppDb)
+            AppDbContext AppDb, IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _AppDb = AppDb; ;
+            _AppDb = AppDb;
+            _imageService = imageService;
         }
 
         public string Username { get; set; }
@@ -207,28 +211,8 @@ namespace A_Little_Source_Of_Hope.Areas.Identity.Pages.Account.Manage
             }
             if (Input.ImageFile != null)
             {
-                var filename = Input.ImageFile.FileName;
-                var fileExt = Path.GetExtension(filename);
-                string fileNameWithoutExt = Path.GetFileNameWithoutExtension(Input.ImageFile.FileName);
-                string myfile = fileNameWithoutExt + "_" + user.Id + fileExt;
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\User");
-                string fileNameWithPath = Path.Combine(path, myfile);
-                if (fileNameWithPath != user.ImageUrl)
-                {
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    //if (System.IO.File.Exists(fileNameWithPath))
-                    //{
-                    //    System.IO.File.Delete(fileNameWithPath);
-                    //}
-                    user.ImageUrl = $"images/User/{myfile}";
-                    //using (var stream = new FileStream(path, FileMode.Create))
-                    //{
-                    //    Input.ImageFile.CopyTo(stream);
-                    //}
-                }
+                _imageService.deleteImageFromAzure(user.ImageUrl);
+                user.ImageUrl = _imageService.uploadImageToAzure(Input.ImageFile);
             }
             GenderList = _AppDb.Gender.Select(x => new SelectListItem() { Text = x.GenderName, Value = x.Id.ToString() }).AsEnumerable();
             var selectedGender = GenderList.FirstOrDefault(x => x.Value == Input.GenderId);

@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using A_Little_Source_Of_Hope.Data;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
+using A_Little_Source_Of_Hope.Options;
 using A_Little_Source_Of_Hope.Services;
+using A_Little_Source_Of_Hope.Services.Abstract;
+using A_Little_Source_Of_Hope.Services.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -55,6 +58,8 @@ builder.Services.AddScoped<IAuthorizationHandler, ShoppingCartCustomerAuthorizat
 builder.Services.AddSingleton<IAuthorizationHandler, VolunteerAdministratorAuthorizationHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, VolunteerCustomerAuthorizationHandler>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.Configure<AzureOptions>(builder.Configuration.GetSection("Azure"));
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o =>
 {

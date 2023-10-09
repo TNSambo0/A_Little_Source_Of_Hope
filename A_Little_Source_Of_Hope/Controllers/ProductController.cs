@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using A_Little_Source_Of_Hope.Data;
 using A_Little_Source_Of_Hope.Models;
 using Microsoft.AspNetCore.Identity;
+using A_Little_Source_Of_Hope.Services.Abstract;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -18,15 +19,17 @@ namespace A_Little_Source_Of_Hope.Controllers
         protected IAuthorizationService _AuthorizationService;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IImageService _imageService;
 
         public ProductController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
-            IAuthorizationService AuthorizationService, SignInManager<AppUser> signInManager)
+            IAuthorizationService AuthorizationService, IImageService imageService, SignInManager<AppUser> signInManager)
         {
             _logger = logger;
             _AppDb = AppDb;
             _AuthorizationService = AuthorizationService;
             _userManager = userManager;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
         // GET: ProductController
         public async Task<IActionResult> Index()
@@ -116,17 +119,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     {
                         if (product.File != null && product.File.FileName != null)
                         {
-                            var filename = Path.GetFileName(product.File.FileName);
-                            var fileExt = Path.GetExtension(product.File.FileName);
-                            //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
-                            //string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt; 
-                            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
-                            //if (!Directory.Exists(path))
-                            //{
-                            //    Directory.CreateDirectory(path);
-                            //}
-                            //string fileNameWithPath = Path.Combine(path, myfile);
-                            product.Imageurl = $"images/Product/{filename}";
+                            product.Imageurl = _imageService.uploadImageToAzure(product.File);
                         }
                         product.CreatedDate = DateTime.Now;
                         product.CategoryNames = _AppDb.Category.Select(x => new SelectListItem() { Text = x.CategoryName, Value = x.Id.ToString() }).AsEnumerable();
@@ -148,10 +141,6 @@ namespace A_Little_Source_Of_Hope.Controllers
                         }
                         await _AppDb.Product.AddAsync(product);
                         await _AppDb.SaveChangesAsync();
-                        //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                        //{
-                        //    product.File.CopyTo(stream);
-                        //}
                         TempData["success"] = "Product successfully created";
                         return RedirectToAction("Index");
                     }
@@ -262,17 +251,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     }
                     if (product.File != null && product.File.FileName != null)
                     {
-                        var filename = Path.GetFileName(product.File.FileName);
-                        var fileExt = Path.GetExtension(product.File.FileName);
-                        string fileNameWithoutPath = Path.GetFileNameWithoutExtension(product.File.FileName);
-                        string myfile = fileNameWithoutPath + "_" + product.ProductName + fileExt;
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Product");
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-                        string fileNameWithPath = Path.Combine(path, myfile);
-                        product.Imageurl = $"images/Product/{myfile}";
+                        product.Imageurl = _imageService.uploadImageToAzure(product.File);
                     }
                     _AppDb.Product.Update(product);
                     await _AppDb.SaveChangesAsync();
@@ -330,6 +309,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 else
                 {
                     _AppDb.Product.Remove(productFromDb);
+                    _imageService.deleteImageFromAzure(productFromDb.Imageurl);
                 }
             }
             if (!String.IsNullOrEmpty(errorList))

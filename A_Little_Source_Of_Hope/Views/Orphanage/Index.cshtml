@@ -116,7 +116,7 @@
                                 $(".orphanage-table").fadeOut("slow");
                             }
                             else {
-                                while (data.DeleteItemsIds.length != 0) {
+                                for (let i = 0; i < data.DeleteItemsIds.length;i++) {
                                     $(".row-" + data.DeleteItemsIds[0]).fadeOut("slow");
                                     data.DeleteItemsIds.splice(0, 1);
                                 }

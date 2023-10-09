@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using A_Little_Source_Of_Hope.Models;
 using A_Little_Source_Of_Hope.Areas.Identity.Data;
 using A_Little_Source_Of_Hope.Data;
+using A_Little_Source_Of_Hope.Services.Abstract;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,14 +18,16 @@ namespace A_Little_Source_Of_Hope.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         protected IAuthorizationService _AuthorizationService;
+        private readonly IImageService _imageService;
         public CategoryController(ILogger<ShoppingCartController> logger, AppDbContext AppDb, UserManager<AppUser> userManager,
-            IAuthorizationService AuthorizationService, SignInManager<AppUser> signInManager)
+            IAuthorizationService AuthorizationService, IImageService imageService, SignInManager<AppUser> signInManager)
         {
             _logger = logger;
             _AppDb = AppDb;
             _userManager = userManager;
             _AuthorizationService = AuthorizationService;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
         // GET: CategoryController
         public async Task<ActionResult> Index()
@@ -104,27 +107,14 @@ namespace A_Little_Source_Of_Hope.Controllers
                     var categoryFromDb = _AppDb.Category.Contains(category);
                     if (categoryFromDb != true)
                     {
-                        if (category.File != null && category.File.FileName != null)
+                        if (category.File == null && category.File.FileName == null)
                         {
-                            var filename = Path.GetFileName(category.File.FileName);
-                            var fileExt = Path.GetExtension(category.File.FileName);
-                            //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
-                            //string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
-                            //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
-                            //if (!Directory.Exists(path))
-                            //{
-                            //    Directory.CreateDirectory(path);
-                            //}
-                            //string fileNameWithPath = Path.Combine(path, myfile);
-                            category.Imageurl = $"images/Category/{filename}";
+                            return View(category);
                         }
+                        category.Imageurl = _imageService.uploadImageToAzure(category.File);
                         category.CreatedDate = DateTime.Now;
                         await _AppDb.Category.AddAsync(category);
                         await _AppDb.SaveChangesAsync();
-                        //using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-                        //{
-                        //    category.File.CopyTo(stream);
-                        //}
                         TempData["success"] = "category successfully created";
                         return RedirectToAction("Index");
                     }
@@ -219,17 +209,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                     }
                     if (category.File != null && category.File.FileName != null)
                     {
-                        var filename = Path.GetFileName(category.File.FileName);
-                        var fileExt = Path.GetExtension(category.File.FileName);
-                        //string fileNameWithoutPath = Path.GetFileNameWithoutExtension(category.File.FileName);
-                        //string myfile = fileNameWithoutPath + "_" + category.CategoryName + fileExt;
-                        //var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/category");
-                        //if (!Directory.Exists(path))
-                        //{
-                        //    Directory.CreateDirectory(path);
-                        //}
-                        //string fileNameWithPath = Path.Combine(path, myfile);
-                        category.Imageurl = $"images/Category/{filename}";
+                        category.Imageurl = _imageService.uploadImageToAzure(category.File);
                     }
                     _AppDb.Category.Update(category);
                     await _AppDb.SaveChangesAsync();
@@ -287,6 +267,7 @@ namespace A_Little_Source_Of_Hope.Controllers
                 else
                 {
                     _AppDb.Category.Remove(CategoryFromDb);
+                    _imageService.deleteImageFromAzure(CategoryFromDb.Imageurl);
                 }
             }
             if (!String.IsNullOrEmpty(errorList))
