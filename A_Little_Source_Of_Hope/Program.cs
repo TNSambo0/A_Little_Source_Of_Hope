@@ -10,11 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AccountDbContextConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
@@ -60,11 +61,16 @@ builder.Services.AddScoped<IAuthorizationHandler, VolunteerCustomerAuthorization
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.Configure<AzureOptions>(builder.Configuration.GetSection("Azure"));
-builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+//builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o =>
 {
     o.ExpireTimeSpan = TimeSpan.FromDays(5);
     o.SlidingExpiration = true;
+});
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["Azure:ConnectionString:blob"], preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["Azure:ConnectionString:queue"], preferMsi: true);
 });
 
 var app = builder.Build();

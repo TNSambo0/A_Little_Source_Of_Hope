@@ -11,12 +11,11 @@ namespace A_Little_Source_Of_Hope.Services
     public class EmailSender : IEmailSender
     {
         private readonly ILogger _logger;
-        public EmailSender(/*IOptions<AuthMessageSenderOptions> optionsAccessor,*/ ILogger<EmailSender> logger)
+        public EmailSender( ILogger<EmailSender> logger)
         {
             //Options = optionsAccessor.Value;
             _logger = logger;
         }
-        //public AuthMessageSenderOptions Options { get; }
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
@@ -24,7 +23,7 @@ namespace A_Little_Source_Of_Hope.Services
             //{
             //    throw new NotImplementedException("Null SendGridKey");
             //}
-            await Execute("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", subject, message, toEmail);
+            await Execute("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", subject, message, toEmail);
         }
 
         public async Task Execute(string apiKey, string subject, string message, string toEmail)

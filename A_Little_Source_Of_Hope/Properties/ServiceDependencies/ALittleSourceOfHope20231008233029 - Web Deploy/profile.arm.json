@@ -21,7 +21,7 @@
     },
     "resourceName": {
       "type": "string",
-      "defaultValue": "A-LittleSourceOfHope",
+      "defaultValue": "ALittleSourceOfHope20231008233029",
       "metadata": {
         "description": "Name of the main resource to be created by this template."
       }

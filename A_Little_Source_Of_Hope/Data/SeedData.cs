@@ -47,7 +47,7 @@ namespace A_Little_Source_Of_Hope.Data
                     EmailConfirmed = true,
                     Email = UserName,
                     UserType = UserType,
-                    ImageUrl = "images//User/images.png"
+                    ImageUrl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/images.png"
                 };
                 await userManager.CreateAsync(user, testUserPw);
             }
@@ -78,13 +78,13 @@ namespace A_Little_Source_Of_Hope.Data
                 await context.Category.AddRangeAsync(new Category
                 {
                     CategoryName = "Men",
-                    Imageurl = "images/Category/shirt.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/ white shirt.png",
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 }, new Category
                 {
                     CategoryName = "Women",
-                    Imageurl = "images/Category/dress.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/ red dress.png",
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 });
@@ -99,7 +99,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Grey men's shirt size S",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 1,
-                    Imageurl = "images/Product/shirt.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt.png",
                     CategoryId = 1,
                     IsActive = true,
                     ClaimStatus = true,
@@ -110,7 +110,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Blue men's shirt size 9",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 5,
-                    Imageurl = "images/Product/shirt1.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt1.png",
                     CategoryId = 1,
                     IsActive = true,
                     ClaimStatus = false,
@@ -121,7 +121,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "black men's shirt size M",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 1,
-                    Imageurl = "images/Product/shirt2.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt2.png",
                     CategoryId = 1,
                     IsActive = false,
                     ClaimStatus = false,
@@ -132,7 +132,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Strong blue men's shirt size 14",
                     Price = Math.Round(((decimal)60), 2),
                     Quantity = 7,
-                    Imageurl = "images/Product/shirt3.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt3.png",
                     CategoryId = 1,
                     IsActive = true,
                     ClaimStatus = false,
@@ -143,7 +143,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Sky blue men's shrit size XL",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 1,
-                    Imageurl = "images/Product/shirt4.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt4.png",
                     CategoryId = 1,
                     IsActive = false,
                     ClaimStatus = false,
@@ -154,7 +154,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Red and white stripe men's shirt size 12",
                     Price = Math.Round(((decimal)60), 2),
                     Quantity = 2,
-                    Imageurl = "images/Product/shirt5.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/shirt5.png",
                     CategoryId = 1,
                     IsActive = false,
                     ClaimStatus = true,
@@ -165,7 +165,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Red short dress",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 3,
-                    Imageurl = "images/Product/dress.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress.png",
                     CategoryId = 2,
                     IsActive = true,
                     ClaimStatus = true,
@@ -176,7 +176,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Purple long dress",
                     Price = Math.Round(((decimal)60), 2),
                     Quantity = 2,
-                    Imageurl = "images/Product/dress1.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress1.png",
                     CategoryId = 2,
                     IsActive = true,
                     ClaimStatus = true,
@@ -187,7 +187,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Black long dress",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 10,
-                    Imageurl = "images/Product/dress2.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress2.png",
                     CategoryId = 2,
                     IsActive = true,
                     ClaimStatus = true,
@@ -198,7 +198,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "Grey long dress",
                     Price = Math.Round(((decimal)85), 2),
                     Quantity = 2,
-                    Imageurl = "images/Product/dress3.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress3.png",
                     CategoryId = 2,
                     IsActive = false,
                     ClaimStatus = false,
@@ -209,7 +209,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "long Black wedding dress",
                     Price = Math.Round(((decimal)50), 2),
                     Quantity = 2,
-                    Imageurl = "images/Product/dress4.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress4.png",
                     CategoryId = 2,
                     IsActive = true,
                     ClaimStatus = true,
@@ -220,7 +220,7 @@ namespace A_Little_Source_Of_Hope.Data
                     Description = "lite purple dress size 34",
                     Price = Math.Round(((decimal)60), 2),
                     Quantity = 9,
-                    Imageurl = "images/Product/dress5.png",
+                    Imageurl = "https://datapicsblobact.blob.core.windows.net/datapicscontainer1/dress5.png",
                     CategoryId = 2,
                     IsActive = true,
                     ClaimStatus = true,

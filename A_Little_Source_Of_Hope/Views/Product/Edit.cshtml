@@ -62,7 +62,7 @@
                         <div class="col-sm-6">
                             <div class="container mb-2" id="container-canvImg">
                                 <div class="product_img_icon_div">
-                                    <img class="ProductImagePreview" src="https://datapicsblobact.blob.core.windows.net/datapicscontainer1/{@Model.Imageurl}" />
+                                    <img class="ProductImagePreview" src="@Model.Imageurl" />
                                 </div>
                                 <input asp-for="File" type="file" id="ProductImageInput" multiple="false" accept="Image/*" class="d-none upload_inputfile">
                                 <span asp-validation-for="File" class="text-danger"></span>
